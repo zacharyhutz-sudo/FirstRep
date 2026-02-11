@@ -444,6 +444,12 @@ import Layout from '../layouts/Layout.astro';
 							headers: { 'Content-Type': 'application/json' },
 							body: JSON.stringify({ query })
 						});
+						
+						if (!response.ok) {
+							const errorText = await response.text();
+							throw new Error(`Worker Error: ${errorText}`);
+						}
+
 						const matches = await response.json();
 						
 						// Store temporarily to allow selection
