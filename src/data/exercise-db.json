@@ -1,0 +1,70 @@
+{
+  "exercises": [
+    {
+      "name": "Barbell Squat",
+      "instructions": [
+        "Place the bar on your upper back (traps), not your neck.",
+        "Keep your feet shoulder-width apart, toes slightly pointed out.",
+        "Inhale and descend by pushing your hips back and bending your knees.",
+        "Keep your chest up and back flat throughout the movement.",
+        "Drive through your heels to return to the starting position."
+      ],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Squat/0.jpg"
+    },
+    {
+      "name": "Bench Press",
+      "instructions": [
+        "Lie flat on the bench with your feet planted firmly on the floor.",
+        "Grip the bar slightly wider than shoulder-width.",
+        "Lower the bar slowly to your mid-chest while tucking your elbows slightly.",
+        "Press the bar back up until your arms are fully extended.",
+        "Keep your shoulder blades squeezed together for stability."
+      ],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bench_Press/0.jpg"
+    },
+    {
+      "name": "Barbell Row",
+      "instructions": [
+        "Hinge at the hips until your torso is nearly parallel to the floor.",
+        "Grip the bar with an overhand grip, slightly wider than shoulder-width.",
+        "Pull the bar toward your lower chest/upper abdomen.",
+        "Squeeze your shoulder blades at the top of the movement.",
+        "Lower the bar under control back to the starting position."
+      ],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bent_Over_Row/0.jpg"
+    },
+    {
+      "name": "Overhead Press",
+      "instructions": [
+        "Stand with your feet hip-width apart and grip the bar just outside your shoulders.",
+        "Start with the bar at shoulder height, elbows slightly in front of the bar.",
+        "Press the bar overhead until your arms are locked out.",
+        "Avoid excessive arching of the lower back by bracing your core.",
+        "Lower the bar back to the starting position under control."
+      ],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Overhead_Press/0.jpg"
+    },
+    {
+      "name": "Goblet Squat",
+      "instructions": [
+        "Hold a dumbbell or kettlebell against your chest with both hands.",
+        "Stand with your feet slightly wider than shoulder-width.",
+        "Lower your hips back and down as if sitting into a chair.",
+        "Keep your elbows inside your knees at the bottom of the squat.",
+        "Drive back up to the starting position."
+      ],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Goblet_Squat/0.jpg"
+    },
+    {
+      "name": "Dumbbell RDL",
+      "instructions": [
+        "Hold a pair of dumbbells in front of your thighs.",
+        "Hinge at the hips, pushing them back while keeping a slight bend in your knees.",
+        "Lower the weights along your shins until you feel a stretch in your hamstrings.",
+        "Keep your back flat and chest out throughout.",
+        "Contract your glutes and hamstrings to return to a standing position."
+      ],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Romanian_Deadlift/0.jpg"
+    }
+  ]
+}
