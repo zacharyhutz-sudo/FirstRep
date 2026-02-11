@@ -235,16 +235,10 @@ import Layout from '../layouts/Layout.astro';
 				
 				const container = document.getElementById('workout-container');
 				
-				// Show the AI-generated workout
-				const workoutDays = [
-					{ label: 'Day 1: Primary Lift Focus', exercises: match.workout },
-					{ label: 'Day 2: Accessory & Recovery', exercises: [...match.workout].reverse().slice(0, 3) },
-					{ label: 'Day 3: Strength & Conditioning', exercises: match.workout }
-				];
-
-				container.innerHTML = workoutDays.map(day => `
+				// Show the AI-generated workout days
+				container.innerHTML = match.days.map(day => `
 					<div class="space-y-4">
-						<h3 class="text-xl font-bold border-b border-gray-800 pb-2 text-indigo-200">${day.label}</h3>
+						<h3 class="text-xl font-bold border-b border-gray-800 pb-2 text-indigo-200">${day.day_label}</h3>
 						<div class="space-y-3">
 							${day.exercises.map(ex => `
 								<div onclick="window.openExerciseModal('${ex.exercise}')" class="flex justify-between items-center bg-gray-800/50 p-3 rounded-lg border border-gray-700/50 hover:border-indigo-500/50 hover:bg-gray-800 transition cursor-pointer group">
