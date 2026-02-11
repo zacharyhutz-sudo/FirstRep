@@ -16,26 +16,33 @@ export default {
     }
 
     try {
-      const { sex, age, goal, level } = await request.json();
+      const body = await request.json();
 
       // 2. Call Google Gemini 1.5 Flash (Free Tier)
       const API_KEY = env.GEMINI_API_KEY;
       const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
       const prompt = `You are a professional fitness coach for the app "FirstRep". 
-      Generate a customized 3-day workout plan for a ${age} year old ${sex} with the goal of "${goal}" and a training level of "${level}".
+      Generate a customized workout plan based on these user stats:
+      - Age: ${body.age}
+      - Biological Sex: ${body.sex}
+      - Goal: ${body.goal}
+      - Equipment Available: ${body.equipment}
+      - Schedule: ${body.daysPerWeek} days/week, ${body.sessionTime} mins/session
+      - Experience: ${body.experience} level (Last time worked out: ${body.lastWorkout})
+      - Injury/Pain: ${body.injuries}
       
       Return ONLY a JSON object with this exact structure:
       {
         "name": "Plan Name",
         "schedule": "X days/week",
-        "reasoning": "1-2 sentences on why this fits them",
+        "reasoning": "1-2 sentences on how this plan optimizes for their specific equipment, schedule, and experience level",
         "workout": [
           {"exercise": "Name", "sets": 3, "reps": "10", "rest": "60s"}
         ]
       }
       
-      Only include these exercises: Barbell Squat, Bench Press, Barbell Row, Overhead Press, Lat Pulldown, Goblet Squat, Dumbbell RDL, Seated Cable Row, Glute Bridges, Deadlift.`;
+      Only include these exercises: Barbell Squat, Bench Press, Barbell Row, Overhead Press, Lat Pulldown, Goblet Squat, Dumbbell RDL, Seated Cable Row, Glute Bridges, Deadlift. If equipment is limited (e.g. dumbbells only), choose only the exercises that can be performed with what they have.`;
 
       const response = await fetch(url, {
         method: "POST",
