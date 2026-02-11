@@ -1,0 +1,53 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="FirstRep - Start Your First Rep Here">
+	<main class="max-w-4xl mx-auto px-6 py-20 text-center">
+		<h1 class="text-6xl font-black mb-6 tracking-tight">
+			First<span class="text-indigo-500">Rep</span>
+		</h1>
+		<p class="text-2xl text-gray-400 mb-12">
+			"Start your first rep here."
+		</p>
+		
+		<div class="bg-gray-900/50 border border-gray-800 p-8 rounded-2xl mb-12">
+			<h2 class="text-2xl font-bold mb-4">Personalized Fitness Questionnaire</h2>
+			<p class="text-gray-400 mb-8">Answer these questions to get your custom program.</p>
+			
+			<form class="space-y-6 text-left max-w-md mx-auto">
+				<div>
+					<label class="block text-sm font-medium mb-2">Age</label>
+					<input type="number" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="25" />
+				</div>
+				<div>
+					<label class="block text-sm font-medium mb-2">Fitness Goal</label>
+					<select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none">
+						<option>Build Muscle</option>
+						<option>Lose Weight</option>
+						<option>Strength / Powerlifting</option>
+						<option>General Fitness</option>
+					</select>
+				</div>
+				<button type="button" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-lg transition">
+					Get My Program
+				</button>
+			</form>
+		</div>
+
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+			<div class="p-6 border border-gray-800 rounded-xl bg-gray-900/30">
+				<h3 class="font-bold mb-2">Macro Tracking</h3>
+				<p class="text-sm text-gray-500">Combine nutrition with training in one place.</p>
+			</div>
+			<div class="p-6 border border-gray-800 rounded-xl bg-gray-900/30">
+				<h3 class="font-bold mb-2">Whoop Sync</h3>
+				<p class="text-sm text-gray-500">Coming soon: leverage your recovery data.</p>
+			</div>
+			<div class="p-6 border border-gray-800 rounded-xl bg-gray-900/30">
+				<h3 class="font-bold mb-2">Cheap & Simple</h3>
+				<p class="text-sm text-gray-500">Just $5/month for AI-personalized coaching.</p>
+			</div>
+		</div>
+	</main>
+</Layout>
