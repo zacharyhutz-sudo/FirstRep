@@ -148,19 +148,55 @@ import Layout from '../layouts/Layout.astro';
 			</div>
 		</div>
 
-		<!-- Macros Section (Placeholder) -->
-		<div id="macros-section" class="feature-content hidden">
-			<div class="bg-gray-900/50 border border-gray-800 p-8 sm:p-12 rounded-2xl text-center">
-				<div class="w-16 h-16 bg-indigo-500/10 text-indigo-400 rounded-full flex items-center justify-center mx-auto mb-6">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-					</svg>
+		<!-- Macros Section -->
+		<div id="macros-section" class="feature-content hidden text-left max-w-2xl mx-auto">
+			<!-- Daily Dashboard -->
+			<div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-6">
+				<div class="flex items-center justify-between mb-8">
+					<div class="text-center flex-1">
+						<p id="total-cals" class="text-4xl font-black text-white">0</p>
+						<p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Calories</p>
+					</div>
+					<div class="w-px h-10 bg-gray-800"></div>
+					<div class="text-center flex-1">
+						<p id="target-cals" class="text-4xl font-black text-gray-700">2500</p>
+						<p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Target</p>
+					</div>
 				</div>
-				<h2 class="text-2xl font-bold mb-4">Calorie & Macro Tracking</h2>
-				<p class="text-gray-400 max-w-sm mx-auto mb-8">Set your targets and log your daily intake to stay on track with your nutrition goals.</p>
-				<div class="inline-flex items-center px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-500 text-sm font-medium">
-					🚧 Feature Under Development
+				
+				<div class="grid grid-cols-3 gap-4">
+					<div class="bg-gray-800/50 p-3 rounded-xl border border-gray-700/50 text-center">
+						<p id="total-protein" class="font-bold text-indigo-400">0g</p>
+						<p class="text-[9px] text-gray-500 uppercase font-bold">Protein</p>
+					</div>
+					<div class="bg-gray-800/50 p-3 rounded-xl border border-gray-700/50 text-center">
+						<p id="total-carbs" class="font-bold text-green-400">0g</p>
+						<p class="text-[9px] text-gray-500 uppercase font-bold">Carbs</p>
+					</div>
+					<div class="bg-gray-800/50 p-3 rounded-xl border border-gray-700/50 text-center">
+						<p id="total-fat" class="font-bold text-yellow-400">0g</p>
+						<p class="text-[9px] text-gray-500 uppercase font-bold">Fat</p>
+					</div>
 				</div>
+			</div>
+
+			<!-- Meal Lists -->
+			<div class="space-y-4">
+				{['Breakfast', 'Lunch', 'Dinner', 'Snacks'].map(meal => (
+					<div class="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden">
+						<div class="px-5 py-4 flex items-center justify-between border-b border-gray-800">
+							<h3 class="font-bold text-gray-300">{meal}</h3>
+							<button onclick={`window.openFoodSearch('${meal.toLowerCase()}')`} class="w-8 h-8 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full flex items-center justify-center transition active:scale-90">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+									<path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+								</svg>
+							</button>
+						</div>
+						<div id={`meal-list-${meal.toLowerCase()}`} class="divide-y divide-gray-800/50">
+							<!-- Food entries injected here -->
+						</div>
+					</div>
+				))}
 			</div>
 		</div>
 
@@ -180,6 +216,69 @@ import Layout from '../layouts/Layout.astro';
 			</div>
 		</div>
 
+		<!-- Food Search Modal -->
+		<div id="food-overlay" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+			<div class="bg-gray-900 border border-indigo-500/30 w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
+				<div class="p-6 border-b border-gray-800 bg-gray-900">
+					<div class="flex justify-between items-center mb-4">
+						<h2 class="text-xl font-bold text-indigo-400">Add to <span id="search-meal-name"></span></h2>
+						<button id="food-close" class="text-gray-400 hover:text-white transition">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+							</svg>
+						</button>
+					</div>
+					<div class="relative">
+						<input type="text" id="food-search-input" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 pl-10 focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="Search food (e.g. Chicken, Rice...)" />
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+						</svg>
+					</div>
+				</div>
+				
+				<!-- Results -->
+				<div id="food-results" class="overflow-y-auto p-2 space-y-1 bg-gray-950/30">
+					<!-- Search results here -->
+				</div>
+
+				<!-- Portion Adjuster (Hidden initially) -->
+				<div id="portion-selector" class="hidden p-6 bg-gray-900 border-t border-gray-800">
+					<div class="flex items-center justify-between mb-6">
+						<div>
+							<p id="selected-food-name" class="font-bold text-lg text-white"></p>
+							<p id="selected-food-unit" class="text-xs text-gray-500 uppercase font-bold tracking-wider"></p>
+						</div>
+						<div class="text-right">
+							<p id="preview-cals" class="text-2xl font-black text-indigo-400">0</p>
+							<p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Est. Cals</p>
+						</div>
+					</div>
+					<div class="flex gap-4 items-end mb-6">
+						<div class="flex-1">
+							<label class="block text-xs font-medium mb-2 text-gray-500">Amount / Multiplier</label>
+							<input type="number" id="food-amount" step="0.1" value="1.0" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none text-center text-lg font-bold" />
+						</div>
+						<button id="confirm-add-food" class="flex-[2] bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-lg transition active:scale-95 shadow-lg shadow-indigo-500/20">
+							Add to Diary
+						</button>
+					</div>
+					<div class="grid grid-cols-3 gap-2">
+						<div class="text-center p-2 bg-gray-800/30 rounded-lg border border-gray-800">
+							<p id="preview-protein" class="text-xs font-bold text-gray-300">0g</p>
+							<p class="text-[8px] text-gray-600 uppercase">Prot</p>
+						</div>
+						<div class="text-center p-2 bg-gray-800/30 rounded-lg border border-gray-800">
+							<p id="preview-carbs" class="text-xs font-bold text-gray-300">0g</p>
+							<p class="text-[8px] text-gray-600 uppercase">Carb</p>
+						</div>
+						<div class="text-center p-2 bg-gray-800/30 rounded-lg border border-gray-800">
+							<p id="preview-fat" class="text-xs font-bold text-gray-300">0g</p>
+							<p class="text-[8px] text-gray-600 uppercase">Fat</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<!-- Exercise Detail Modal -->
 		<div id="modal-overlay" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -229,6 +328,7 @@ import Layout from '../layouts/Layout.astro';
 		<script>
 			import programsData from '../data/programs.json';
 			import exerciseDB from '../data/exercise-db.json';
+			import foodDB from '../data/food-db.json';
 
 			// --- DOM References ---
 			const form = document.getElementById('quiz-form');
@@ -241,7 +341,147 @@ import Layout from '../layouts/Layout.astro';
 			const savePlanBtn = document.getElementById('save-plan-btn');
 			const saveFeedback = document.getElementById('save-feedback');
 
+			// Macros DOM
+			const foodOverlay = document.getElementById('food-overlay');
+			const foodClose = document.getElementById('food-close');
+			const foodInput = document.getElementById('food-search-input');
+			const foodResults = document.getElementById('food-results');
+			const portionSelector = document.getElementById('portion-selector');
+			const amountInput = document.getElementById('food-amount');
+			const confirmAddBtn = document.getElementById('confirm-add-food');
+
 			const WORKER_URL = 'https://first-rep-worker.hutzellcreativeco.workers.dev/';
+
+			// --- Macro State ---
+			let currentDiary = JSON.parse(localStorage.getItem('firstrep_diary') || '{}');
+			const todayKey = new Date().toISOString().split('T')[0];
+			if (!currentDiary[todayKey]) {
+				currentDiary[todayKey] = {
+					meals: { breakfast: [], lunch: [], dinner: [], snacks: [] },
+					targets: { calories: 2500, protein: 180, carbs: 250, fat: 70 }
+				};
+			}
+
+			let activeMeal = null;
+			let selectedFood = null;
+
+			// --- Macro Logic ---
+			function updateDiaryDisplay() {
+				const day = currentDiary[todayKey];
+				const totals = { calories: 0, protein: 0, carbs: 0, fat: 0 };
+
+				['breakfast', 'lunch', 'dinner', 'snacks'].forEach(m => {
+					const list = document.getElementById(`meal-list-${m}`);
+					list.innerHTML = day.meals[m].map((entry, idx) => {
+						totals.calories += entry.calories;
+						totals.protein += entry.protein;
+						totals.carbs += entry.carbs;
+						totals.fat += entry.fat;
+
+						return `
+							<div class="px-5 py-3 flex justify-between items-center group">
+								<div class="min-w-0">
+									<p class="text-sm font-bold text-gray-200">${entry.name}</p>
+									<p class="text-xs text-gray-500">${entry.amount}x serving</p>
+								</div>
+								<div class="flex items-center gap-4">
+									<div class="text-right">
+										<p class="text-sm font-black text-indigo-400">${Math.round(entry.calories)}</p>
+										<p class="text-[9px] text-gray-600 uppercase font-bold tracking-tighter">Cals</p>
+									</div>
+									<button onclick="window.removeFood('${m}', ${idx})" class="text-gray-700 hover:text-red-500 transition opacity-0 group-hover:opacity-100 p-1">
+										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+										</svg>
+									</button>
+								</div>
+							</div>
+						`;
+					}).join('');
+				});
+
+				document.getElementById('total-cals').innerText = Math.round(totals.calories);
+				document.getElementById('total-protein').innerText = Math.round(totals.protein) + 'g';
+				document.getElementById('total-carbs').innerText = Math.round(totals.carbs) + 'g';
+				document.getElementById('total-fat').innerText = Math.round(totals.fat) + 'g';
+				
+				localStorage.setItem('firstrep_diary', JSON.stringify(currentDiary));
+			}
+
+			window.openFoodSearch = (meal) => {
+				activeMeal = meal;
+				selectedFood = null;
+				document.getElementById('search-meal-name').innerText = meal;
+				foodOverlay.classList.remove('hidden');
+				portionSelector.classList.add('hidden');
+				foodResults.classList.remove('hidden');
+				foodInput.value = '';
+				foodResults.innerHTML = '';
+				setTimeout(() => foodInput.focus(), 100);
+			};
+
+			window.removeFood = (meal, idx) => {
+				currentDiary[todayKey].meals[meal].splice(idx, 1);
+				updateDiaryDisplay();
+			};
+
+			foodInput?.addEventListener('input', (e) => {
+				const query = e.target.value.toLowerCase();
+				if (query.length < 2) {
+					foodResults.innerHTML = '';
+					return;
+				}
+				const matches = foodDB.foods.filter(f => f.name.toLowerCase().includes(query)).slice(0, 10);
+				foodResults.innerHTML = matches.map(f => `
+					<div onclick="window.selectFoodForPortion('${f.id}')" class="p-4 hover:bg-gray-800 transition cursor-pointer flex justify-between items-center rounded-xl border border-transparent hover:border-indigo-500/30">
+						<div>
+							<p class="font-bold text-gray-200">${f.name}</p>
+							<p class="text-xs text-gray-500">${f.unit} serving</p>
+						</div>
+						<p class="text-indigo-400 font-bold">${f.calories} cal</p>
+					</div>
+				`).join('');
+			});
+
+			window.selectFoodForPortion = (id) => {
+				selectedFood = foodDB.foods.find(f => f.id === id);
+				document.getElementById('selected-food-name').innerText = selectedFood.name;
+				document.getElementById('selected-food-unit').innerText = selectedFood.unit;
+				foodResults.classList.add('hidden');
+				portionSelector.classList.remove('hidden');
+				updatePreview();
+			};
+
+			function updatePreview() {
+				const amt = parseFloat(amountInput.value) || 0;
+				document.getElementById('preview-cals').innerText = Math.round(selectedFood.calories * amt);
+				document.getElementById('preview-protein').innerText = Math.round(selectedFood.protein * amt) + 'g';
+				document.getElementById('preview-carbs').innerText = Math.round(selectedFood.carbs * amt) + 'g';
+				document.getElementById('preview-fat').innerText = Math.round(selectedFood.fat * amt) + 'g';
+			}
+
+			amountInput?.addEventListener('input', updatePreview);
+
+			confirmAddBtn?.addEventListener('click', () => {
+				const amt = parseFloat(amountInput.value) || 0;
+				if (amt <= 0) return;
+
+				const entry = {
+					name: selectedFood.name,
+					amount: amt,
+					calories: selectedFood.calories * amt,
+					protein: selectedFood.protein * amt,
+					carbs: selectedFood.carbs * amt,
+					fat: selectedFood.fat * amt
+				};
+
+				currentDiary[todayKey].meals[activeMeal].push(entry);
+				updateDiaryDisplay();
+				foodOverlay.classList.add('hidden');
+			});
+
+			foodClose?.addEventListener('click', () => foodOverlay.classList.add('hidden'));
+			updateDiaryDisplay();
 
 			// --- Navigation Logic ---
 			const pills = document.querySelectorAll('.feature-pill');
