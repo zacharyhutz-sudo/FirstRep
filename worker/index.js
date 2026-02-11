@@ -44,8 +44,11 @@ Generate a customized workout plan based on these user stats:
 1. SAFETY FIRST (Pain/Injury):
    - BACK PAIN: ABSOLUTELY NO spinal compression. Banned: Barbell Squat, Deadlift, Overhead Press, Romanian Deadlift. Replace with: Plank, Dead Bug, Bird-Dog, Glute Bridges.
    - KNEE PAIN: Banned: Lunges, Deep Squats, Box Jumps. Replace with: Box Step-ups (low box), Glute Bridges, Wall Sits.
-   - SHOULDER PAIN: Banned: Overhead Press, Dips. Replace with: Floor Press, Lateral Raises (light).
-   - If any pain is mentioned, the ENTIRE workout must be "Low Impact" and focused on stability.
+   - SHOULDER PAIN: Banned: Overhead Press, Dips, Wide Grip Pushups. Replace with: Floor Press, Lateral Raises (light), Neutral Grip Rows.
+   - WRIST PAIN: Banned: Standard Pushups, Front Squats. Replace with: Dumbbell Press (neutral grip), Knuckle Pushups, or Cable work.
+   - HIP PAIN: Banned: Deep Sumo Deadlifts, Wide Stance Squats. Replace with: Glute Bridges, Step-ups, or Stationary Bike.
+   - NECK PAIN: Banned: Shrugs, Heavy Barbell Back Squats. Replace with: Goblet Squats, Chest-Supported Rows.
+   - If any pain is mentioned, the ENTIRE workout must be "Low Impact" and focused on stability. Avoid all high-impact jumping/plyometrics.
 
 2. SENIOR SCALING (Age 65+):
    - OVERRIDE Duration: Regardless of user request, if Age > 65 and Experience is Beginner, limit to 20-25 mins max.
