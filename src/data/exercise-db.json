@@ -20,7 +20,7 @@
         "Press the bar back up until your arms are fully extended.",
         "Keep your shoulder blades squeezed together for stability."
       ],
-      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bench_Press/0.jpg"
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/0.jpg"
     },
     {
       "name": "Barbell Row",
@@ -31,7 +31,7 @@
         "Squeeze your shoulder blades at the top of the movement.",
         "Lower the bar under control back to the starting position."
       ],
-      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bent_Over_Row/0.jpg"
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Barbell_Row/0.jpg"
     },
     {
       "name": "Overhead Press",
@@ -42,7 +42,18 @@
         "Avoid excessive arching of the lower back by bracing your core.",
         "Lower the bar back to the starting position under control."
       ],
-      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Overhead_Press/0.jpg"
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Military_Press/0.jpg"
+    },
+    {
+      "name": "Lat Pulldown",
+      "instructions": [
+        "Sit at a lat pulldown station and grab the bar with a wide overhand grip.",
+        "Pull your shoulder blades down and back, and then pull the bar down toward your upper chest.",
+        "Focus on pulling with your elbows rather than your hands.",
+        "Pause at the bottom, then slowly return the bar to the starting position.",
+        "Maintain a slight lean back but avoid using momentum."
+      ],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Wide-Grip_Lat_Pulldown/0.jpg"
     },
     {
       "name": "Goblet Squat",
@@ -65,6 +76,39 @@
         "Contract your glutes and hamstrings to return to a standing position."
       ],
       "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Romanian_Deadlift/0.jpg"
+    },
+    {
+      "name": "Seated Cable Row",
+      "instructions": [
+        "Sit at a cable row station with your feet on the pads and knees slightly bent.",
+        "Grip the handle and pull it toward your lower abdomen.",
+        "Squeeze your shoulder blades together at the peak of the movement.",
+        "Slowly release the weight back to the starting position.",
+        "Maintain a neutral spine and avoid rocking your torso."
+      ],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Cable_Rows/0.jpg"
+    },
+    {
+      "name": "Glute Bridges",
+      "instructions": [
+        "Lie on your back with your knees bent and feet flat on the floor.",
+        "Drive through your heels to lift your hips toward the ceiling.",
+        "Squeeze your glutes hard at the top of the movement.",
+        "Lower your hips back to the floor under control.",
+        "Keep your core engaged to prevent over-arching your lower back."
+      ],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Glute_Bridge/0.jpg"
+    },
+    {
+      "name": "Deadlift",
+      "instructions": [
+        "Stand with your feet hip-width apart and the bar over the middle of your feet.",
+        "Bend at the hips and knees to grip the bar just outside your legs.",
+        "Keep your back flat and chest up as you pull the bar up along your shins.",
+        "Stand up fully, locking your hips at the top.",
+        "Lower the bar back to the floor by hinging at the hips first."
+      ],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Deadlift/0.jpg"
     }
   ]
 }
