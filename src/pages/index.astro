@@ -154,6 +154,29 @@ import Layout from '../layouts/Layout.astro';
 			</div>
 		</div>
 
+		<!-- Swap Exercise Modal -->
+		<div id="swap-overlay" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+			<div class="bg-gray-900 border border-indigo-500/30 w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[80vh]">
+				<div class="p-6 border-b border-gray-800 flex justify-between items-center bg-gray-900">
+					<div>
+						<h2 class="text-xl font-bold text-indigo-400">Swap Exercise</h2>
+						<p id="swap-target-name" class="text-xs text-gray-500 uppercase font-bold tracking-wider"></p>
+					</div>
+					<button id="swap-close" class="text-gray-400 hover:text-white transition">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+						</svg>
+					</button>
+				</div>
+				<div id="swap-list" class="overflow-y-auto p-4 space-y-3 bg-gray-950/30">
+					<!-- Alternatives injected here -->
+				</div>
+				<div class="p-4 bg-gray-900 border-t border-gray-800 text-center">
+					<p class="text-[10px] text-gray-500 uppercase">Select an exercise to replace the current one</p>
+				</div>
+			</div>
+		</div>
+
 		<script>
 			import programsData from '../data/programs.json';
 			import exerciseDB from '../data/exercise-db.json';
@@ -163,13 +186,17 @@ import Layout from '../layouts/Layout.astro';
 			const display = document.getElementById('program-display');
 			const overlay = document.getElementById('modal-overlay');
 			const modalClose = document.getElementById('modal-close');
+			const swapOverlay = document.getElementById('swap-overlay');
+			const swapClose = document.getElementById('swap-close');
+			const swapList = document.getElementById('swap-list');
 			const savePlanBtn = document.getElementById('save-plan-btn');
 			const saveFeedback = document.getElementById('save-feedback');
 
 			const WORKER_URL = 'https://first-rep-worker.hutzellcreativeco.workers.dev/';
 
-			// Track current plan for saving
+			// Track current plan and swap state
 			let currentPlan = null;
+			let activeSwap = { dayIndex: null, exerciseIndex: null };
 
 			// --- Exercise Modal ---
 			function openExerciseModal(name) {
@@ -185,6 +212,52 @@ import Layout from '../layouts/Layout.astro';
 
 			modalClose?.addEventListener('click', () => overlay.classList.add('hidden'));
 			overlay?.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.add('hidden'); });
+
+			// --- Swap Logic ---
+			function openSwapModal(dayIndex, exerciseIndex) {
+				activeSwap = { dayIndex, exerciseIndex };
+				const currentEx = currentPlan.days[dayIndex].exercises[exerciseIndex];
+				const currentExData = exerciseDB.exercises.find(e => e.name === currentEx.exercise);
+				
+				document.getElementById('swap-target-name').innerText = `Replacing: ${currentEx.exercise}`;
+				
+				// Find 4 alternatives targeting similar muscles
+				const mainMuscle = currentExData?.muscles.split(',')[0].trim();
+				const alts = exerciseDB.exercises
+					.filter(e => e.name !== currentEx.exercise && e.muscles.includes(mainMuscle))
+					.sort(() => 0.5 - Math.random())
+					.slice(0, 4);
+
+				swapList.innerHTML = alts.map(alt => `
+					<div onclick="window.confirmSwap('${alt.name.replace(/'/g, "\\'")}')"
+						 class="flex items-center gap-4 bg-gray-800/50 p-4 rounded-xl border border-gray-700 hover:border-indigo-500 hover:bg-gray-800 transition cursor-pointer group">
+						<img src="${alt.image}" class="w-12 h-12 rounded-lg object-cover bg-gray-700" />
+						<div class="flex-1 min-w-0">
+							<p class="font-bold text-gray-100 group-hover:text-indigo-400 transition truncate">${alt.name}</p>
+							<p class="text-[10px] text-gray-500 uppercase tracking-wider">${alt.muscles}</p>
+						</div>
+						<div class="text-indigo-500 opacity-0 group-hover:opacity-100 transition">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+								<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+							</svg>
+						</div>
+					</div>
+				`).join('');
+
+				swapOverlay.classList.remove('hidden');
+			}
+			window.openSwapModal = openSwapModal;
+
+			function confirmSwap(newName) {
+				const { dayIndex, exerciseIndex } = activeSwap;
+				currentPlan.days[dayIndex].exercises[exerciseIndex].exercise = newName;
+				renderPlan(currentPlan);
+				swapOverlay.classList.add('hidden');
+			}
+			window.confirmSwap = confirmSwap;
+
+			swapClose?.addEventListener('click', () => swapOverlay.classList.add('hidden'));
+			swapOverlay?.addEventListener('click', (e) => { if (e.target === swapOverlay) swapOverlay.classList.add('hidden'); });
 
 			// --- Save Plan ---
 			savePlanBtn?.addEventListener('click', () => {
@@ -211,21 +284,29 @@ import Layout from '../layouts/Layout.astro';
 				document.getElementById('program-reasoning').innerText = plan.reasoning;
 
 				const container = document.getElementById('workout-container');
-				container.innerHTML = plan.days.map(day => `
+				container.innerHTML = plan.days.map((day, dIdx) => `
 					<div class="space-y-3 sm:space-y-4">
 						<h3 class="text-lg sm:text-xl font-bold border-b border-gray-800 pb-2 text-indigo-200">${day.day_label}</h3>
 						<div class="space-y-2 sm:space-y-3">
-							${day.exercises.map(ex => `
-								<div onclick="window.openExerciseModal('${ex.exercise.replace(/'/g, "\\'")}')" 
-									 class="flex justify-between items-center bg-gray-800/50 p-3 sm:p-4 rounded-lg border border-gray-700/50 hover:border-indigo-500/50 hover:bg-gray-800 transition cursor-pointer group active:scale-[0.98]">
-									<div class="min-w-0 flex-1 mr-3">
-										<p class="font-bold text-gray-100 group-hover:text-indigo-400 transition text-sm sm:text-base">${ex.exercise}</p>
-										<p class="text-xs text-gray-500">Rest: ${ex.rest}</p>
+							${day.exercises.map((ex, eIdx) => `
+								<div class="flex gap-2 group">
+									<div onclick="window.openExerciseModal('${ex.exercise.replace(/'/g, "\\'")}')" 
+										 class="flex-1 flex justify-between items-center bg-gray-800/50 p-3 sm:p-4 rounded-lg border border-gray-700/50 hover:border-indigo-500/50 hover:bg-gray-800 transition cursor-pointer active:scale-[0.98]">
+										<div class="min-w-0 flex-1 mr-3">
+											<p class="font-bold text-gray-100 group-hover:text-indigo-400 transition text-sm sm:text-base">${ex.exercise}</p>
+											<p class="text-xs text-gray-500">Rest: ${ex.rest}</p>
+										</div>
+										<div class="text-right shrink-0">
+											<p class="text-indigo-400 font-mono font-bold text-sm sm:text-base">${ex.sets} x ${ex.reps}</p>
+										</div>
 									</div>
-									<div class="text-right shrink-0">
-										<p class="text-indigo-400 font-mono font-bold text-sm sm:text-base">${ex.sets} x ${ex.reps}</p>
-										<p class="text-[10px] text-gray-600 uppercase tracking-tighter hidden sm:block">Click for guide</p>
-									</div>
+									<button onclick="window.openSwapModal(${dIdx}, ${eIdx})" 
+											class="bg-gray-800 border border-gray-700 hover:border-indigo-500 hover:text-indigo-400 px-3 rounded-lg transition flex items-center justify-center text-gray-500"
+											title="Swap Exercise">
+										<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+										</svg>
+									</button>
 								</div>
 							`).join('')}
 						</div>
