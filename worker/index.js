@@ -16,6 +16,43 @@ export default {
     try {
       const body = await request.json();
       const API_KEY = env.GEMINI_API_KEY;
+      
+      // Routing based on request data
+      if (body.query) {
+        // FOOD SEARCH LOGIC
+        const searchUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+        const searchPrompt = `You are a nutrition database API. Return a JSON array of the top 5 most likely food items matching the query: "${body.query}".
+        For each item, provide typical nutritional values for a standard serving size.
+        
+        Structure:
+        [
+          {
+            "id": "unique_string",
+            "name": "Food Name",
+            "unit": "100g or 1 cup, etc",
+            "calories": 100,
+            "protein": 10,
+            "carbs": 20,
+            "fat": 5
+          }
+        ]
+        Return ONLY the JSON array.`;
+
+        const response = await fetch(searchUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: searchPrompt }] }],
+            generationConfig: { response_mime_type: "application/json" }
+          }),
+        });
+        const data = await response.json();
+        return new Response(data.candidates[0].content.parts[0].text, {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      // WORKOUT GENERATION LOGIC (Existing)
       const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
       // Available exercises grouped by equipment requirement

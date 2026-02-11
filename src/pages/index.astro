@@ -425,26 +425,47 @@ import Layout from '../layouts/Layout.astro';
 				updateDiaryDisplay();
 			};
 
+			let searchTimeout = null;
 			foodInput?.addEventListener('input', (e) => {
-				const query = e.target.value.toLowerCase();
-				if (query.length < 2) {
+				const query = e.target.value.trim();
+				if (query.length < 3) {
 					foodResults.innerHTML = '';
 					return;
 				}
-				const matches = foodDB.foods.filter(f => f.name.toLowerCase().includes(query)).slice(0, 10);
-				foodResults.innerHTML = matches.map(f => `
-					<div onclick="window.selectFoodForPortion('${f.id}')" class="p-4 hover:bg-gray-800 transition cursor-pointer flex justify-between items-center rounded-xl border border-transparent hover:border-indigo-500/30">
-						<div>
-							<p class="font-bold text-gray-200">${f.name}</p>
-							<p class="text-xs text-gray-500">${f.unit} serving</p>
-						</div>
-						<p class="text-indigo-400 font-bold">${f.calories} cal</p>
-					</div>
-				`).join('');
+
+				// Debounce to save API hits
+				clearTimeout(searchTimeout);
+				searchTimeout = setTimeout(async () => {
+					foodResults.innerHTML = '<p class="p-4 text-center text-gray-500 animate-pulse">Searching AI Database...</p>';
+					
+					try {
+						const response = await fetch(WORKER_URL, {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify({ query })
+						});
+						const matches = await response.json();
+						
+						// Store temporarily to allow selection
+						window._lastSearchResults = matches;
+
+						foodResults.innerHTML = matches.map(f => `
+							<div onclick="window.selectFoodForPortion('${f.id}')" class="p-4 hover:bg-gray-800 transition cursor-pointer flex justify-between items-center rounded-xl border border-transparent hover:border-indigo-500/30">
+								<div>
+									<p class="font-bold text-gray-200">${f.name}</p>
+									<p class="text-xs text-gray-500">${f.unit} serving</p>
+								</div>
+								<p class="text-indigo-400 font-bold">${f.calories} cal</p>
+							</div>
+						`).join('');
+					} catch (err) {
+						foodResults.innerHTML = '<p class="p-4 text-center text-red-500">Search failed. Try again.</p>';
+					}
+				}, 600);
 			});
 
 			window.selectFoodForPortion = (id) => {
-				selectedFood = foodDB.foods.find(f => f.id === id);
+				selectedFood = window._lastSearchResults.find(f => f.id === id);
 				document.getElementById('selected-food-name').innerText = selectedFood.name;
 				document.getElementById('selected-food-unit').innerText = selectedFood.unit;
 				foodResults.classList.add('hidden');
