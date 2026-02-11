@@ -1,96 +1,692 @@
 {
   "baseline_templates": [
     {
-      "id": "adult_male_hypertrophy_beginner",
-      "target": {
-        "age_range": "18-40",
-        "sex": "male",
-        "goal": "Build Muscle",
-        "level": "Beginner"
-      },
+      "id": "beginner_full_body_3day",
+      "target": { "sex": "male", "goal": "Build Muscle", "level": "Beginner" },
       "name": "Foundational Growth (3-Day Full Body)",
       "schedule": "3 days/week (Mon/Wed/Fri)",
-      "reasoning": "Focuses on compound movements to maximize newbie gains while allowing 48h recovery. Volume set at Maintenance/Minimum Effective (10-12 sets/muscle/week) to build work capacity without overtraining.",
-      "workout": [
-        {"exercise": "Barbell Squat", "sets": 3, "reps": "8-10", "rest": "120s"},
-        {"exercise": "Bench Press", "sets": 3, "reps": "8-10", "rest": "90s"},
-        {"exercise": "Barbell Row", "sets": 3, "reps": "10-12", "rest": "90s"},
-        {"exercise": "Overhead Press", "sets": 2, "reps": "10-12", "rest": "90s"},
-        {"exercise": "Lat Pulldown", "sets": 2, "reps": "12-15", "rest": "60s"}
+      "reasoning": "Full-body training 3x/week maximizes beginner 'newbie gains' by hitting each muscle group frequently. Compound movements build a strong foundation while keeping volume manageable for recovery.",
+      "days": [
+        {
+          "day_label": "Day 1: Full Body A",
+          "exercises": [
+            { "exercise": "Barbell Squat", "sets": 3, "reps": "8-10", "rest": "120s" },
+            { "exercise": "Bench Press", "sets": 3, "reps": "8-10", "rest": "90s" },
+            { "exercise": "Barbell Row", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Overhead Press", "sets": 2, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Plank", "sets": 3, "reps": "30s", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 2: Full Body B",
+          "exercises": [
+            { "exercise": "Deadlift", "sets": 3, "reps": "6-8", "rest": "150s" },
+            { "exercise": "Dumbbell Incline Press", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Lat Pulldown", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Dumbbell Lunges", "sets": 2, "reps": "10/leg", "rest": "90s" },
+            { "exercise": "Dumbbell Curl", "sets": 2, "reps": "12-15", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 3: Full Body C",
+          "exercises": [
+            { "exercise": "Leg Press", "sets": 3, "reps": "10-12", "rest": "120s" },
+            { "exercise": "Dumbbell Press", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Seated Cable Row", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Lateral Raises", "sets": 3, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Tricep Pushdowns", "sets": 2, "reps": "12-15", "rest": "60s" }
+          ]
+        }
       ]
     },
     {
-      "id": "adult_female_hypertrophy_beginner",
-      "target": {
-        "age_range": "18-40",
-        "sex": "female",
-        "goal": "Build Muscle",
-        "level": "Beginner"
-      },
+      "id": "beginner_female_full_body",
+      "target": { "sex": "female", "goal": "Build Muscle", "level": "Beginner" },
       "name": "Sculpt & Strength (3-Day Full Body)",
       "schedule": "3 days/week (Mon/Wed/Fri)",
-      "reasoning": "Leverages women's generally higher fatigue resistance. Slightly higher repetition ranges (10-15) to focus on mind-muscle connection and form, with emphasis on posterior chain development.",
-      "workout": [
-        {"exercise": "Goblet Squat", "sets": 3, "reps": "12-15", "rest": "90s"},
-        {"exercise": "Dumbbell RDL", "sets": 3, "reps": "12-15", "rest": "90s"},
-        {"exercise": "Dumbbell Bench Press", "sets": 3, "reps": "10-12", "rest": "60s"},
-        {"exercise": "Seated Cable Row", "sets": 3, "reps": "12-15", "rest": "60s"},
-        {"exercise": "Glute Bridges", "sets": 3, "reps": "15-20", "rest": "60s"}
+      "reasoning": "Leverages women's generally higher fatigue resistance with slightly higher rep ranges. Emphasis on posterior chain (glutes/hamstrings) and balanced upper body development.",
+      "days": [
+        {
+          "day_label": "Day 1: Lower Emphasis",
+          "exercises": [
+            { "exercise": "Goblet Squat", "sets": 3, "reps": "12-15", "rest": "90s" },
+            { "exercise": "Dumbbell RDL", "sets": 3, "reps": "12-15", "rest": "90s" },
+            { "exercise": "Hip Thrust", "sets": 3, "reps": "12-15", "rest": "90s" },
+            { "exercise": "Dumbbell Bench Press", "sets": 3, "reps": "10-12", "rest": "60s" },
+            { "exercise": "Plank", "sets": 3, "reps": "30s", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 2: Upper Emphasis",
+          "exercises": [
+            { "exercise": "Lat Pulldown", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Dumbbell Shoulder Press", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Seated Cable Row", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Lateral Raises", "sets": 3, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Glute Bridges", "sets": 3, "reps": "15-20", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 3: Full Body",
+          "exercises": [
+            { "exercise": "Bulgarian Split Squat", "sets": 3, "reps": "10/leg", "rest": "90s" },
+            { "exercise": "Dumbbell Press", "sets": 3, "reps": "10-12", "rest": "60s" },
+            { "exercise": "Dumbbell Row", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Dumbbell RDL", "sets": 3, "reps": "12-15", "rest": "90s" },
+            { "exercise": "Dead Bug", "sets": 3, "reps": "10/side", "rest": "45s" }
+          ]
+        }
       ]
     },
     {
-      "id": "masters_strength_intermediate",
-      "target": {
-        "age_range": "40-65",
-        "sex": "any",
-        "goal": "Strength / Powerlifting",
-        "level": "Intermediate"
-      },
-      "name": "Longevity Strength (Upper/Lower Split)",
+      "id": "intermediate_ppl_6day",
+      "target": { "sex": "male", "goal": "Build Muscle", "level": "Intermediate" },
+      "name": "Hypertrophy PPL (Push/Pull/Legs)",
+      "schedule": "6 days/week (PPL x2)",
+      "reasoning": "The classic Push/Pull/Legs split allows high volume per muscle group while training each muscle twice per week — the sweet spot for hypertrophy. Ideal for intermediate lifters who've outgrown full-body routines.",
+      "days": [
+        {
+          "day_label": "Day 1: Push",
+          "exercises": [
+            { "exercise": "Bench Press", "sets": 4, "reps": "6-8", "rest": "120s" },
+            { "exercise": "Dumbbell Incline Press", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Overhead Press", "sets": 3, "reps": "8-10", "rest": "90s" },
+            { "exercise": "Lateral Raises", "sets": 4, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Tricep Pushdowns", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Dumbbell Tricep Extension", "sets": 3, "reps": "12-15", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 2: Pull",
+          "exercises": [
+            { "exercise": "Deadlift", "sets": 3, "reps": "5-6", "rest": "180s" },
+            { "exercise": "Pull-Ups", "sets": 3, "reps": "6-10", "rest": "120s" },
+            { "exercise": "Barbell Row", "sets": 3, "reps": "8-10", "rest": "90s" },
+            { "exercise": "Face Pulls", "sets": 3, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Barbell Curl", "sets": 3, "reps": "10-12", "rest": "60s" },
+            { "exercise": "Hammer Curl", "sets": 3, "reps": "12-15", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 3: Legs",
+          "exercises": [
+            { "exercise": "Barbell Squat", "sets": 4, "reps": "6-8", "rest": "150s" },
+            { "exercise": "Romanian Deadlift", "sets": 3, "reps": "10-12", "rest": "120s" },
+            { "exercise": "Leg Press", "sets": 3, "reps": "10-12", "rest": "120s" },
+            { "exercise": "Leg Curls", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Leg Extension", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Calf Raises", "sets": 4, "reps": "15-20", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 4: Push",
+          "exercises": [
+            { "exercise": "Overhead Press", "sets": 4, "reps": "6-8", "rest": "120s" },
+            { "exercise": "Dumbbell Press", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Cable Fly", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Lateral Raises", "sets": 4, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Dips", "sets": 3, "reps": "AMRAP", "rest": "90s" },
+            { "exercise": "Skull Crushers", "sets": 3, "reps": "10-12", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 5: Pull",
+          "exercises": [
+            { "exercise": "Barbell Row", "sets": 4, "reps": "6-8", "rest": "120s" },
+            { "exercise": "Lat Pulldown", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Seated Cable Row", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Rear Delt Fly", "sets": 3, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Dumbbell Curl", "sets": 3, "reps": "10-12", "rest": "60s" },
+            { "exercise": "Hammer Curl", "sets": 3, "reps": "12-15", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 6: Legs",
+          "exercises": [
+            { "exercise": "Front Squat", "sets": 3, "reps": "8-10", "rest": "120s" },
+            { "exercise": "Bulgarian Split Squat", "sets": 3, "reps": "10/leg", "rest": "90s" },
+            { "exercise": "Leg Curls", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Leg Extension", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Hip Thrust", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Calf Raises", "sets": 4, "reps": "15-20", "rest": "45s" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "upper_lower_4day",
+      "target": { "sex": "male", "goal": "Build Muscle", "level": "Intermediate" },
+      "name": "Upper/Lower Hypertrophy Split",
+      "schedule": "4 days/week (Mon/Tue/Thu/Fri)",
+      "reasoning": "A 4-day Upper/Lower split balances volume and recovery perfectly for intermediates who can't commit to 6 days. Each muscle is trained twice per week with ample recovery between sessions.",
+      "days": [
+        {
+          "day_label": "Day 1: Upper A (Strength Focus)",
+          "exercises": [
+            { "exercise": "Bench Press", "sets": 4, "reps": "5-6", "rest": "150s" },
+            { "exercise": "Barbell Row", "sets": 4, "reps": "6-8", "rest": "120s" },
+            { "exercise": "Overhead Press", "sets": 3, "reps": "8-10", "rest": "90s" },
+            { "exercise": "Chin-Ups", "sets": 3, "reps": "6-10", "rest": "90s" },
+            { "exercise": "Dumbbell Curl", "sets": 2, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Tricep Pushdowns", "sets": 2, "reps": "12-15", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 2: Lower A (Strength Focus)",
+          "exercises": [
+            { "exercise": "Barbell Squat", "sets": 4, "reps": "5-6", "rest": "180s" },
+            { "exercise": "Romanian Deadlift", "sets": 3, "reps": "8-10", "rest": "120s" },
+            { "exercise": "Leg Press", "sets": 3, "reps": "10-12", "rest": "120s" },
+            { "exercise": "Leg Curls", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Calf Raises", "sets": 4, "reps": "12-15", "rest": "45s" },
+            { "exercise": "Plank", "sets": 3, "reps": "45s", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 3: Upper B (Hypertrophy Focus)",
+          "exercises": [
+            { "exercise": "Dumbbell Incline Press", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Lat Pulldown", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Dumbbell Shoulder Press", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Seated Cable Row", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Lateral Raises", "sets": 4, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Skull Crushers", "sets": 3, "reps": "10-12", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 4: Lower B (Hypertrophy Focus)",
+          "exercises": [
+            { "exercise": "Bulgarian Split Squat", "sets": 3, "reps": "10/leg", "rest": "90s" },
+            { "exercise": "Dumbbell RDL", "sets": 3, "reps": "12-15", "rest": "90s" },
+            { "exercise": "Leg Extension", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Leg Curls", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Hip Thrust", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Hanging Leg Raise", "sets": 3, "reps": "10-15", "rest": "60s" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "strength_powerlifting_4day",
+      "target": { "sex": "male", "goal": "Strength / Powerlifting", "level": "Intermediate" },
+      "name": "Powerlifting Foundation (4-Day)",
       "schedule": "4 days/week",
-      "reasoning": "Accounts for slower systemic recovery in 40+ athletes. Uses an Upper/Lower split to prevent joint overuse while maintaining high intensity on primary lifts. Rep ranges are 5-8 to build strength without excessive metabolic stress.",
-      "workout": [
-        {"exercise": "Deadlift", "sets": 3, "reps": "5", "rest": "180s"},
-        {"exercise": "Leg Press", "sets": 3, "reps": "8-10", "rest": "120s"},
-        {"exercise": "Leg Curls", "sets": 3, "reps": "12-15", "rest": "90s"},
-        {"exercise": "Plank", "sets": 3, "reps": "45s", "rest": "60s"}
+      "reasoning": "Built around the big 3 (squat, bench, deadlift) with dedicated days for each. Lower rep ranges with longer rest periods build maximal strength. Accessories target weak points in the main lifts.",
+      "days": [
+        {
+          "day_label": "Day 1: Heavy Squat",
+          "exercises": [
+            { "exercise": "Barbell Squat", "sets": 5, "reps": "3-5", "rest": "180s" },
+            { "exercise": "Front Squat", "sets": 3, "reps": "6-8", "rest": "150s" },
+            { "exercise": "Leg Press", "sets": 3, "reps": "8-10", "rest": "120s" },
+            { "exercise": "Leg Curls", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Plank", "sets": 3, "reps": "60s", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 2: Heavy Bench",
+          "exercises": [
+            { "exercise": "Bench Press", "sets": 5, "reps": "3-5", "rest": "180s" },
+            { "exercise": "Close-Grip Bench Press", "sets": 3, "reps": "6-8", "rest": "120s" },
+            { "exercise": "Dumbbell Incline Press", "sets": 3, "reps": "8-10", "rest": "90s" },
+            { "exercise": "Barbell Row", "sets": 4, "reps": "6-8", "rest": "120s" },
+            { "exercise": "Dips", "sets": 3, "reps": "AMRAP", "rest": "90s" }
+          ]
+        },
+        {
+          "day_label": "Day 3: Heavy Deadlift",
+          "exercises": [
+            { "exercise": "Deadlift", "sets": 5, "reps": "3-5", "rest": "180s" },
+            { "exercise": "Romanian Deadlift", "sets": 3, "reps": "8-10", "rest": "120s" },
+            { "exercise": "Barbell Row", "sets": 3, "reps": "6-8", "rest": "120s" },
+            { "exercise": "Pull-Ups", "sets": 3, "reps": "AMRAP", "rest": "120s" },
+            { "exercise": "Barbell Curl", "sets": 3, "reps": "10-12", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 4: Accessory Day",
+          "exercises": [
+            { "exercise": "Overhead Press", "sets": 4, "reps": "6-8", "rest": "120s" },
+            { "exercise": "Bulgarian Split Squat", "sets": 3, "reps": "8/leg", "rest": "90s" },
+            { "exercise": "Face Pulls", "sets": 4, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Dumbbell Row", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Hanging Leg Raise", "sets": 3, "reps": "10-15", "rest": "60s" }
+          ]
+        }
       ]
     },
     {
-      "id": "senior_health_beginner",
-      "target": {
-        "age_range": "65+",
-        "sex": "any",
-        "goal": "General Fitness",
-        "level": "Beginner"
-      },
+      "id": "masters_strength",
+      "target": { "sex": "any", "goal": "Strength / Powerlifting", "level": "Intermediate" },
+      "name": "Longevity Strength (Upper/Lower)",
+      "schedule": "4 days/week",
+      "reasoning": "Accounts for slower systemic recovery in 40+ athletes. Uses an Upper/Lower split to prevent joint overuse while maintaining high intensity on primary lifts.",
+      "days": [
+        {
+          "day_label": "Day 1: Upper",
+          "exercises": [
+            { "exercise": "Bench Press", "sets": 3, "reps": "6-8", "rest": "150s" },
+            { "exercise": "Barbell Row", "sets": 3, "reps": "8-10", "rest": "120s" },
+            { "exercise": "Dumbbell Shoulder Press", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Face Pulls", "sets": 3, "reps": "15-20", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 2: Lower",
+          "exercises": [
+            { "exercise": "Barbell Squat", "sets": 3, "reps": "6-8", "rest": "180s" },
+            { "exercise": "Romanian Deadlift", "sets": 3, "reps": "8-10", "rest": "120s" },
+            { "exercise": "Leg Press", "sets": 3, "reps": "10-12", "rest": "120s" },
+            { "exercise": "Plank", "sets": 3, "reps": "45s", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 3: Upper",
+          "exercises": [
+            { "exercise": "Overhead Press", "sets": 3, "reps": "6-8", "rest": "150s" },
+            { "exercise": "Lat Pulldown", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Dumbbell Press", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Dumbbell Curl", "sets": 2, "reps": "12-15", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 4: Lower",
+          "exercises": [
+            { "exercise": "Deadlift", "sets": 3, "reps": "5", "rest": "180s" },
+            { "exercise": "Leg Press", "sets": 3, "reps": "8-10", "rest": "120s" },
+            { "exercise": "Leg Curls", "sets": 3, "reps": "12-15", "rest": "90s" },
+            { "exercise": "Calf Raises", "sets": 3, "reps": "15-20", "rest": "45s" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "senior_fitness",
+      "target": { "sex": "any", "goal": "General Fitness", "level": "Beginner" },
       "name": "Vitality & Balance (2-Day Full Body)",
       "schedule": "2 days/week",
-      "reasoning": "Prioritizes functional mobility, bone density, and fall prevention. Lower volume and higher rest periods to accommodate slower heart rate recovery. Includes balance-specific movements.",
-      "workout": [
-        {"exercise": "Chair Squats", "sets": 2, "reps": "10-12", "rest": "120s"},
-        {"exercise": "Wall Pushups", "sets": 2, "reps": "10-12", "rest": "120s"},
-        {"exercise": "Step-ups", "sets": 2, "reps": "8 per side", "rest": "90s"},
-        {"exercise": "Resistance Band Rows", "sets": 2, "reps": "12-15", "rest": "90s"},
-        {"exercise": "Single-Leg Stance", "sets": 2, "reps": "30s per side", "rest": "60s"}
+      "reasoning": "Prioritizes functional mobility, bone density, and fall prevention. Lower volume and higher rest periods to accommodate slower recovery. Includes balance-specific movements.",
+      "days": [
+        {
+          "day_label": "Day 1: Strength & Balance",
+          "exercises": [
+            { "exercise": "Chair Squats", "sets": 2, "reps": "10-12", "rest": "120s" },
+            { "exercise": "Wall Pushups", "sets": 2, "reps": "10-12", "rest": "120s" },
+            { "exercise": "Step-ups", "sets": 2, "reps": "8/side", "rest": "90s" },
+            { "exercise": "Resistance Band Rows", "sets": 2, "reps": "12-15", "rest": "90s" },
+            { "exercise": "Single-Leg Stance", "sets": 2, "reps": "30s/side", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 2: Mobility & Endurance",
+          "exercises": [
+            { "exercise": "Goblet Squat", "sets": 2, "reps": "10-12", "rest": "120s" },
+            { "exercise": "Dumbbell Row", "sets": 2, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Glute Bridges", "sets": 2, "reps": "12-15", "rest": "90s" },
+            { "exercise": "Dead Bug", "sets": 2, "reps": "8/side", "rest": "60s" },
+            { "exercise": "Plank", "sets": 2, "reps": "20s", "rest": "60s" }
+          ]
+        }
       ]
     },
     {
-      "id": "adult_male_fatloss_intermediate",
-      "target": {
-        "age_range": "18-40",
-        "sex": "male",
-        "goal": "Lose Weight",
-        "level": "Intermediate"
-      },
+      "id": "fat_loss_ppl",
+      "target": { "sex": "male", "goal": "Lose Weight", "level": "Intermediate" },
       "name": "Metabolic Power (PPL)",
       "schedule": "6 days/week",
-      "reasoning": "High-frequency Push/Pull/Legs split to maximize caloric expenditure while preserving muscle tissue during a deficit. Incorporates supersets for metabolic stress.",
-      "workout": [
-        {"exercise": "Dumbbell Incline Press", "sets": 4, "reps": "10-12", "rest": "60s"},
-        {"exercise": "Weighted Dips", "sets": 3, "reps": "AMRAP", "rest": "60s"},
-        {"exercise": "Lateral Raises", "sets": 4, "reps": "15-20", "rest": "45s"},
-        {"exercise": "Tricep Pushdowns", "sets": 3, "reps": "12-15", "rest": "45s"}
+      "reasoning": "High-frequency training to maximize caloric expenditure while preserving lean muscle during a calorie deficit. Shorter rest periods increase metabolic demand. Compound movements burn more calories.",
+      "days": [
+        {
+          "day_label": "Day 1: Push",
+          "exercises": [
+            { "exercise": "Dumbbell Incline Press", "sets": 4, "reps": "10-12", "rest": "60s" },
+            { "exercise": "Weighted Dips", "sets": 3, "reps": "AMRAP", "rest": "60s" },
+            { "exercise": "Lateral Raises", "sets": 4, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Tricep Pushdowns", "sets": 3, "reps": "12-15", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 2: Pull",
+          "exercises": [
+            { "exercise": "Pull-Ups", "sets": 4, "reps": "AMRAP", "rest": "60s" },
+            { "exercise": "Barbell Row", "sets": 3, "reps": "10-12", "rest": "60s" },
+            { "exercise": "Face Pulls", "sets": 3, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Barbell Curl", "sets": 3, "reps": "10-12", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 3: Legs",
+          "exercises": [
+            { "exercise": "Barbell Squat", "sets": 4, "reps": "8-10", "rest": "90s" },
+            { "exercise": "Dumbbell RDL", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Bulgarian Split Squat", "sets": 3, "reps": "10/leg", "rest": "60s" },
+            { "exercise": "Calf Raises", "sets": 3, "reps": "15-20", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 4: Push",
+          "exercises": [
+            { "exercise": "Bench Press", "sets": 4, "reps": "8-10", "rest": "60s" },
+            { "exercise": "Overhead Press", "sets": 3, "reps": "10-12", "rest": "60s" },
+            { "exercise": "Cable Fly", "sets": 3, "reps": "12-15", "rest": "45s" },
+            { "exercise": "Dumbbell Tricep Extension", "sets": 3, "reps": "12-15", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 5: Pull",
+          "exercises": [
+            { "exercise": "Deadlift", "sets": 3, "reps": "6-8", "rest": "90s" },
+            { "exercise": "Lat Pulldown", "sets": 3, "reps": "10-12", "rest": "60s" },
+            { "exercise": "Seated Cable Row", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Hammer Curl", "sets": 3, "reps": "12-15", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 6: Legs",
+          "exercises": [
+            { "exercise": "Leg Press", "sets": 4, "reps": "10-12", "rest": "60s" },
+            { "exercise": "Romanian Deadlift", "sets": 3, "reps": "10-12", "rest": "60s" },
+            { "exercise": "Leg Extension", "sets": 3, "reps": "12-15", "rest": "45s" },
+            { "exercise": "Leg Curls", "sets": 3, "reps": "12-15", "rest": "45s" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bodyweight_3day",
+      "target": { "sex": "any", "goal": "General Fitness", "level": "Beginner" },
+      "name": "No Equipment Needed (3-Day Bodyweight)",
+      "schedule": "3 days/week",
+      "reasoning": "A complete bodyweight program requiring zero equipment. Perfect for home workouts or travel. Progressive overload through reps, tempo, and exercise variations.",
+      "days": [
+        {
+          "day_label": "Day 1: Upper Body & Core",
+          "exercises": [
+            { "exercise": "Pushups", "sets": 4, "reps": "AMRAP", "rest": "60s" },
+            { "exercise": "Dips", "sets": 3, "reps": "AMRAP", "rest": "60s" },
+            { "exercise": "Plank", "sets": 3, "reps": "45s", "rest": "45s" },
+            { "exercise": "Mountain Climbers", "sets": 3, "reps": "20/side", "rest": "45s" },
+            { "exercise": "Dead Bug", "sets": 3, "reps": "10/side", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 2: Lower Body",
+          "exercises": [
+            { "exercise": "Air Squats", "sets": 4, "reps": "20", "rest": "60s" },
+            { "exercise": "Dumbbell Lunges", "sets": 3, "reps": "12/leg", "rest": "60s" },
+            { "exercise": "Glute Bridges", "sets": 3, "reps": "20", "rest": "60s" },
+            { "exercise": "Step-ups", "sets": 3, "reps": "10/leg", "rest": "60s" },
+            { "exercise": "Calf Raises", "sets": 3, "reps": "20", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 3: Full Body HIIT",
+          "exercises": [
+            { "exercise": "Burpees", "sets": 4, "reps": "10", "rest": "60s" },
+            { "exercise": "Jumping Jacks", "sets": 3, "reps": "30", "rest": "30s" },
+            { "exercise": "Mountain Climbers", "sets": 3, "reps": "20/side", "rest": "45s" },
+            { "exercise": "Air Squats", "sets": 3, "reps": "20", "rest": "45s" },
+            { "exercise": "Pushups", "sets": 3, "reps": "AMRAP", "rest": "60s" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hiit_3day",
+      "target": { "sex": "any", "goal": "Lose Weight", "level": "Beginner" },
+      "name": "HIIT Fat Burner (3-Day)",
+      "schedule": "3 days/week",
+      "reasoning": "High-intensity interval training burns maximum calories in minimum time. The EPOC (afterburn) effect means you keep burning calories hours after the workout. Perfect for busy schedules and fat loss goals.",
+      "days": [
+        {
+          "day_label": "Day 1: Cardio HIIT",
+          "exercises": [
+            { "exercise": "Jumping Jacks", "sets": 4, "reps": "30", "rest": "30s" },
+            { "exercise": "Burpees", "sets": 4, "reps": "8", "rest": "45s" },
+            { "exercise": "Mountain Climbers", "sets": 4, "reps": "20/side", "rest": "30s" },
+            { "exercise": "Air Squats", "sets": 4, "reps": "20", "rest": "30s" }
+          ]
+        },
+        {
+          "day_label": "Day 2: Strength HIIT",
+          "exercises": [
+            { "exercise": "Goblet Squat", "sets": 4, "reps": "12", "rest": "45s" },
+            { "exercise": "Pushups", "sets": 4, "reps": "AMRAP", "rest": "45s" },
+            { "exercise": "Dumbbell Row", "sets": 4, "reps": "10/arm", "rest": "45s" },
+            { "exercise": "Dumbbell Lunges", "sets": 3, "reps": "10/leg", "rest": "45s" },
+            { "exercise": "Plank", "sets": 3, "reps": "30s", "rest": "30s" }
+          ]
+        },
+        {
+          "day_label": "Day 3: Total Body Blast",
+          "exercises": [
+            { "exercise": "Burpees", "sets": 3, "reps": "10", "rest": "30s" },
+            { "exercise": "Dumbbell Press", "sets": 3, "reps": "12", "rest": "45s" },
+            { "exercise": "Air Squats", "sets": 3, "reps": "25", "rest": "30s" },
+            { "exercise": "Mountain Climbers", "sets": 3, "reps": "20/side", "rest": "30s" },
+            { "exercise": "Jumping Jacks", "sets": 3, "reps": "40", "rest": "30s" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dumbbell_only_4day",
+      "target": { "sex": "any", "goal": "Build Muscle", "level": "Beginner" },
+      "name": "Dumbbell-Only Gains (4-Day)",
+      "schedule": "4 days/week",
+      "reasoning": "Complete muscle-building program using only dumbbells. Perfect for home gyms or limited equipment. Upper/Lower split ensures each muscle is hit twice per week for optimal growth.",
+      "days": [
+        {
+          "day_label": "Day 1: Upper A",
+          "exercises": [
+            { "exercise": "Dumbbell Bench Press", "sets": 4, "reps": "8-10", "rest": "90s" },
+            { "exercise": "Dumbbell Row", "sets": 4, "reps": "8-10", "rest": "90s" },
+            { "exercise": "Dumbbell Shoulder Press", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Lateral Raises", "sets": 3, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Dumbbell Curl", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Dumbbell Tricep Extension", "sets": 3, "reps": "12-15", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 2: Lower A",
+          "exercises": [
+            { "exercise": "Goblet Squat", "sets": 4, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Dumbbell RDL", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Dumbbell Lunges", "sets": 3, "reps": "10/leg", "rest": "90s" },
+            { "exercise": "Glute Bridges", "sets": 3, "reps": "15-20", "rest": "60s" },
+            { "exercise": "Calf Raises", "sets": 3, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Plank", "sets": 3, "reps": "45s", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 3: Upper B",
+          "exercises": [
+            { "exercise": "Dumbbell Incline Press", "sets": 4, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Dumbbell Row", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Dumbbell Fly", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Rear Delt Fly", "sets": 3, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Hammer Curl", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Dumbbell Tricep Extension", "sets": 3, "reps": "12-15", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 4: Lower B",
+          "exercises": [
+            { "exercise": "Bulgarian Split Squat", "sets": 3, "reps": "10/leg", "rest": "90s" },
+            { "exercise": "Dumbbell RDL", "sets": 4, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Goblet Squat", "sets": 3, "reps": "12-15", "rest": "90s" },
+            { "exercise": "Step-ups", "sets": 3, "reps": "10/leg", "rest": "60s" },
+            { "exercise": "Bicycle Crunches", "sets": 3, "reps": "20/side", "rest": "45s" },
+            { "exercise": "Dead Bug", "sets": 3, "reps": "10/side", "rest": "45s" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "advanced_ppl_6day",
+      "target": { "sex": "male", "goal": "Build Muscle", "level": "Advanced" },
+      "name": "Advanced Hypertrophy PPL",
+      "schedule": "6 days/week (PPL x2)",
+      "reasoning": "High-volume program for advanced lifters who need more stimulus to continue growing. Incorporates intensity techniques, varied rep ranges, and strategic exercise selection to push past plateaus.",
+      "days": [
+        {
+          "day_label": "Day 1: Push (Heavy)",
+          "exercises": [
+            { "exercise": "Bench Press", "sets": 5, "reps": "4-6", "rest": "180s" },
+            { "exercise": "Incline Bench Press", "sets": 4, "reps": "6-8", "rest": "120s" },
+            { "exercise": "Overhead Press", "sets": 4, "reps": "6-8", "rest": "120s" },
+            { "exercise": "Cable Fly", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Lateral Raises", "sets": 5, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Skull Crushers", "sets": 3, "reps": "10-12", "rest": "60s" },
+            { "exercise": "Tricep Pushdowns", "sets": 3, "reps": "12-15", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 2: Pull (Heavy)",
+          "exercises": [
+            { "exercise": "Deadlift", "sets": 4, "reps": "3-5", "rest": "180s" },
+            { "exercise": "Pull-Ups", "sets": 4, "reps": "6-8", "rest": "120s" },
+            { "exercise": "Barbell Row", "sets": 4, "reps": "6-8", "rest": "120s" },
+            { "exercise": "Face Pulls", "sets": 4, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Barbell Curl", "sets": 4, "reps": "8-10", "rest": "60s" },
+            { "exercise": "Hammer Curl", "sets": 3, "reps": "10-12", "rest": "60s" }
+          ]
+        },
+        {
+          "day_label": "Day 3: Legs (Heavy)",
+          "exercises": [
+            { "exercise": "Barbell Squat", "sets": 5, "reps": "4-6", "rest": "180s" },
+            { "exercise": "Romanian Deadlift", "sets": 4, "reps": "8-10", "rest": "120s" },
+            { "exercise": "Hack Squat", "sets": 3, "reps": "8-10", "rest": "120s" },
+            { "exercise": "Leg Curls", "sets": 4, "reps": "10-12", "rest": "60s" },
+            { "exercise": "Leg Extension", "sets": 4, "reps": "10-12", "rest": "60s" },
+            { "exercise": "Calf Raises", "sets": 5, "reps": "12-15", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 4: Push (Volume)",
+          "exercises": [
+            { "exercise": "Dumbbell Incline Press", "sets": 4, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Dumbbell Press", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Cable Fly", "sets": 3, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Dumbbell Shoulder Press", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Cable Lateral Raise", "sets": 4, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Dips", "sets": 3, "reps": "AMRAP", "rest": "90s" },
+            { "exercise": "Dumbbell Tricep Extension", "sets": 3, "reps": "12-15", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 5: Pull (Volume)",
+          "exercises": [
+            { "exercise": "Chin-Ups", "sets": 4, "reps": "8-10", "rest": "90s" },
+            { "exercise": "Seated Cable Row", "sets": 4, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Lat Pulldown", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Rear Delt Fly", "sets": 4, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Dumbbell Curl", "sets": 3, "reps": "10-12", "rest": "60s" },
+            { "exercise": "Hammer Curl", "sets": 3, "reps": "12-15", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 6: Legs (Volume)",
+          "exercises": [
+            { "exercise": "Front Squat", "sets": 4, "reps": "8-10", "rest": "120s" },
+            { "exercise": "Bulgarian Split Squat", "sets": 3, "reps": "10/leg", "rest": "90s" },
+            { "exercise": "Sumo Deadlift", "sets": 3, "reps": "8-10", "rest": "120s" },
+            { "exercise": "Leg Extension", "sets": 4, "reps": "12-15", "rest": "45s" },
+            { "exercise": "Leg Curls", "sets": 4, "reps": "12-15", "rest": "45s" },
+            { "exercise": "Hip Thrust", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Calf Raises", "sets": 4, "reps": "15-20", "rest": "45s" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "female_fat_loss_4day",
+      "target": { "sex": "female", "goal": "Lose Weight", "level": "Beginner" },
+      "name": "Lean & Strong (4-Day)",
+      "schedule": "4 days/week",
+      "reasoning": "Combines resistance training with metabolic conditioning to build lean muscle while burning fat. Focus on compound movements for maximum calorie burn and a toned, athletic physique.",
+      "days": [
+        {
+          "day_label": "Day 1: Lower Body",
+          "exercises": [
+            { "exercise": "Goblet Squat", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Dumbbell RDL", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Dumbbell Lunges", "sets": 3, "reps": "10/leg", "rest": "60s" },
+            { "exercise": "Glute Bridges", "sets": 3, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Calf Raises", "sets": 3, "reps": "15-20", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 2: Upper Body",
+          "exercises": [
+            { "exercise": "Dumbbell Bench Press", "sets": 3, "reps": "10-12", "rest": "60s" },
+            { "exercise": "Dumbbell Row", "sets": 3, "reps": "10-12", "rest": "60s" },
+            { "exercise": "Dumbbell Shoulder Press", "sets": 3, "reps": "10-12", "rest": "60s" },
+            { "exercise": "Lateral Raises", "sets": 3, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Plank", "sets": 3, "reps": "30s", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 3: HIIT + Lower",
+          "exercises": [
+            { "exercise": "Jumping Jacks", "sets": 3, "reps": "30", "rest": "30s" },
+            { "exercise": "Bulgarian Split Squat", "sets": 3, "reps": "10/leg", "rest": "60s" },
+            { "exercise": "Hip Thrust", "sets": 3, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Mountain Climbers", "sets": 3, "reps": "20/side", "rest": "30s" },
+            { "exercise": "Burpees", "sets": 3, "reps": "8", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 4: Full Body Circuit",
+          "exercises": [
+            { "exercise": "Goblet Squat", "sets": 3, "reps": "12", "rest": "45s" },
+            { "exercise": "Pushups", "sets": 3, "reps": "AMRAP", "rest": "45s" },
+            { "exercise": "Dumbbell Row", "sets": 3, "reps": "10/arm", "rest": "45s" },
+            { "exercise": "Dumbbell Lunges", "sets": 3, "reps": "10/leg", "rest": "45s" },
+            { "exercise": "Bicycle Crunches", "sets": 3, "reps": "20/side", "rest": "30s" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "general_fitness_3day",
+      "target": { "sex": "any", "goal": "General Fitness", "level": "Intermediate" },
+      "name": "Balanced Fitness (3-Day Full Body)",
+      "schedule": "3 days/week",
+      "reasoning": "A well-rounded program balancing strength, endurance, and mobility. Perfect for anyone who wants to look good, feel good, and move well without committing to a bodybuilding split.",
+      "days": [
+        {
+          "day_label": "Day 1: Strength",
+          "exercises": [
+            { "exercise": "Barbell Squat", "sets": 3, "reps": "8-10", "rest": "120s" },
+            { "exercise": "Bench Press", "sets": 3, "reps": "8-10", "rest": "90s" },
+            { "exercise": "Barbell Row", "sets": 3, "reps": "8-10", "rest": "90s" },
+            { "exercise": "Overhead Press", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Plank", "sets": 3, "reps": "45s", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 2: Conditioning",
+          "exercises": [
+            { "exercise": "Goblet Squat", "sets": 3, "reps": "15", "rest": "60s" },
+            { "exercise": "Pushups", "sets": 3, "reps": "AMRAP", "rest": "60s" },
+            { "exercise": "Dumbbell Row", "sets": 3, "reps": "12/arm", "rest": "60s" },
+            { "exercise": "Dumbbell Lunges", "sets": 3, "reps": "12/leg", "rest": "60s" },
+            { "exercise": "Mountain Climbers", "sets": 3, "reps": "20/side", "rest": "45s" }
+          ]
+        },
+        {
+          "day_label": "Day 3: Hypertrophy",
+          "exercises": [
+            { "exercise": "Deadlift", "sets": 3, "reps": "6-8", "rest": "150s" },
+            { "exercise": "Dumbbell Incline Press", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Lat Pulldown", "sets": 3, "reps": "10-12", "rest": "90s" },
+            { "exercise": "Face Pulls", "sets": 3, "reps": "15-20", "rest": "45s" },
+            { "exercise": "Dumbbell Curl", "sets": 2, "reps": "12-15", "rest": "60s" },
+            { "exercise": "Tricep Pushdowns", "sets": 2, "reps": "12-15", "rest": "60s" }
+          ]
+        }
       ]
     }
   ]

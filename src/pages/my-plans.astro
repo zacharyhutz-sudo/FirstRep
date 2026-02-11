@@ -1,0 +1,149 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="My Plans - FirstRep">
+	<main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-20">
+		<h1 class="text-3xl sm:text-4xl font-black mb-2 tracking-tight text-center">
+			My <span class="text-indigo-500">Plans</span>
+		</h1>
+		<p class="text-gray-400 text-center mb-8 sm:mb-12 text-sm sm:text-base">Your saved workout plans, stored locally on this device.</p>
+
+		<!-- Empty State -->
+		<div id="empty-state" class="hidden text-center py-16">
+			<p class="text-5xl mb-4">🏋️</p>
+			<h2 class="text-xl font-bold mb-2 text-gray-300">No saved plans yet</h2>
+			<p class="text-gray-500 mb-6 text-sm">Generate a workout plan from the home page and save it.</p>
+			<a href="/FirstRep/" class="inline-block bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-bold px-6 py-3 rounded-lg transition">
+				Create a Plan
+			</a>
+		</div>
+
+		<!-- Plans List -->
+		<div id="plans-list" class="space-y-6"></div>
+
+		<script>
+			import exerciseDB from '../data/exercise-db.json';
+
+			function loadPlans() {
+				return JSON.parse(localStorage.getItem('firstrep_plans') || '[]');
+			}
+
+			function savePlans(plans) {
+				localStorage.setItem('firstrep_plans', JSON.stringify(plans));
+			}
+
+			function deletePlan(id) {
+				if (!confirm('Delete this plan?')) return;
+				const plans = loadPlans().filter(p => p.id !== id);
+				savePlans(plans);
+				renderPlans();
+			}
+			window.deletePlan = deletePlan;
+
+			// Exercise modal (reuse)
+			function openExerciseModal(name) {
+				const data = exerciseDB.exercises.find(e => e.name === name);
+				if (!data) return;
+				document.getElementById('modal-title').innerText = data.name;
+				document.getElementById('modal-muscles').innerText = `Target: ${data.muscles}`;
+				document.getElementById('modal-image').src = data.image;
+				document.getElementById('modal-instructions').innerHTML = data.instructions.map(i => `<li>${i}</li>`).join('');
+				document.getElementById('modal-overlay').classList.remove('hidden');
+			}
+			window.openExerciseModal = openExerciseModal;
+
+			function renderPlans() {
+				const plans = loadPlans();
+				const list = document.getElementById('plans-list');
+				const empty = document.getElementById('empty-state');
+
+				if (plans.length === 0) {
+					empty.classList.remove('hidden');
+					list.innerHTML = '';
+					return;
+				}
+
+				empty.classList.add('hidden');
+				list.innerHTML = plans.map(plan => {
+					const date = new Date(plan.savedAt).toLocaleDateString('en-US', {
+						month: 'short', day: 'numeric', year: 'numeric'
+					});
+					const totalExercises = plan.days?.reduce((sum, d) => sum + d.exercises.length, 0) || 0;
+
+					return `
+						<div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
+							<!-- Plan Header -->
+							<div class="p-4 sm:p-6 border-b border-gray-800">
+								<div class="flex items-start justify-between gap-3">
+									<div class="min-w-0">
+										<h2 class="text-lg sm:text-xl font-black text-indigo-400 truncate">${plan.name}</h2>
+										<p class="text-sm text-gray-500 mt-1">${plan.schedule} · ${totalExercises} exercises · Saved ${date}</p>
+									</div>
+									<button onclick="window.deletePlan('${plan.id}')" 
+											class="shrink-0 text-gray-600 hover:text-red-400 transition p-2 tap-target" 
+											title="Delete plan">
+										<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+										</svg>
+									</button>
+								</div>
+								${plan.reasoning ? `<p class="text-xs text-gray-500 mt-3 leading-relaxed">${plan.reasoning}</p>` : ''}
+							</div>
+
+							<!-- Plan Days (collapsible) -->
+							<details class="group">
+								<summary class="px-4 sm:px-6 py-3 cursor-pointer text-sm font-bold text-indigo-300 hover:text-indigo-200 transition flex items-center justify-between">
+									<span>View Workout Days</span>
+									<svg class="h-4 w-4 transform group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+									</svg>
+								</summary>
+								<div class="px-4 sm:px-6 pb-4 sm:pb-6 space-y-4">
+									${(plan.days || []).map(day => `
+										<div>
+											<h3 class="text-sm font-bold text-indigo-200 mb-2">${day.day_label}</h3>
+											<div class="space-y-2">
+												${day.exercises.map(ex => `
+													<div onclick="window.openExerciseModal('${ex.exercise.replace(/'/g, "\\'")}')"
+														 class="flex justify-between items-center bg-gray-800/50 p-3 rounded-lg border border-gray-700/50 hover:border-indigo-500/50 cursor-pointer active:scale-[0.98] transition">
+														<span class="text-sm text-gray-200 min-w-0 truncate mr-2">${ex.exercise}</span>
+														<span class="text-indigo-400 font-mono text-sm shrink-0">${ex.sets}x${ex.reps}</span>
+													</div>
+												`).join('')}
+											</div>
+										</div>
+									`).join('')}
+								</div>
+							</details>
+						</div>
+					`;
+				}).join('');
+			}
+
+			renderPlans();
+		</script>
+
+		<!-- Exercise Detail Modal (same as index) -->
+		<div id="modal-overlay" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+			<div class="bg-gray-900 border border-indigo-500/30 w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto">
+				<div class="relative h-48 sm:h-64 bg-gray-800 flex items-center justify-center overflow-hidden">
+					<img id="modal-image" src="" alt="" class="max-w-full max-h-full object-contain" />
+					<button onclick="document.getElementById('modal-overlay').classList.add('hidden')" class="absolute top-3 right-3 bg-gray-950/50 hover:bg-gray-950 text-white p-3 rounded-full transition tap-target">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+						</svg>
+					</button>
+				</div>
+				<div class="p-5 sm:p-8">
+					<h2 id="modal-title" class="text-2xl sm:text-3xl font-black mb-1 text-indigo-400"></h2>
+					<p id="modal-muscles" class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-6"></p>
+					<div class="space-y-4 text-left">
+						<h3 class="text-sm font-bold text-indigo-300 uppercase tracking-widest">How to Perform</h3>
+						<ul id="modal-instructions" class="space-y-3 text-gray-300 list-disc pl-5 text-sm"></ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+</Layout>

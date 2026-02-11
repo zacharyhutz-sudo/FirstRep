@@ -3,74 +3,374 @@
     {
       "name": "Barbell Squat",
       "muscles": "Quads, Glutes, Hamstrings, Core",
-      "instructions": ["Place the bar on your upper back.", "Keep feet shoulder-width apart.", "Descend until thighs are parallel to floor.", "Drive back up through heels."],
+      "instructions": ["Place the bar on your upper back (high bar) or rear delts (low bar).", "Keep feet shoulder-width apart, toes slightly out.", "Brace your core and descend until thighs are parallel to floor.", "Drive back up through your heels, keeping chest tall."],
       "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Squat/0.jpg"
     },
     {
       "name": "Bench Press",
       "muscles": "Chest, Front Delts, Triceps",
-      "instructions": ["Lie flat on the bench.", "Lower bar to mid-chest.", "Press up until arms are extended."],
+      "instructions": ["Lie flat on the bench with eyes under the bar.", "Grip the bar slightly wider than shoulder-width.", "Unrack and lower bar to mid-chest with control.", "Press up until arms are fully extended."],
       "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/0.jpg"
     },
     {
       "name": "Deadlift",
       "muscles": "Full Body, Posterior Chain, Grip",
-      "instructions": ["Feet hip-width apart.", "Grip bar outside legs.", "Pull bar up along shins.", "Stand tall and lock hips."],
+      "instructions": ["Stand with feet hip-width apart, bar over mid-foot.", "Grip bar just outside legs, hinge at hips.", "Pull bar up along shins, keeping back flat.", "Stand tall, lock hips, and squeeze glutes at top."],
       "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Deadlift/0.jpg"
+    },
+    {
+      "name": "Overhead Press",
+      "muscles": "Shoulders, Triceps, Upper Chest",
+      "instructions": ["Stand with bar at shoulder height, grip just outside shoulders.", "Brace core and press bar straight overhead.", "Lock out arms and push head slightly through at top.", "Lower bar back to shoulders with control."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Military_Press/0.jpg"
+    },
+    {
+      "name": "Barbell Row",
+      "muscles": "Upper Back, Lats, Biceps, Rear Delts",
+      "instructions": ["Hinge at hips with slight knee bend, back flat.", "Grip bar shoulder-width apart.", "Pull bar to lower chest/upper belly.", "Squeeze shoulder blades together at top."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Reverse_Grip_Bent-Over_Rows/0.jpg"
     },
     {
       "name": "Dumbbell Press",
       "muscles": "Chest, Shoulders, Triceps",
-      "instructions": ["Lie on bench with dumbbells.", "Lower weights to chest level.", "Press weights up together."],
+      "instructions": ["Lie on bench with a dumbbell in each hand.", "Lower weights to chest level, elbows at ~45 degrees.", "Press weights up together until arms are extended.", "Squeeze chest at the top."],
       "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Bench_Press/0.jpg"
+    },
+    {
+      "name": "Dumbbell Bench Press",
+      "muscles": "Chest, Shoulders, Triceps",
+      "instructions": ["Lie on flat bench with a dumbbell in each hand.", "Lower weights to chest level with elbows at ~45 degrees.", "Press weights up together until arms are extended.", "Control the negative for maximum muscle engagement."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Bench_Press/0.jpg"
+    },
+    {
+      "name": "Dumbbell Incline Press",
+      "muscles": "Upper Chest, Shoulders, Triceps",
+      "instructions": ["Set bench to 30-45 degree incline.", "Press dumbbells up from shoulder height.", "Lower with control, elbows at ~45 degrees.", "Squeeze upper chest at the top."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Press/0.jpg"
     },
     {
       "name": "Dumbbell Row",
       "muscles": "Lats, Upper Back, Biceps",
-      "instructions": ["One hand/knee on bench.", "Pull dumbbell to hip.", "Squeeze shoulder blade."],
+      "instructions": ["Place one hand and knee on bench for support.", "Pull dumbbell to hip with opposite arm.", "Squeeze shoulder blade at the top.", "Lower with control, full stretch at bottom."],
       "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/One_Arm_Dumbbell_Row/0.jpg"
     },
     {
       "name": "Dumbbell Lunges",
       "muscles": "Quads, Glutes, Hamstrings",
-      "instructions": ["Hold dumbbells at sides.", "Step forward and lower hips.", "Push back to start."],
+      "instructions": ["Hold dumbbells at your sides.", "Step forward and lower hips until both knees are at 90 degrees.", "Push through front heel to return to start.", "Alternate legs each rep."],
       "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Lunges/0.jpg"
+    },
+    {
+      "name": "Dumbbell RDL",
+      "muscles": "Hamstrings, Glutes, Lower Back",
+      "instructions": ["Hold dumbbells in front of thighs.", "Hinge at hips, pushing them back.", "Lower dumbbells along legs until you feel a hamstring stretch.", "Squeeze glutes to return to standing."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Stiff-Legged_Dumbbell_Deadlift/0.jpg"
+    },
+    {
+      "name": "Dumbbell Shoulder Press",
+      "muscles": "Shoulders, Triceps",
+      "instructions": ["Sit or stand with dumbbells at shoulder height.", "Press dumbbells overhead until arms are extended.", "Lower back to shoulders with control.", "Keep core braced throughout."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Shoulder_Press/0.jpg"
+    },
+    {
+      "name": "Dumbbell Curl",
+      "muscles": "Biceps, Forearms",
+      "instructions": ["Stand with dumbbells at sides, palms forward.", "Curl weights up by bending elbows.", "Squeeze biceps at the top.", "Lower with control, no swinging."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Bicep_Curl/0.jpg"
+    },
+    {
+      "name": "Hammer Curl",
+      "muscles": "Biceps, Brachialis, Forearms",
+      "instructions": ["Hold dumbbells with neutral (palms-in) grip.", "Curl weights up keeping palms facing each other.", "Squeeze at the top.", "Lower with control."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hammer_Curls/0.jpg"
+    },
+    {
+      "name": "Lateral Raises",
+      "muscles": "Side Delts",
+      "instructions": ["Hold light dumbbells at sides.", "Raise arms out to sides until parallel with floor.", "Lead with elbows, slight bend in arms.", "Lower slowly with control."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Side_Lateral_Raise/0.jpg"
+    },
+    {
+      "name": "Dumbbell Fly",
+      "muscles": "Chest, Front Delts",
+      "instructions": ["Lie on bench with dumbbells above chest, slight elbow bend.", "Lower arms out to sides in a wide arc.", "Feel the stretch across your chest.", "Squeeze chest to bring weights back together."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Flyes/0.jpg"
+    },
+    {
+      "name": "Goblet Squat",
+      "muscles": "Quads, Glutes, Core",
+      "instructions": ["Hold dumbbell vertically at chest level.", "Squat down between your legs, elbows inside knees.", "Keep chest up and back straight.", "Drive up through heels."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Goblet_Squat/0.jpg"
+    },
+    {
+      "name": "Dumbbell Tricep Extension",
+      "muscles": "Triceps",
+      "instructions": ["Hold one dumbbell overhead with both hands.", "Lower the weight behind your head by bending elbows.", "Extend arms back to the top.", "Keep elbows close to your head."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Triceps_Press/0.jpg"
     },
     {
       "name": "Pushups",
       "muscles": "Chest, Shoulders, Triceps, Core",
-      "instructions": ["Hands shoulder-width apart.", "Lower chest to floor.", "Push back up."],
+      "instructions": ["Place hands slightly wider than shoulder-width.", "Keep body in a straight line from head to heels.", "Lower chest to floor with control.", "Push back up to full arm extension."],
       "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pushups/0.jpg"
     },
     {
       "name": "Air Squats",
       "muscles": "Quads, Glutes",
-      "instructions": ["Feet shoulder-width apart.", "Lower hips back and down.", "Keep chest up."],
+      "instructions": ["Stand with feet shoulder-width apart.", "Lower hips back and down as if sitting.", "Keep chest up and knees tracking over toes.", "Stand back up by driving through heels."],
       "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bodyweight_Squat/0.jpg"
     },
     {
       "name": "Burpees",
       "muscles": "Full Body, Cardio",
-      "instructions": ["Drop to plank.", "Do a pushup.", "Jump feet in and jump up."],
+      "instructions": ["From standing, drop hands to floor.", "Jump feet back to plank position.", "Do a pushup, then jump feet forward.", "Explode up into a jump with arms overhead."],
       "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Burpee/0.jpg"
     },
     {
       "name": "Jumping Jacks",
       "muscles": "Full Body, Cardio",
-      "instructions": ["Jump feet out, arms up.", "Jump back to start."],
+      "instructions": ["Stand with feet together, arms at sides.", "Jump feet out wide while raising arms overhead.", "Jump back to starting position.", "Maintain a steady rhythm."],
       "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Jumping_Jack/0.jpg"
     },
     {
       "name": "Mountain Climbers",
-      "muscles": "Core, Cardio",
-      "instructions": ["Plank position.", "Drive knees to chest rapidly."],
+      "muscles": "Core, Cardio, Shoulders",
+      "instructions": ["Start in a high plank position.", "Drive one knee toward your chest.", "Quickly switch legs in a running motion.", "Keep hips level and core tight."],
       "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Mountain_Climbers/0.jpg"
     },
     {
       "name": "Lat Pulldown",
-      "muscles": "Lats, Biceps",
-      "instructions": ["Pull bar to upper chest.", "Squeeze lats."],
+      "muscles": "Lats, Biceps, Upper Back",
+      "instructions": ["Sit at the machine with thighs secured under pads.", "Grip bar wider than shoulder-width.", "Pull bar down to upper chest, squeezing lats.", "Return bar up with control, full stretch at top."],
       "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Wide-Grip_Lat_Pulldown/0.jpg"
+    },
+    {
+      "name": "Seated Cable Row",
+      "muscles": "Mid Back, Lats, Biceps",
+      "instructions": ["Sit with feet on platform, slight knee bend.", "Pull handle to lower chest.", "Squeeze shoulder blades together.", "Return with control, reaching forward for a stretch."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Cable_Rows/0.jpg"
+    },
+    {
+      "name": "Cable Fly",
+      "muscles": "Chest, Front Delts",
+      "instructions": ["Stand between cable columns, handles at chest height.", "Step forward slightly for tension.", "Bring hands together in front of chest in an arc.", "Squeeze chest, then return with control."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Crossover/0.jpg"
+    },
+    {
+      "name": "Tricep Pushdowns",
+      "muscles": "Triceps",
+      "instructions": ["Stand facing cable machine with rope or bar attachment.", "Keep elbows pinned to sides.", "Push weight down until arms are fully extended.", "Squeeze triceps, then return with control."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Triceps_Pushdown/0.jpg"
+    },
+    {
+      "name": "Face Pulls",
+      "muscles": "Rear Delts, Upper Back, Rotator Cuff",
+      "instructions": ["Set cable to face height with rope attachment.", "Pull rope toward face, separating hands.", "Squeeze rear delts and externally rotate at the end.", "Return with control."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Face_Pull/0.jpg"
+    },
+    {
+      "name": "Leg Press",
+      "muscles": "Quads, Glutes, Hamstrings",
+      "instructions": ["Sit in leg press with feet shoulder-width on platform.", "Lower the sled by bending knees toward chest.", "Press through heels until legs are almost extended.", "Do not lock out knees at the top."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Press/0.jpg"
+    },
+    {
+      "name": "Leg Curls",
+      "muscles": "Hamstrings",
+      "instructions": ["Lie face down on the machine, pad behind ankles.", "Curl weight up by bending knees.", "Squeeze hamstrings at the top.", "Lower with control."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Lying_Leg_Curls/0.jpg"
+    },
+    {
+      "name": "Leg Extension",
+      "muscles": "Quads",
+      "instructions": ["Sit on machine with pad on front of shins.", "Extend legs until straight.", "Squeeze quads at the top.", "Lower with control."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Extensions/0.jpg"
+    },
+    {
+      "name": "Calf Raises",
+      "muscles": "Calves",
+      "instructions": ["Stand on a ledge or plate with heels hanging off.", "Rise up on your toes as high as possible.", "Squeeze calves at the top.", "Lower slowly for a full stretch."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Calf_Raises/0.jpg"
+    },
+    {
+      "name": "Glute Bridges",
+      "muscles": "Glutes, Hamstrings",
+      "instructions": ["Lie on back with knees bent, feet flat on floor.", "Drive hips up by squeezing glutes.", "Hold at the top for a count.", "Lower hips back down with control."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Glute_Bridge/0.jpg"
+    },
+    {
+      "name": "Hip Thrust",
+      "muscles": "Glutes, Hamstrings",
+      "instructions": ["Sit with upper back against a bench, barbell across hips.", "Drive hips up until torso is parallel with floor.", "Squeeze glutes hard at the top.", "Lower hips back down with control."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Hip_Thrust/0.jpg"
+    },
+    {
+      "name": "Plank",
+      "muscles": "Core, Shoulders",
+      "instructions": ["Rest on forearms and toes, body in a straight line.", "Brace core as if bracing for a punch.", "Keep hips level — don't sag or pike.", "Breathe steadily and hold for the prescribed time."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Plank/0.jpg"
+    },
+    {
+      "name": "Russian Twist",
+      "muscles": "Obliques, Core",
+      "instructions": ["Sit with knees bent, lean back slightly.", "Hold weight or clasp hands at chest.", "Rotate torso side to side.", "Keep core engaged throughout."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Russian_Twist/0.jpg"
+    },
+    {
+      "name": "Hanging Leg Raise",
+      "muscles": "Lower Abs, Hip Flexors",
+      "instructions": ["Hang from a pull-up bar with straight arms.", "Raise legs until parallel with floor (or higher).", "Lower with control — no swinging.", "For easier version, raise bent knees."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hanging_Leg_Raise/0.jpg"
+    },
+    {
+      "name": "Pull-Ups",
+      "muscles": "Lats, Biceps, Upper Back",
+      "instructions": ["Hang from bar with overhand grip, hands wider than shoulders.", "Pull yourself up until chin is over the bar.", "Lower with control to full arm extension.", "Avoid kipping or swinging."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pullups/0.jpg"
+    },
+    {
+      "name": "Chin-Ups",
+      "muscles": "Lats, Biceps",
+      "instructions": ["Hang from bar with underhand (supinated) grip.", "Pull yourself up until chin clears the bar.", "Lower with control.", "Great for bicep emphasis."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Chin-Up/0.jpg"
+    },
+    {
+      "name": "Dips",
+      "muscles": "Chest, Triceps, Front Delts",
+      "instructions": ["Support yourself on parallel bars with arms extended.", "Lower body by bending elbows until upper arms are parallel.", "Lean forward for chest emphasis, stay upright for triceps.", "Push back up to full extension."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dips_-_Chest_Version/0.jpg"
+    },
+    {
+      "name": "Weighted Dips",
+      "muscles": "Chest, Triceps, Front Delts",
+      "instructions": ["Attach weight belt or hold dumbbell between feet.", "Support yourself on parallel bars.", "Lower body with control until upper arms are parallel.", "Push back up to full lockout."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dips_-_Chest_Version/0.jpg"
+    },
+    {
+      "name": "Bulgarian Split Squat",
+      "muscles": "Quads, Glutes, Hamstrings",
+      "instructions": ["Stand with rear foot elevated on a bench behind you.", "Lower hips until front thigh is parallel.", "Drive up through front heel.", "Keep torso upright throughout."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bulgarian_Split_Squat/0.jpg"
+    },
+    {
+      "name": "Step-ups",
+      "muscles": "Quads, Glutes",
+      "instructions": ["Stand facing a box or bench.", "Step up with one foot, driving through the heel.", "Stand tall on top, then lower with control.", "Complete all reps on one side before switching."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Step_Ups/0.jpg"
+    },
+    {
+      "name": "Chair Squats",
+      "muscles": "Quads, Glutes",
+      "instructions": ["Stand in front of a chair with feet shoulder-width.", "Lower yourself until you lightly touch the chair.", "Stand back up by driving through heels.", "Keep chest up throughout."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bodyweight_Squat/0.jpg"
+    },
+    {
+      "name": "Wall Pushups",
+      "muscles": "Chest, Shoulders, Triceps",
+      "instructions": ["Stand arm's length from a wall.", "Place hands on wall at shoulder height.", "Bend elbows to bring chest toward wall.", "Push back to start position."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pushups/0.jpg"
+    },
+    {
+      "name": "Resistance Band Rows",
+      "muscles": "Upper Back, Lats, Biceps",
+      "instructions": ["Anchor band at mid-height or loop around feet while seated.", "Pull band toward torso, squeezing shoulder blades.", "Return with control.", "Keep core braced."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Cable_Rows/0.jpg"
+    },
+    {
+      "name": "Single-Leg Stance",
+      "muscles": "Balance, Ankle Stability",
+      "instructions": ["Stand on one leg with slight knee bend.", "Keep hips level and core engaged.", "Hold for the prescribed time.", "Use a wall for light support if needed."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bodyweight_Squat/0.jpg"
+    },
+    {
+      "name": "Box Jumps",
+      "muscles": "Quads, Glutes, Calves, Cardio",
+      "instructions": ["Stand facing a sturdy box or platform.", "Swing arms and jump onto the box, landing softly.", "Stand fully upright on the box.", "Step down (don't jump down) and repeat."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bodyweight_Squat/0.jpg"
+    },
+    {
+      "name": "Battle Ropes",
+      "muscles": "Shoulders, Arms, Core, Cardio",
+      "instructions": ["Hold one end of the rope in each hand.", "Alternate raising and slamming each arm.", "Keep a slight squat and engaged core.", "Maintain intensity for the prescribed time."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pushups/0.jpg"
+    },
+    {
+      "name": "Kettlebell Swing",
+      "muscles": "Glutes, Hamstrings, Core, Cardio",
+      "instructions": ["Stand with feet wider than shoulder-width, kettlebell on floor.", "Hinge at hips, grip kettlebell with both hands.", "Hike the bell back between legs, then thrust hips forward.", "Let the bell swing to chest height, arms straight."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Kettlebell_Sumo_Deadlift/0.jpg"
+    },
+    {
+      "name": "Bicycle Crunches",
+      "muscles": "Abs, Obliques",
+      "instructions": ["Lie on back with hands behind head, legs raised.", "Bring right elbow toward left knee while extending right leg.", "Alternate sides in a pedaling motion.", "Keep lower back pressed to floor."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Air_Bike/0.jpg"
+    },
+    {
+      "name": "Dead Bug",
+      "muscles": "Core, Deep Stabilizers",
+      "instructions": ["Lie on back with arms extended up, knees at 90 degrees.", "Simultaneously lower opposite arm and leg toward floor.", "Return to start, then switch sides.", "Keep lower back pressed firmly into the floor."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Plank/0.jpg"
+    },
+    {
+      "name": "Romanian Deadlift",
+      "muscles": "Hamstrings, Glutes, Lower Back",
+      "instructions": ["Stand with barbell at hip level, slight knee bend.", "Hinge at hips, pushing them back.", "Lower bar along legs until hamstring stretch.", "Squeeze glutes to return to standing."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Romanian_Deadlift/0.jpg"
+    },
+    {
+      "name": "Front Squat",
+      "muscles": "Quads, Core, Upper Back",
+      "instructions": ["Rest barbell on front delts in a clean grip or cross-arm grip.", "Keep elbows high and chest up.", "Squat down with a very upright torso.", "Drive up through heels."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Front_Barbell_Squat/0.jpg"
+    },
+    {
+      "name": "Incline Bench Press",
+      "muscles": "Upper Chest, Shoulders, Triceps",
+      "instructions": ["Set bench to 30-45 degree incline.", "Unrack bar and lower to upper chest.", "Press up until arms are extended.", "Keep feet flat on floor."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Incline_Bench_Press_-_Medium_Grip/0.jpg"
+    },
+    {
+      "name": "Close-Grip Bench Press",
+      "muscles": "Triceps, Chest",
+      "instructions": ["Grip bar with hands shoulder-width or slightly narrower.", "Lower bar to lower chest.", "Press up, focusing on tricep engagement.", "Keep elbows closer to body than regular bench."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/0.jpg"
+    },
+    {
+      "name": "Barbell Curl",
+      "muscles": "Biceps",
+      "instructions": ["Stand with barbell, underhand grip at shoulder width.", "Curl bar up by bending elbows.", "Squeeze biceps at the top.", "Lower with control, keep elbows stationary."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Curl/0.jpg"
+    },
+    {
+      "name": "Skull Crushers",
+      "muscles": "Triceps",
+      "instructions": ["Lie on bench with EZ bar or barbell extended above chest.", "Lower the bar toward your forehead by bending elbows.", "Keep upper arms stationary.", "Extend arms back to start."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Lying_Triceps_Press/0.jpg"
+    },
+    {
+      "name": "Rear Delt Fly",
+      "muscles": "Rear Delts, Upper Back",
+      "instructions": ["Bend forward at hips with dumbbells hanging down.", "Raise arms out to sides, squeezing rear delts.", "Keep slight bend in elbows.", "Lower with control."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Bent-Over_Rear_Delt_Raise/0.jpg"
+    },
+    {
+      "name": "Sumo Deadlift",
+      "muscles": "Glutes, Inner Thighs, Hamstrings, Back",
+      "instructions": ["Take a wide stance with toes pointed out.", "Grip bar between legs with narrow grip.", "Drive through heels, pushing hips forward.", "Stand tall and lock out."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Sumo_Deadlift/0.jpg"
+    },
+    {
+      "name": "Cable Lateral Raise",
+      "muscles": "Side Delts",
+      "instructions": ["Stand sideways to cable machine, handle in far hand.", "Raise arm out to side until parallel with floor.", "Lower with control.", "Keep slight bend in elbow throughout."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Side_Lateral_Raise/0.jpg"
+    },
+    {
+      "name": "Hack Squat",
+      "muscles": "Quads, Glutes",
+      "instructions": ["Position yourself in hack squat machine.", "Place feet shoulder-width on platform.", "Lower until thighs are parallel.", "Drive up through heels."],
+      "image": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hack_Squat/0.jpg"
     }
   ]
 }
