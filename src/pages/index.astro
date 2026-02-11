@@ -101,6 +101,8 @@ import Layout from '../layouts/Layout.astro';
 			const modalInstructions = document.getElementById('modal-instructions');
 			const modalClose = document.getElementById('modal-close');
 
+			const WORKER_URL = 'https://muddy-moon-6ad2.hutzellcreativeco.workers.dev/';
+
 			// Close modal
 			modalClose?.addEventListener('click', () => overlay.classList.add('hidden'));
 			overlay?.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.add('hidden'); });
@@ -120,19 +122,44 @@ import Layout from '../layouts/Layout.astro';
 			// Attach to window so onclick works in template literals
 			window.openExerciseModal = openExerciseModal;
 
-			form?.addEventListener('submit', (e) => {
+			form?.addEventListener('submit', async (e) => {
 				e.preventDefault();
 				
+				const submitBtn = form.querySelector('button[type="submit"]');
+				const originalText = submitBtn.innerText;
+				submitBtn.innerText = '🤖 AI is Generating...';
+				submitBtn.disabled = true;
+
 				const sex = document.getElementById('sex').value;
 				const age = document.getElementById('age').value;
 				const goal = document.getElementById('goal').value;
 
-				// Find best match in our static library
-				const match = programsData.baseline_templates.find(t => 
-					t.target.sex === sex && 
-					t.target.age_range === age && 
-					t.target.goal === goal
-				) || programsData.baseline_templates[0]; 
+				let match;
+
+				try {
+					// 1. Try to get a custom AI plan from your Cloudflare Worker
+					const response = await fetch(WORKER_URL, {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ sex, age, goal })
+					});
+
+					if (!response.ok) throw new Error('Worker failed');
+					match = await response.json();
+					console.log('AI Plan Generated:', match);
+
+				} catch (err) {
+					console.error('Falling back to static templates:', err);
+					// 2. Fallback to our static library if the AI is offline
+					match = programsData.baseline_templates.find(t => 
+						t.target.sex === sex && 
+						t.target.age_range === age && 
+						t.target.goal === goal
+					) || programsData.baseline_templates[0];
+				} finally {
+					submitBtn.innerText = originalText;
+					submitBtn.disabled = false;
+				}
 
 				// Update UI
 				document.getElementById('program-name').innerText = match.name;
@@ -141,9 +168,10 @@ import Layout from '../layouts/Layout.astro';
 				
 				const container = document.getElementById('workout-container');
 				
+				// Show the AI-generated workout
 				const workoutDays = [
 					{ label: 'Day 1: Primary Lift Focus', exercises: match.workout },
-					{ label: 'Day 2: Accessory & Recovery', exercises: [...match.workout].reverse() },
+					{ label: 'Day 2: Accessory & Recovery', exercises: [...match.workout].reverse().slice(0, 3) },
 					{ label: 'Day 3: Strength & Conditioning', exercises: match.workout }
 				];
 
