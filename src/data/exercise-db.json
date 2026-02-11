@@ -2,6 +2,7 @@
   "exercises": [
     {
       "name": "Barbell Squat",
+      "muscles": "Quads, Glutes, Hamstrings, Core",
       "instructions": [
         "Place the bar on your upper back (traps), not your neck.",
         "Keep your feet shoulder-width apart, toes slightly pointed out.",
@@ -13,6 +14,7 @@
     },
     {
       "name": "Bench Press",
+      "muscles": "Chest, Front Delts, Triceps",
       "instructions": [
         "Lie flat on the bench with your feet planted firmly on the floor.",
         "Grip the bar slightly wider than shoulder-width.",
@@ -24,6 +26,7 @@
     },
     {
       "name": "Barbell Row",
+      "muscles": "Lats, Upper Back, Biceps, Rear Delts",
       "instructions": [
         "Hinge at the hips until your torso is nearly parallel to the floor.",
         "Grip the bar with an overhand grip, slightly wider than shoulder-width.",
@@ -35,6 +38,7 @@
     },
     {
       "name": "Overhead Press",
+      "muscles": "Shoulders, Triceps, Upper Chest",
       "instructions": [
         "Stand with your feet hip-width apart and grip the bar just outside your shoulders.",
         "Start with the bar at shoulder height, elbows slightly in front of the bar.",
@@ -46,6 +50,7 @@
     },
     {
       "name": "Lat Pulldown",
+      "muscles": "Lats, Biceps, Upper Back",
       "instructions": [
         "Sit at a lat pulldown station and grab the bar with a wide overhand grip.",
         "Pull your shoulder blades down and back, and then pull the bar down toward your upper chest.",
@@ -57,6 +62,7 @@
     },
     {
       "name": "Goblet Squat",
+      "muscles": "Quads, Glutes, Core",
       "instructions": [
         "Hold a dumbbell or kettlebell against your chest with both hands.",
         "Stand with your feet slightly wider than shoulder-width.",
@@ -68,6 +74,7 @@
     },
     {
       "name": "Dumbbell RDL",
+      "muscles": "Hamstrings, Glutes, Lower Back",
       "instructions": [
         "Hold a pair of dumbbells in front of your thighs.",
         "Hinge at the hips, pushing them back while keeping a slight bend in your knees.",
@@ -79,6 +86,7 @@
     },
     {
       "name": "Seated Cable Row",
+      "muscles": "Middle Back, Lats, Biceps",
       "instructions": [
         "Sit at a cable row station with your feet on the pads and knees slightly bent.",
         "Grip the handle and pull it toward your lower abdomen.",
@@ -90,6 +98,7 @@
     },
     {
       "name": "Glute Bridges",
+      "muscles": "Glutes, Hamstrings, Core",
       "instructions": [
         "Lie on your back with your knees bent and feet flat on the floor.",
         "Drive through your heels to lift your hips toward the ceiling.",
@@ -101,6 +110,7 @@
     },
     {
       "name": "Deadlift",
+      "muscles": "Full Body, Posterior Chain, Grip",
       "instructions": [
         "Stand with your feet hip-width apart and the bar over the middle of your feet.",
         "Bend at the hips and knees to grip the bar just outside your legs.",
