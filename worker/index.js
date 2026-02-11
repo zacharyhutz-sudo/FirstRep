@@ -47,7 +47,17 @@ export default {
           }),
         });
         const data = await response.json();
-        return new Response(data.candidates[0].content.parts[0].text, {
+        
+        if (!data.candidates || !data.candidates[0]) {
+          throw new Error("AI Search limit reached or invalid response");
+        }
+
+        let rawText = data.candidates[0].content.parts[0].text;
+        
+        // Clean markdown backticks if AI included them
+        rawText = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
+
+        return new Response(rawText, {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
