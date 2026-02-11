@@ -39,28 +39,31 @@ Generate a customized workout plan based on these user stats:
 - Experience: ${body.experience} (Last workout: ${body.lastWorkout})
 - Injury/Pain: ${body.injuries}
 
---- ADAPTIVE SAFETY & SCALING LOGIC (MANDATORY) ---
-1. SENIORS (Age 65+): 
-   - Prioritize balance, mobility, and low-impact steady-state cardio (Walking).
-   - If Beginner, limit total session time to 20-30 mins regardless of their request.
-   - Use higher rep ranges (12-15) with lower weight to protect joints.
+--- CRITICAL HIERARCHY OF ADAPTATION (MANDATORY) ---
 
-2. INJURY/PAIN ADAPTATION:
-   - BACK PAIN: Avoid spinal compression. NO Barbell Squats, Deadlifts, or Overhead Presses. Substitute with Goblet Squats (if tolerated), Bird-Dogs (Bodyweight), or Plank.
-   - KNEE PAIN: Avoid deep flexion under load. NO Lunges or deep Squats. Substitute with Glute Bridges or Box Step-ups.
-   - SHOULDER PAIN: Avoid heavy overhead movement. NO Overhead Press. Substitute with Lateral Raises or Floor Press.
-   - GENERAL: If any pain is mentioned, include a "Pain Management Note" in the reasoning.
+1. SAFETY FIRST (Pain/Injury):
+   - BACK PAIN: ABSOLUTELY NO spinal compression. Banned: Barbell Squat, Deadlift, Overhead Press, Romanian Deadlift. Replace with: Plank, Dead Bug, Bird-Dog, Glute Bridges.
+   - KNEE PAIN: Banned: Lunges, Deep Squats, Box Jumps. Replace with: Box Step-ups (low box), Glute Bridges, Wall Sits.
+   - SHOULDER PAIN: Banned: Overhead Press, Dips. Replace with: Floor Press, Lateral Raises (light).
+   - If any pain is mentioned, the ENTIRE workout must be "Low Impact" and focused on stability.
 
-3. EXPERIENCE SCALING:
-   - If "Beginner" AND "Last workout" was >6 months ago, the first week MUST be an onboarding intensity (RPE 5-6).
+2. SENIOR SCALING (Age 65+):
+   - OVERRIDE Duration: Regardless of user request, if Age > 65 and Experience is Beginner, limit to 20-25 mins max.
+   - Volume: Max 2-3 sets per exercise.
+   - Intensity: Focus on "Functional Independence" (Balance, Sit-to-Stand, Grip Strength).
 
-CRITICAL: Return a plan for EXACTLY ${body.daysPerWeek} different days.
+3. DE-CONDITIONING (Last Workout > 3 months ago):
+   - If the user hasn't worked out in months, they are "De-conditioned". 
+   - Reduction: Reduce requested session time by 30% for the first week.
+   - Focus: High reps (15+), low weight, focusing on form over load.
+
+CRITICAL: The "reasoning" field MUST explicitly list every adaptation made (e.g. "Because you mentioned back pain, I removed Deadlifts...").
 
 Return ONLY a JSON object with this structure:
 {
   "name": "Plan Name",
   "schedule": "X days/week | Y mins per session",
-  "reasoning": "Explain the specific safety adaptations made for their age, injuries, and experience level.",
+  "reasoning": "Detailed list of safety adaptations based on age, pain, and time since last workout.",
   "days": [
     {
       "day_label": "Day 1: Title",
