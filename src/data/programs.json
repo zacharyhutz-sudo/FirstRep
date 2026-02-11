@@ -12174,6 +12174,430 @@
           ]
         }
       ]
+    },
+    {
+      "id": "home_resistance_band_3day",
+      "target": {
+        "sex": "any",
+        "goal": "Build Muscle",
+        "level": "Beginner"
+      },
+      "name": "Resistance Band Revolution (Full Body)",
+      "schedule": "3 days/week",
+      "reasoning": "A comprehensive home-based program using only resistance bands. This routine maximizes muscle tension through constant resistance, perfect for those without gym access or who prefer home workouts.",
+      "days": [
+        {
+          "day_label": "Day 1: Full Body A",
+          "exercises": [
+            {
+              "exercise": "Band Good Morning",
+              "sets": 3,
+              "reps": "12-15",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Resistance Band Rows",
+              "sets": 3,
+              "reps": "12-15",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Back Flyes - With Bands",
+              "sets": 3,
+              "reps": "15-20",
+              "rest": "45s"
+            },
+            {
+              "exercise": "Band Hip Adductions",
+              "sets": 3,
+              "reps": "12-15",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Band Pull Apart",
+              "sets": 3,
+              "reps": "20",
+              "rest": "45s"
+            }
+          ]
+        },
+        {
+          "day_label": "Day 2: Full Body B",
+          "exercises": [
+            {
+              "exercise": "Band Good Morning (Pull Through)",
+              "sets": 3,
+              "reps": "12-15",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Band Assisted Pull-Up",
+              "sets": 3,
+              "reps": "8-12",
+              "rest": "90s"
+            },
+            {
+              "exercise": "Band Skull Crusher",
+              "sets": 3,
+              "reps": "12-15",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Band Pull Apart",
+              "sets": 3,
+              "reps": "20",
+              "rest": "45s"
+            },
+            {
+              "exercise": "Dead Bug",
+              "sets": 3,
+              "reps": "12/side",
+              "rest": "45s"
+            }
+          ]
+        },
+        {
+          "day_label": "Day 3: Full Body C",
+          "exercises": [
+            {
+              "exercise": "Band Good Morning",
+              "sets": 3,
+              "reps": "15",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Resistance Band Rows",
+              "sets": 3,
+              "reps": "12-15",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Back Flyes - With Bands",
+              "sets": 3,
+              "reps": "15-20",
+              "rest": "45s"
+            },
+            {
+              "exercise": "Band Skull Crusher",
+              "sets": 3,
+              "reps": "12-15",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Plank",
+              "sets": 3,
+              "reps": "45s",
+              "rest": "45s"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "advanced_machine_bodybuilder_5day",
+      "target": {
+        "sex": "male",
+        "goal": "Build Muscle",
+        "level": "Advanced"
+      },
+      "name": "Machine Mastery: Advanced Bodybuilder Split",
+      "schedule": "5 days/week",
+      "reasoning": "Focuses on maximizing hypertrophy through stable, machine-based movements. This allows for extreme intensity and isolation while minimizing joint stress. Perfect for advanced lifters looking to bring up weak points with high precision.",
+      "days": [
+        {
+          "day_label": "Day 1: Chest & Core",
+          "exercises": [
+            {
+              "exercise": "Hammer Strength Press",
+              "sets": 4,
+              "reps": "8-10",
+              "rest": "90s"
+            },
+            {
+              "exercise": "Pec Deck Fly",
+              "sets": 4,
+              "reps": "12-15",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Ab Crunch Machine",
+              "sets": 4,
+              "reps": "15-20",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Barbell Ab Rollout",
+              "sets": 3,
+              "reps": "10-12",
+              "rest": "90s"
+            },
+            {
+              "exercise": "Cable Fly",
+              "sets": 3,
+              "reps": "15",
+              "rest": "60s"
+            }
+          ]
+        },
+        {
+          "day_label": "Day 2: Back & Rear Delts",
+          "exercises": [
+            {
+              "exercise": "T-Bar Row",
+              "sets": 4,
+              "reps": "8-10",
+              "rest": "90s"
+            },
+            {
+              "exercise": "Close Grip Pulldown",
+              "sets": 4,
+              "reps": "10-12",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Straight Arm Pulldown",
+              "sets": 3,
+              "reps": "12-15",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Seated Cable Row",
+              "sets": 3,
+              "reps": "10-12",
+              "rest": "90s"
+            },
+            {
+              "exercise": "Face Pulls",
+              "sets": 4,
+              "reps": "15-20",
+              "rest": "45s"
+            }
+          ]
+        },
+        {
+          "day_label": "Day 3: Legs (Machine Focus)",
+          "exercises": [
+            {
+              "exercise": "Hack Squat",
+              "sets": 4,
+              "reps": "8-10",
+              "rest": "120s"
+            },
+            {
+              "exercise": "Leg Press",
+              "sets": 4,
+              "reps": "10-12",
+              "rest": "90s"
+            },
+            {
+              "exercise": "Leg Extension",
+              "sets": 4,
+              "reps": "12-15",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Leg Curls",
+              "sets": 4,
+              "reps": "12-15",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Calf Raises",
+              "sets": 5,
+              "reps": "15-20",
+              "rest": "45s"
+            }
+          ]
+        },
+        {
+          "day_label": "Day 4: Shoulders & Upper Traps",
+          "exercises": [
+            {
+              "exercise": "Arnold Press",
+              "sets": 4,
+              "reps": "8-10",
+              "rest": "90s"
+            },
+            {
+              "exercise": "Cable Lateral Raise",
+              "sets": 4,
+              "reps": "15-20",
+              "rest": "45s"
+            },
+            {
+              "exercise": "Face Pulls",
+              "sets": 3,
+              "reps": "15-20",
+              "rest": "45s"
+            },
+            {
+              "exercise": "Alternating Deltoid Raise",
+              "sets": 3,
+              "reps": "12/side",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Lateral Raises",
+              "sets": 3,
+              "reps": "15-20",
+              "rest": "45s"
+            }
+          ]
+        },
+        {
+          "day_label": "Day 5: Arms (Bicep/Tricep)",
+          "exercises": [
+            {
+              "exercise": "Preacher Curl",
+              "sets": 4,
+              "reps": "10-12",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Cable Overhead Tricep Extension",
+              "sets": 4,
+              "reps": "10-12",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Cable Bicep Curl",
+              "sets": 3,
+              "reps": "12-15",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Tricep Pushdowns",
+              "sets": 3,
+              "reps": "12-15",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Zottman Curl",
+              "sets": 3,
+              "reps": "12-15",
+              "rest": "60s"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kettlebell_functional_3day",
+      "target": {
+        "sex": "any",
+        "goal": "Build Muscle",
+        "level": "Intermediate"
+      },
+      "name": "The Functional Kettlebell (3-Day)",
+      "schedule": "3 days/week",
+      "reasoning": "Utilizes the unique loading of kettlebells to build stability, power, and functional strength. High carryover to real-world movements and athletics.",
+      "days": [
+        {
+          "day_label": "Day 1",
+          "exercises": [
+            {
+              "exercise": "Kettlebell Swing",
+              "sets": 5,
+              "reps": "15-20",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Alternating Kettlebell Press",
+              "sets": 4,
+              "reps": "8-10",
+              "rest": "90s"
+            },
+            {
+              "exercise": "Alternating Kettlebell Row",
+              "sets": 4,
+              "reps": "10-12",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Goblet Squat",
+              "sets": 3,
+              "reps": "12-15",
+              "rest": "90s"
+            },
+            {
+              "exercise": "Alternating Renegade Row",
+              "sets": 3,
+              "reps": "8/side",
+              "rest": "90s"
+            }
+          ]
+        },
+        {
+          "day_label": "Day 2",
+          "exercises": [
+            {
+              "exercise": "Advanced Kettlebell Windmill",
+              "sets": 3,
+              "reps": "8/side",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Alternating Floor Press",
+              "sets": 4,
+              "reps": "10-12",
+              "rest": "90s"
+            },
+            {
+              "exercise": "Alternating Hang Clean",
+              "sets": 4,
+              "reps": "10-12",
+              "rest": "90s"
+            },
+            {
+              "exercise": "Kettlebell Swing",
+              "sets": 5,
+              "reps": "20",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Russian Twist",
+              "sets": 3,
+              "reps": "20/side",
+              "rest": "45s"
+            }
+          ]
+        },
+        {
+          "day_label": "Day 3",
+          "exercises": [
+            {
+              "exercise": "Alternating Kettlebell Row",
+              "sets": 4,
+              "reps": "10-12",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Alternating Kettlebell Press",
+              "sets": 4,
+              "reps": "8-10",
+              "rest": "90s"
+            },
+            {
+              "exercise": "Kettlebell Swing",
+              "sets": 5,
+              "reps": "20",
+              "rest": "60s"
+            },
+            {
+              "exercise": "Alternating Floor Press",
+              "sets": 4,
+              "reps": "10-12",
+              "rest": "90s"
+            },
+            {
+              "exercise": "Plank",
+              "sets": 3,
+              "reps": "60s",
+              "rest": "45s"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
