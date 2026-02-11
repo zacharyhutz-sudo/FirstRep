@@ -60,6 +60,10 @@ Generate a customized workout plan based on these user stats:
    - Reduction: Reduce requested session time by 30% for the first week.
    - Focus: High reps (15+), low weight, focusing on form over load.
 
+--- VOLUME & FREQUENCY CONSTRAINTS ---
+- DO NOT CHANGE the number of days per week. If they requested ${body.daysPerWeek} days, you MUST return exactly ${body.daysPerWeek} days.
+- For high-frequency requests (5-6 days) from Beginners or Seniors, reduce the daily load (e.g. fewer sets per day) to ensure recovery, but maintain the requested frequency.
+
 CRITICAL: The "reasoning" field MUST explicitly list every adaptation made (e.g. "Because you mentioned back pain, I removed Deadlifts...").
 
 Return ONLY a JSON object with this structure:
