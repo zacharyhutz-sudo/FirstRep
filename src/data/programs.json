@@ -1,0 +1,97 @@
+{
+  "baseline_templates": [
+    {
+      "id": "adult_male_hypertrophy_beginner",
+      "target": {
+        "age_range": "18-40",
+        "sex": "male",
+        "goal": "Build Muscle",
+        "level": "Beginner"
+      },
+      "name": "Foundational Growth (3-Day Full Body)",
+      "schedule": "3 days/week (Mon/Wed/Fri)",
+      "reasoning": "Focuses on compound movements to maximize newbie gains while allowing 48h recovery. Volume set at Maintenance/Minimum Effective (10-12 sets/muscle/week) to build work capacity without overtraining.",
+      "workout": [
+        {"exercise": "Barbell Squat", "sets": 3, "reps": "8-10", "rest": "120s"},
+        {"exercise": "Bench Press", "sets": 3, "reps": "8-10", "rest": "90s"},
+        {"exercise": "Barbell Row", "sets": 3, "reps": "10-12", "rest": "90s"},
+        {"exercise": "Overhead Press", "sets": 2, "reps": "10-12", "rest": "90s"},
+        {"exercise": "Lat Pulldown", "sets": 2, "reps": "12-15", "rest": "60s"}
+      ]
+    },
+    {
+      "id": "adult_female_hypertrophy_beginner",
+      "target": {
+        "age_range": "18-40",
+        "sex": "female",
+        "goal": "Build Muscle",
+        "level": "Beginner"
+      },
+      "name": "Sculpt & Strength (3-Day Full Body)",
+      "schedule": "3 days/week (Mon/Wed/Fri)",
+      "reasoning": "Leverages women's generally higher fatigue resistance. Slightly higher repetition ranges (10-15) to focus on mind-muscle connection and form, with emphasis on posterior chain development.",
+      "workout": [
+        {"exercise": "Goblet Squat", "sets": 3, "reps": "12-15", "rest": "90s"},
+        {"exercise": "Dumbbell RDL", "sets": 3, "reps": "12-15", "rest": "90s"},
+        {"exercise": "Dumbbell Bench Press", "sets": 3, "reps": "10-12", "rest": "60s"},
+        {"exercise": "Seated Cable Row", "sets": 3, "reps": "12-15", "rest": "60s"},
+        {"exercise": "Glute Bridges", "sets": 3, "reps": "15-20", "rest": "60s"}
+      ]
+    },
+    {
+      "id": "masters_strength_intermediate",
+      "target": {
+        "age_range": "40-65",
+        "sex": "any",
+        "goal": "Strength / Powerlifting",
+        "level": "Intermediate"
+      },
+      "name": "Longevity Strength (Upper/Lower Split)",
+      "schedule": "4 days/week",
+      "reasoning": "Accounts for slower systemic recovery in 40+ athletes. Uses an Upper/Lower split to prevent joint overuse while maintaining high intensity on primary lifts. Rep ranges are 5-8 to build strength without excessive metabolic stress.",
+      "workout": [
+        {"exercise": "Deadlift", "sets": 3, "reps": "5", "rest": "180s"},
+        {"exercise": "Leg Press", "sets": 3, "reps": "8-10", "rest": "120s"},
+        {"exercise": "Leg Curls", "sets": 3, "reps": "12-15", "rest": "90s"},
+        {"exercise": "Plank", "sets": 3, "reps": "45s", "rest": "60s"}
+      ]
+    },
+    {
+      "id": "senior_health_beginner",
+      "target": {
+        "age_range": "65+",
+        "sex": "any",
+        "goal": "General Fitness",
+        "level": "Beginner"
+      },
+      "name": "Vitality & Balance (2-Day Full Body)",
+      "schedule": "2 days/week",
+      "reasoning": "Prioritizes functional mobility, bone density, and fall prevention. Lower volume and higher rest periods to accommodate slower heart rate recovery. Includes balance-specific movements.",
+      "workout": [
+        {"exercise": "Chair Squats", "sets": 2, "reps": "10-12", "rest": "120s"},
+        {"exercise": "Wall Pushups", "sets": 2, "reps": "10-12", "rest": "120s"},
+        {"exercise": "Step-ups", "sets": 2, "reps": "8 per side", "rest": "90s"},
+        {"exercise": "Resistance Band Rows", "sets": 2, "reps": "12-15", "rest": "90s"},
+        {"exercise": "Single-Leg Stance", "sets": 2, "reps": "30s per side", "rest": "60s"}
+      ]
+    },
+    {
+      "id": "adult_male_fatloss_intermediate",
+      "target": {
+        "age_range": "18-40",
+        "sex": "male",
+        "goal": "Lose Weight",
+        "level": "Intermediate"
+      },
+      "name": "Metabolic Power (PPL)",
+      "schedule": "6 days/week",
+      "reasoning": "High-frequency Push/Pull/Legs split to maximize caloric expenditure while preserving muscle tissue during a deficit. Incorporates supersets for metabolic stress.",
+      "workout": [
+        {"exercise": "Dumbbell Incline Press", "sets": 4, "reps": "10-12", "rest": "60s"},
+        {"exercise": "Weighted Dips", "sets": 3, "reps": "AMRAP", "rest": "60s"},
+        {"exercise": "Lateral Raises", "sets": 4, "reps": "15-20", "rest": "45s"},
+        {"exercise": "Tricep Pushdowns", "sets": 3, "reps": "12-15", "rest": "45s"}
+      ]
+    }
+  ]
+}
