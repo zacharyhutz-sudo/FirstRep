@@ -33,9 +33,9 @@ import Layout from '../layouts/Layout.astro';
 				</div>
 			</div>
 
-			<button id="btn-logout" class="w-full bg-red-500/10 border border-red-500/20 text-red-400 font-bold py-4 rounded-2xl transition active:scale-95 hover:bg-red-500/20">
+			<a href="/FirstRep/login/index.html" onclick="localStorage.clear();" class="w-full bg-red-500/10 border border-red-500/20 text-red-400 font-bold py-4 rounded-2xl transition active:scale-95 hover:bg-red-500/20 text-center block">
 				Sign Out
-			</button>
+			</a>
 		</div>
 	</main>
 </Layout>
@@ -55,11 +55,6 @@ import Layout from '../layouts/Layout.astro';
 		document.getElementById('email').innerText = user.email;
 		document.getElementById('avatar').innerText = user.email?.[0].toUpperCase() || '?';
 		document.getElementById('joined').innerText = `Member since ${new Date(user.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`;
-
-		document.getElementById('btn-logout')?.addEventListener('click', async () => {
-			await supabase.auth.signOut();
-			window.location.href = '/FirstRep/login/index.html';
-		});
 	}
 
 	init();
