@@ -201,8 +201,10 @@ import Layout from '../layouts/Layout.astro';
 	}
 
 	logoutBtn?.addEventListener('click', async () => {
-		await supabase.auth.signOut();
-		window.location.href = '/FirstRep/login';
+		console.log("Signing out...");
+		const { error } = await supabase.auth.signOut();
+		if (error) console.error("Sign out error:", error);
+		window.location.replace('/FirstRep/login/');
 	});
 
 	init();
