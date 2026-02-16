@@ -10,7 +10,7 @@ import Layout from '../layouts/Layout.astro';
 		<p class="text-gray-400 mb-12">Sign in to save your progress.</p>
 
 		<div class="bg-gray-900 border border-gray-800 p-8 rounded-2xl shadow-xl text-left">
-			<form id="auth-form" class="space-y-6">
+			<div class="space-y-6">
 				<div>
 					<label for="email" class="block text-xs font-medium mb-2 text-gray-500 uppercase tracking-widest">Email Address</label>
 					<input type="email" id="email" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="you@example.com" required />
@@ -28,7 +28,7 @@ import Layout from '../layouts/Layout.astro';
 						Create Account
 					</button>
 				</div>
-			</form>
+			</div>
 			<p id="auth-msg" class="hidden mt-6 text-center text-sm font-medium"></p>
 		</div>
 
@@ -41,7 +41,6 @@ import Layout from '../layouts/Layout.astro';
 <script>
 	import { supabase } from '../lib/supabase';
 
-	const form = document.getElementById('auth-form');
 	const emailInput = document.getElementById('email') as HTMLInputElement;
 	const passwordInput = document.getElementById('password') as HTMLInputElement;
 	const btnLogin = document.getElementById('btn-login-submit');
@@ -49,51 +48,55 @@ import Layout from '../layouts/Layout.astro';
 	const msg = document.getElementById('auth-msg');
 
 	function showMsg(text: string, isError = false) {
+		if (!msg) return;
 		msg.innerText = text;
 		msg.className = `mt-6 text-center text-sm font-medium ${isError ? 'text-red-400' : 'text-green-400'}`;
 		msg.classList.remove('hidden');
 	}
 
-	async function handleAuth(type: 'login' | 'signup') {
+	// Sign In Handler
+	btnLogin?.addEventListener('click', async () => {
 		const email = emailInput.value;
 		const password = passwordInput.value;
 		if (!email || !password) return showMsg('Enter email and password.', true);
 
-		const originalText = type === 'login' ? 'Sign In' : 'Create Account';
-		const loadingText = type === 'login' ? 'Signing In...' : 'Creating Account...';
+		btnLogin.innerText = 'Signing In...';
+		const { error } = await supabase.auth.signInWithPassword({ email, password });
 		
-		const targetBtn = type === 'login' ? btnLogin : btnSignup;
-		if (targetBtn) targetBtn.innerText = loadingText;
-
-		try {
-			if (type === 'signup') {
-				const { error } = await supabase.auth.signUp({ 
-					email, 
-					password,
-					options: { emailRedirectTo: window.location.origin + '/FirstRep/login/index.html' }
-				});
-				if (error) throw error;
-				showMsg('Check your email for a confirmation link!');
-			} else {
-				const { error } = await supabase.auth.signInWithPassword({ email, password });
-				if (error) throw error;
-				showMsg('Success! Redirecting...');
-				window.location.replace('/FirstRep/index.html');
-			}
-		} catch (err: any) {
-			showMsg(err.message, true);
-		} finally {
-			if (targetBtn) targetBtn.innerText = originalText;
+		if (error) {
+			showMsg(error.message, true);
+			btnLogin.innerText = 'Sign In';
+		} else {
+			window.location.href = '/FirstRep/index.html';
 		}
-	}
+	});
 
-	btnLogin?.addEventListener('click', () => handleAuth('login'));
-	btnSignup?.addEventListener('click', () => handleAuth('signup'));
+	// Sign Up Handler
+	btnSignup?.addEventListener('click', async () => {
+		const email = emailInput.value;
+		const password = passwordInput.value;
+		if (!email || !password) return showMsg('Enter email and password.', true);
 
+		btnSignup.innerText = 'Creating...';
+		const { error } = await supabase.auth.signUp({ 
+			email, 
+			password,
+			options: { emailRedirectTo: window.location.origin + '/FirstRep/login/index.html' }
+		});
+		
+		if (error) {
+			showMsg(error.message, true);
+			btnSignup.innerText = 'Create Account';
+		} else {
+			showMsg('Check your email for confirmation!');
+			btnSignup.innerText = 'Create Account';
+		}
+	});
+
+	// Session Check
 	async function checkSession() {
 		const { data: { session } } = await supabase.auth.getSession();
 		if (session) {
-			console.log("Session found, redirecting to home...");
 			window.location.href = '/FirstRep/index.html';
 		}
 	}
