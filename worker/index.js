@@ -22,6 +22,7 @@ export default {
         // FOOD SEARCH LOGIC
         const searchUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
         const searchPrompt = `You are a nutrition database API. Return a JSON array of the top 5 most likely food items matching the query: "${body.query}".
+        Consider plural/singular variations (e.g., "eggs" should match "egg").
         For each item, provide typical nutritional values for a standard serving size.
         
         Structure:

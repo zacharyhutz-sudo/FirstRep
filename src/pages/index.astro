@@ -437,7 +437,7 @@ import Layout from '../layouts/Layout.astro';
 				clearTimeout(searchTimeout);
 				searchTimeout = setTimeout(async () => {
 					// LOCAL FALLBACK CHECK FIRST
-					const queryLower = query.toLowerCase();
+					const queryLower = query.toLowerCase().replace(/s$/, ''); // Basic singularization
 					const localMatches = foodDB.foods
 						.filter(f => f.name.toLowerCase().includes(queryLower))
 						.slice(0, 5);
