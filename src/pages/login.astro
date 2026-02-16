@@ -24,9 +24,9 @@ import Layout from '../layouts/Layout.astro';
 					<button type="button" id="btn-login-submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-xl transition shadow-lg shadow-indigo-500/20 active:scale-[0.98]">
 						Sign In
 					</button>
-					<button type="button" id="btn-signup" class="w-full bg-transparent border border-gray-700 hover:border-gray-500 text-gray-300 font-bold py-4 rounded-xl transition active:scale-[0.98]">
+					<a href="/FirstRep/signup/index.html" class="w-full bg-transparent border border-gray-700 hover:border-gray-500 text-gray-300 font-bold py-4 rounded-xl transition active:scale-[0.98] text-center block">
 						Create Account
-					</button>
+					</a>
 				</div>
 			</div>
 			<p id="auth-msg" class="hidden mt-6 text-center text-sm font-medium"></p>
@@ -44,7 +44,6 @@ import Layout from '../layouts/Layout.astro';
 	const emailInput = document.getElementById('email') as HTMLInputElement;
 	const passwordInput = document.getElementById('password') as HTMLInputElement;
 	const btnLogin = document.getElementById('btn-login-submit');
-	const btnSignup = document.getElementById('btn-signup');
 	const msg = document.getElementById('auth-msg');
 
 	function showMsg(text: string, isError = false) {
@@ -68,28 +67,6 @@ import Layout from '../layouts/Layout.astro';
 			btnLogin.innerText = 'Sign In';
 		} else {
 			window.location.href = '/FirstRep/index.html';
-		}
-	});
-
-	// Sign Up Handler
-	btnSignup?.addEventListener('click', async () => {
-		const email = emailInput.value;
-		const password = passwordInput.value;
-		if (!email || !password) return showMsg('Enter email and password.', true);
-
-		btnSignup.innerText = 'Creating...';
-		const { error } = await supabase.auth.signUp({ 
-			email, 
-			password,
-			options: { emailRedirectTo: window.location.origin + '/FirstRep/login/index.html' }
-		});
-		
-		if (error) {
-			showMsg(error.message, true);
-			btnSignup.innerText = 'Create Account';
-		} else {
-			showMsg('Check your email for confirmation!');
-			btnSignup.innerText = 'Create Account';
 		}
 	});
 

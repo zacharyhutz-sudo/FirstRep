@@ -1,0 +1,152 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="FirstRep - Create Account">
+	<main class="max-w-md mx-auto px-6 py-12 pb-32">
+		<header class="flex items-center gap-4 mb-10">
+			<a href="/FirstRep/login/index.html" class="p-2 -ml-2 text-gray-400 hover:text-white transition">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+				</svg>
+			</a>
+			<h1 class="text-2xl font-black text-white">Create Account</h1>
+		</header>
+
+		<div class="bg-gray-900 border border-gray-800 p-8 rounded-3xl shadow-xl space-y-8">
+			<!-- Step 1: Auth -->
+			<div class="space-y-6">
+				<h2 class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Step 1: Account Details</h2>
+				<div>
+					<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Email Address</label>
+					<input type="email" id="email" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="you@example.com" />
+				</div>
+				<div>
+					<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Password</label>
+					<input type="password" id="password" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="••••••••" />
+				</div>
+			</div>
+
+			<div class="w-full h-px bg-gray-800"></div>
+
+			<!-- Step 2: Physical Stats -->
+			<div class="space-y-6">
+				<h2 class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Step 2: Physical Profile</h2>
+				<div class="grid grid-cols-2 gap-4">
+					<div>
+						<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Sex</label>
+						<select id="sex" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+							<option value="male">Male</option>
+							<option value="female">Female</option>
+						</select>
+					</div>
+					<div>
+						<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Age</label>
+						<input type="number" id="age" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="25" />
+					</div>
+				</div>
+				<div class="grid grid-cols-2 gap-4">
+					<div>
+						<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Height (in)</label>
+						<input type="number" id="height" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="70" />
+					</div>
+					<div>
+						<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Weight (lbs)</label>
+						<input type="number" id="weight" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="185" />
+					</div>
+				</div>
+			</div>
+
+			<div class="w-full h-px bg-gray-800"></div>
+
+			<!-- Step 3: Goals -->
+			<div class="space-y-6">
+				<h2 class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Step 3: Lifestyle & Goals</h2>
+				<div>
+					<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Activity Level</label>
+					<select id="activity" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+						<option value="sedentary">Sedentary (Office job)</option>
+						<option value="moderate">Moderately Active</option>
+						<option value="active">Active (Physical job/Daily exercise)</option>
+					</select>
+				</div>
+				<div>
+					<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Fitness Goal</label>
+					<select id="goal" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+						<option value="weight-loss">Lose Weight</option>
+						<option value="maintenance">Maintain Weight</option>
+						<option value="muscle-gain">Gain Muscle</option>
+					</select>
+				</div>
+			</div>
+
+			<button id="btn-register" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl transition shadow-lg shadow-indigo-500/20 active:scale-[0.98]">
+				Create Account & Profile
+			</button>
+			<p id="auth-msg" class="hidden mt-6 text-center text-sm font-medium"></p>
+		</div>
+	</main>
+</Layout>
+
+<script>
+	import { supabase } from '../lib/supabase';
+
+	const btn = document.getElementById('btn-register');
+	const msg = document.getElementById('auth-msg');
+
+	function showMsg(text: string, isError = false) {
+		if (!msg) return;
+		msg.innerText = text;
+		msg.className = `mt-6 text-center text-sm font-medium ${isError ? 'text-red-400' : 'text-green-400'}`;
+		msg.classList.remove('hidden');
+	}
+
+	btn?.addEventListener('click', async () => {
+		const email = (document.getElementById('email') as HTMLInputElement).value;
+		const password = (document.getElementById('password') as HTMLInputElement).value;
+		const age = (document.getElementById('age') as HTMLInputElement).value;
+		const height = (document.getElementById('height') as HTMLInputElement).value;
+		const weight = (document.getElementById('weight') as HTMLInputElement).value;
+		const sex = (document.getElementById('sex') as HTMLSelectElement).value;
+		const activity = (document.getElementById('activity') as HTMLSelectElement).value;
+		const goal = (document.getElementById('goal') as HTMLSelectElement).value;
+
+		if (!email || !password || !age || !height || !weight) {
+			return showMsg('Please fill in all fields.', true);
+		}
+
+		btn.innerText = 'Creating Account...';
+
+		// 1. Create Auth Account
+		const { data: authData, error: authError } = await supabase.auth.signUp({
+			email,
+			password,
+			options: { emailRedirectTo: window.location.origin + '/FirstRep/login/index.html' }
+		});
+
+		if (authError) {
+			showMsg(authError.message, true);
+			btn.innerText = 'Create Account & Profile';
+			return;
+		}
+
+		// 2. Create Profile in 'profiles' table
+		const { error: profileError } = await supabase.from('profiles').insert([{
+			id: authData.user.id,
+			sex,
+			age: parseInt(age),
+			height: parseInt(height),
+			weight: parseInt(weight),
+			activity_level: activity,
+			fitness_goal: goal
+		}]);
+
+		if (profileError) {
+			showMsg('Account created, but profile save failed. You can update this later in settings.', true);
+		} else {
+			showMsg('Success! Check your email for a confirmation link.');
+		}
+		
+		btn.innerText = 'Create Account & Profile';
+	});
+</script>
