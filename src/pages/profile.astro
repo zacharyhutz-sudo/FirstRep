@@ -22,6 +22,58 @@ import Layout from '../layouts/Layout.astro';
 		</div>
 
 		<div class="space-y-4">
+			<!-- Profile Stats Edit -->
+			<div class="bg-gray-900 border border-gray-800 rounded-3xl p-6 space-y-6">
+				<h2 class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Your Profile</h2>
+				
+				<div class="grid grid-cols-2 gap-4">
+					<div>
+						<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Age</label>
+						<input type="number" id="profile-age" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+					</div>
+					<div>
+						<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Sex</label>
+						<select id="profile-sex" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+							<option value="male">Male</option>
+							<option value="female">Female</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="grid grid-cols-2 gap-4">
+					<div>
+						<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Height (in)</label>
+						<input type="number" id="profile-height" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+					</div>
+					<div>
+						<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Weight (lbs)</label>
+						<input type="number" id="profile-weight" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+					</div>
+				</div>
+
+				<div>
+					<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Activity Level</label>
+					<select id="profile-activity" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+						<option value="sedentary">Sedentary</option>
+						<option value="moderate">Moderately Active</option>
+						<option value="active">Active</option>
+					</select>
+				</div>
+
+				<div>
+					<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Fitness Goal</label>
+					<select id="profile-goal" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+						<option value="weight-loss">Lose Weight</option>
+						<option value="maintenance">Maintain</option>
+						<option value="muscle-gain">Gain Muscle</option>
+					</select>
+				</div>
+
+				<button id="btn-save-profile" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition active:scale-[0.98] text-sm">
+					Save Changes
+				</button>
+			</div>
+
 			<div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden divide-y divide-gray-800">
 				<div class="p-5 flex justify-between items-center">
 					<span class="text-gray-400 text-sm">App Version</span>
@@ -55,6 +107,41 @@ import Layout from '../layouts/Layout.astro';
 		document.getElementById('email').innerText = user.email;
 		document.getElementById('avatar').innerText = user.email?.[0].toUpperCase() || '?';
 		document.getElementById('joined').innerText = `Member since ${new Date(user.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`;
+
+		// Fetch Profile Data
+		const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+		
+		if (profile) {
+			(document.getElementById('profile-age') as HTMLInputElement).value = profile.age;
+			(document.getElementById('profile-sex') as HTMLSelectElement).value = profile.sex;
+			(document.getElementById('profile-height') as HTMLInputElement).value = profile.height;
+			(document.getElementById('profile-weight') as HTMLInputElement).value = profile.weight;
+			(document.getElementById('profile-activity') as HTMLSelectElement).value = profile.activity_level;
+			(document.getElementById('profile-goal') as HTMLSelectElement).value = profile.fitness_goal;
+		}
+
+		// Save Logic
+		document.getElementById('btn-save-profile')?.addEventListener('click', async () => {
+			const btn = document.getElementById('btn-save-profile');
+			if (btn) btn.innerText = 'Saving...';
+
+			const { error } = await supabase.from('profiles').update({
+				age: parseInt((document.getElementById('profile-age') as HTMLInputElement).value),
+				sex: (document.getElementById('profile-sex') as HTMLSelectElement).value,
+				height: parseInt((document.getElementById('profile-height') as HTMLInputElement).value),
+				weight: parseInt((document.getElementById('profile-weight') as HTMLInputElement).value),
+				activity_level: (document.getElementById('profile-activity') as HTMLSelectElement).value,
+				fitness_goal: (document.getElementById('profile-goal') as HTMLSelectElement).value,
+			}).eq('id', user.id);
+
+			if (error) {
+				alert('Error saving profile: ' + error.message);
+				if (btn) btn.innerText = 'Save Changes';
+			} else {
+				if (btn) btn.innerText = 'Saved!';
+				setTimeout(() => { if (btn) btn.innerText = 'Save Changes'; }, 2000);
+			}
+		});
 	}
 
 	init();
