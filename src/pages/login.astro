@@ -33,7 +33,7 @@ import Layout from '../layouts/Layout.astro';
 		</div>
 
 		<p class="mt-8 text-sm text-gray-500">
-			By signing in, you agree to our <span class="text-gray-400 underline cursor-pointer">Terms of Service</span>.
+			By signing in, you agree to our <a href="/FirstRep/terms/index.html" class="text-gray-400 underline cursor-pointer">Terms of Service</a>.
 		</p>
 	</main>
 </Layout>
@@ -59,9 +59,22 @@ import Layout from '../layouts/Layout.astro';
 		const password = passwordInput.value;
 		if (!email || !password) return showMsg('Enter email and password.', true);
 
-		const { error } = await supabase.auth.signUp({ email, password });
-		if (error) showMsg(error.message, true);
-		else showMsg('Check your email for a confirmation link!');
+		btnLogin.innerText = 'Creating Account...';
+		const { data, error } = await supabase.auth.signUp({ 
+			email, 
+			password,
+			options: {
+				emailRedirectTo: window.location.origin + '/FirstRep/login/index.html'
+			}
+		});
+		
+		if (error) {
+			showMsg(error.message, true);
+			btnLogin.innerText = 'Sign In';
+		} else {
+			showMsg('Check your email for a confirmation link!');
+			btnLogin.innerText = 'Sign In';
+		}
 	});
 
 	form?.addEventListener('submit', async (e) => {
