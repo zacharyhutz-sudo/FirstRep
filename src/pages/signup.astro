@@ -118,6 +118,7 @@ import Layout from '../layouts/Layout.astro';
 		btn.innerText = 'Creating Account...';
 
 		// 1. Create Auth Account
+		console.log("Attempting sign up...");
 		const { data: authData, error: authError } = await supabase.auth.signUp({
 			email,
 			password,
@@ -125,10 +126,20 @@ import Layout from '../layouts/Layout.astro';
 		});
 
 		if (authError) {
+			console.error("Auth error:", authError);
 			showMsg(authError.message, true);
 			btn.innerText = 'Create Account & Profile';
 			return;
 		}
+
+		if (!authData.user) {
+			console.error("No user returned from signup");
+			showMsg("Signup succeeded but no user session created. Check your email.", true);
+			btn.innerText = 'Create Account & Profile';
+			return;
+		}
+
+		console.log("Auth success, saving profile for:", authData.user.id);
 
 		// 2. Create Profile in 'profiles' table
 		const { error: profileError } = await supabase.from('profiles').insert([{
@@ -142,7 +153,8 @@ import Layout from '../layouts/Layout.astro';
 		}]);
 
 		if (profileError) {
-			showMsg('Account created, but profile save failed. You can update this later in settings.', true);
+			console.error("Profile error:", profileError);
+			showMsg('Account created, but profile save failed: ' + profileError.message, true);
 		} else {
 			showMsg('Success! Check your email for a confirmation link.');
 		}
