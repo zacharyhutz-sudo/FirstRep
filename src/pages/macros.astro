@@ -1,0 +1,337 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="FirstRep - Calorie & Macro Tracker">
+	<main class="max-w-md mx-auto px-6 py-12 pb-32">
+		<header class="flex items-center gap-4 mb-10">
+			<a href="/" class="p-2 -ml-2 text-gray-400 hover:text-white transition">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+				</svg>
+			</a>
+			<h1 class="text-2xl font-black text-white">Nutrition</h1>
+		</header>
+
+		<!-- Progress Card -->
+		<div class="bg-gray-900 border border-gray-800 rounded-3xl p-6 mb-8">
+			<div class="flex items-center justify-between mb-8">
+				<div class="text-center flex-1">
+					<p id="total-cals" class="text-4xl font-black text-white">0</p>
+					<p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Calories</p>
+				</div>
+				<div class="w-px h-10 bg-gray-800"></div>
+				<div class="text-center flex-1">
+					<p id="target-cals" class="text-4xl font-black text-gray-700">2500</p>
+					<p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Goal</p>
+				</div>
+			</div>
+			
+			<div class="grid grid-cols-3 gap-3">
+				<div class="bg-gray-800/50 p-3 rounded-2xl border border-gray-700/50 text-center">
+					<p id="total-protein" class="font-bold text-indigo-400 text-sm">0g</p>
+					<p class="text-[8px] text-gray-500 uppercase font-bold">Protein</p>
+				</div>
+				<div class="bg-gray-800/50 p-3 rounded-2xl border border-gray-700/50 text-center">
+					<p id="total-carbs" class="font-bold text-green-400 text-sm">0g</p>
+					<p class="text-[8px] text-gray-500 uppercase font-bold">Carbs</p>
+				</div>
+				<div class="bg-gray-800/50 p-3 rounded-2xl border border-gray-700/50 text-center">
+					<p id="total-fat" class="font-bold text-yellow-400 text-sm">0g</p>
+					<p class="text-[8px] text-gray-500 uppercase font-bold">Fat</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Meal Lists -->
+		<div class="space-y-4">
+			{['Breakfast', 'Lunch', 'Dinner', 'Snacks'].map(meal => (
+				<div class="bg-gray-900/50 border border-gray-800 rounded-2xl overflow-hidden">
+					<div class="px-5 py-4 flex items-center justify-between border-b border-gray-800">
+						<h3 class="font-bold text-gray-300 text-sm uppercase tracking-wider">{meal}</h3>
+						<button onclick={`window.openFoodSearch('${meal.toLowerCase()}')`} class="w-8 h-8 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full flex items-center justify-center transition active:scale-90 shadow-lg shadow-indigo-500/20">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+								<path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+							</svg>
+						</button>
+					</div>
+					<div id={`meal-list-${meal.toLowerCase()}`} class="divide-y divide-gray-800/50">
+						<!-- Food entries injected here -->
+					</div>
+				</div>
+			))}
+		</div>
+
+		<!-- Food Search Modal (Native-ish Slide-up) -->
+		<div id="food-overlay" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center">
+			<div class="bg-gray-900 border-t sm:border border-gray-800 w-full max-w-lg rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col h-[85vh] sm:h-auto sm:max-h-[85vh]">
+				<!-- Search Header -->
+				<div class="p-6 pb-2">
+					<div class="flex justify-between items-center mb-6">
+						<h2 class="text-xl font-bold text-white">Add to <span id="search-meal-name" class="text-indigo-400"></span></h2>
+						<button id="food-close" class="bg-gray-800 p-2 rounded-full text-gray-400">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+							</svg>
+						</button>
+					</div>
+					<div class="relative">
+						<input type="text" id="food-search-input" class="w-full bg-gray-800 border-none rounded-2xl px-4 py-4 pl-12 focus:ring-2 focus:ring-indigo-500 outline-none transition text-base" placeholder="Search brands or restaurant meals..." />
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-4 top-4.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+						</svg>
+					</div>
+				</div>
+				
+				<!-- Results -->
+				<div id="food-results" class="overflow-y-auto p-2 space-y-1 bg-gray-950/30 flex-1">
+					<!-- Search results here -->
+				</div>
+
+				<!-- Portion Adjuster -->
+				<div id="portion-selector" class="hidden p-6 bg-gray-900 border-t border-gray-800">
+					<div class="flex items-center justify-between mb-8">
+						<div>
+							<p id="selected-food-name" class="font-bold text-lg text-white leading-tight"></p>
+							<p id="selected-food-unit" class="text-xs text-gray-500 uppercase font-bold tracking-wider mt-1"></p>
+						</div>
+						<div class="text-right">
+							<p id="preview-cals" class="text-3xl font-black text-indigo-400">0</p>
+							<p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Calories</p>
+						</div>
+					</div>
+					<div class="flex gap-4 items-center mb-8">
+						<input type="number" id="food-amount" step="0.1" value="1.0" class="w-24 bg-gray-800 border-none rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500 outline-none text-center text-xl font-bold" />
+						<button id="confirm-add-food" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl transition active:scale-95 shadow-lg shadow-indigo-500/20">
+							Add to Log
+						</button>
+					</div>
+					<div class="grid grid-cols-3 gap-3">
+						<div class="text-center p-3 bg-gray-800/30 rounded-2xl border border-gray-800">
+							<p id="preview-protein" class="text-sm font-bold text-gray-300">0g</p>
+							<p class="text-[8px] text-gray-600 uppercase font-bold">Protein</p>
+						</div>
+						<div class="text-center p-3 bg-gray-800/30 rounded-2xl border border-gray-800">
+							<p id="preview-carbs" class="text-sm font-bold text-gray-300">0g</p>
+							<p class="text-[8px] text-gray-600 uppercase font-bold">Carbs</p>
+						</div>
+						<div class="text-center p-3 bg-gray-800/30 rounded-2xl border border-gray-800">
+							<p id="preview-fat" class="text-sm font-bold text-gray-300">0g</p>
+							<p class="text-[8px] text-gray-600 uppercase font-bold">Fat</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<!-- Nav Bar -->
+	<nav class="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-xl border-t border-gray-800 px-6 py-3 flex justify-around items-center z-50">
+		<a href="/" class="flex flex-col items-center gap-1 text-gray-500">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+			</svg>
+			<span class="text-[10px] font-bold">Home</span>
+		</a>
+		<a href="/planner" class="flex flex-col items-center gap-1 text-gray-500">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+			</svg>
+			<span class="text-[10px] font-bold">Planner</span>
+		</a>
+		<a href="/macros" class="flex flex-col items-center gap-1 text-indigo-500">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+				<path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+			</svg>
+			<span class="text-[10px] font-bold">Macros</span>
+		</a>
+	</nav>
+</Layout>
+
+<script>
+	import { supabase } from '../lib/supabase';
+	import foodDB from '../data/food-db.json';
+
+	// DOM References
+	const foodOverlay = document.getElementById('food-overlay');
+	const foodClose = document.getElementById('food-close');
+	const foodInput = document.getElementById('food-search-input') as HTMLInputElement;
+	const foodResults = document.getElementById('food-results');
+	const portionSelector = document.getElementById('portion-selector');
+	const amountInput = document.getElementById('food-amount') as HTMLInputElement;
+	const confirmAddBtn = document.getElementById('confirm-add-food');
+
+	const WORKER_URL = 'https://first-rep-worker.hutzellcreativeco.workers.dev/';
+	const todayKey = new Date().toISOString().split('T')[0];
+
+	let activeMeal = null;
+	let selectedFood = null;
+	let currentUser = null;
+
+	async function init() {
+		const { data: { user } } = await supabase.auth.getUser();
+		if (!user) {
+			window.location.href = '/login';
+			return;
+		}
+		currentUser = user;
+		fetchLogs();
+	}
+
+	async function fetchLogs() {
+		const { data: logs, error } = await supabase
+			.from('food_logs')
+			.select('*')
+			.eq('user_id', currentUser.id)
+			.eq('logged_at', todayKey);
+
+		if (error) return;
+
+		const dayData = { breakfast: [], lunch: [], dinner: [], snacks: [] };
+		logs.forEach(log => dayData[log.meal_type].push(log));
+		renderLogs(dayData);
+	}
+
+	function renderLogs(dayData) {
+		const totals = { calories: 0, protein: 0, carbs: 0, fat: 0 };
+
+		['breakfast', 'lunch', 'dinner', 'snacks'].forEach(m => {
+			const list = document.getElementById(`meal-list-${m}`);
+			list.innerHTML = dayData[m].map((entry) => {
+				totals.calories += entry.calories;
+				totals.protein += entry.protein;
+				totals.carbs += entry.carbs;
+				totals.fat += entry.fat;
+
+				return `
+					<div class="px-5 py-4 flex justify-between items-center group">
+						<div class="min-w-0">
+							<p class="text-sm font-bold text-gray-200 leading-tight">${entry.food_name}</p>
+							<p class="text-[10px] text-gray-500 font-bold uppercase tracking-tight mt-0.5">${entry.amount}x serving</p>
+						</div>
+						<div class="flex items-center gap-4">
+							<div class="text-right">
+								<p class="text-sm font-black text-indigo-400">${Math.round(entry.calories)}</p>
+								<p class="text-[9px] text-gray-600 uppercase font-bold tracking-tighter">Cals</p>
+							</div>
+							<button onclick="window.removeFood('${entry.id}')" class="text-gray-700 hover:text-red-500 transition p-1">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+								</svg>
+							</button>
+						</div>
+					</div>
+				`;
+			}).join('');
+		});
+
+		document.getElementById('total-cals').innerText = Math.round(totals.calories).toString();
+		document.getElementById('total-protein').innerText = Math.round(totals.protein) + 'g';
+		document.getElementById('total-carbs').innerText = Math.round(totals.carbs) + 'g';
+		document.getElementById('total-fat').innerText = Math.round(totals.fat) + 'g';
+	}
+
+	window.openFoodSearch = (meal) => {
+		activeMeal = meal;
+		selectedFood = null;
+		document.getElementById('search-meal-name').innerText = meal;
+		foodOverlay.classList.remove('hidden');
+		portionSelector.classList.add('hidden');
+		foodResults.classList.remove('hidden');
+		foodInput.value = '';
+		foodResults.innerHTML = '';
+		setTimeout(() => foodInput.focus(), 100);
+	};
+
+	window.removeFood = async (id) => {
+		const { error } = await supabase.from('food_logs').delete().eq('id', id);
+		if (!error) fetchLogs();
+	};
+
+	let searchTimeout = null;
+	foodInput?.addEventListener('input', (e: any) => {
+		const query = e.target.value.trim();
+		if (query.length < 3) {
+			foodResults.innerHTML = '';
+			return;
+		}
+
+		clearTimeout(searchTimeout);
+		searchTimeout = setTimeout(async () => {
+			foodResults.innerHTML = '<p class="p-8 text-center text-gray-500 animate-pulse text-sm">Searching global database...</p>';
+			
+			// Local check
+			const queryLower = query.toLowerCase().replace(/s$/, '');
+			const localMatches = foodDB.foods.filter(f => f.name.toLowerCase().includes(queryLower)).slice(0, 3);
+			
+			try {
+				const response = await fetch(WORKER_URL, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ query })
+				});
+				const aiMatches = await response.json();
+				
+				const matches = [...localMatches.map(m => ({...m, source: 'Local'})), ...aiMatches];
+				window['_lastSearchResults'] = matches;
+
+				foodResults.innerHTML = matches.map(f => `
+					<div onclick="window.selectFoodForPortion('${f.id}')" class="p-5 hover:bg-gray-800 transition cursor-pointer flex justify-between items-center rounded-2xl border border-transparent hover:border-indigo-500/20 mx-2">
+						<div>
+							<p class="font-bold text-gray-100 text-sm leading-tight">${f.name}</p>
+							<p class="text-[10px] text-gray-500 font-bold uppercase mt-0.5">${f.unit || '100g'} serving</p>
+						</div>
+						<p class="text-indigo-400 font-black text-sm">${Math.round(f.calories)} cal</p>
+					</div>
+				`).join('');
+			} catch (err) {
+				foodResults.innerHTML = '<p class="p-4 text-center text-red-400">Search failed.</p>';
+			}
+		}, 600);
+	});
+
+	window.selectFoodForPortion = (id) => {
+		selectedFood = window['_lastSearchResults'].find(f => f.id === id);
+		document.getElementById('selected-food-name').innerText = selectedFood.name;
+		document.getElementById('selected-food-unit').innerText = `${selectedFood.unit || '100g'} serving`;
+		foodResults.classList.add('hidden');
+		portionSelector.classList.remove('hidden');
+		updatePreview();
+	};
+
+	function updatePreview() {
+		const amt = parseFloat(amountInput.value) || 0;
+		document.getElementById('preview-cals').innerText = Math.round(selectedFood.calories * amt).toString();
+		document.getElementById('preview-protein').innerText = Math.round(selectedFood.protein * amt) + 'g';
+		document.getElementById('preview-carbs').innerText = Math.round(selectedFood.carbs * amt) + 'g';
+		document.getElementById('preview-fat').innerText = Math.round(selectedFood.fat * amt) + 'g';
+	}
+
+	amountInput?.addEventListener('input', updatePreview);
+
+	confirmAddBtn?.addEventListener('click', async () => {
+		const amt = parseFloat(amountInput.value) || 0;
+		if (amt <= 0) return;
+
+		const { error } = await supabase.from('food_logs').insert([{
+			user_id: currentUser.id,
+			logged_at: todayKey,
+			meal_type: activeMeal,
+			food_name: selectedFood.name,
+			amount: amt,
+			calories: selectedFood.calories * amt,
+			protein: selectedFood.protein * amt,
+			carbs: selectedFood.carbs * amt,
+			fat: selectedFood.fat * amt
+		}]);
+
+		if (!error) {
+			fetchLogs();
+			foodOverlay.classList.add('hidden');
+		}
+	});
+
+	foodClose?.addEventListener('click', () => foodOverlay.classList.add('hidden'));
+
+	init();
+</script>

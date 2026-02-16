@@ -2,761 +2,209 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="FirstRep - Start Your First Rep Here">
-	<main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-20 text-center">
-		<!-- Hero -->
-		<h1 class="text-4xl sm:text-6xl font-black mb-4 sm:mb-6 tracking-tight">
-			First<span class="text-indigo-500">Rep</span>
-		</h1>
-		<p class="text-lg sm:text-2xl text-gray-400 mb-8 sm:mb-12">
-			"Start your first rep here."
-		</p>
-
-		<!-- Feature Selection Pills -->
-		<div id="auth-nav" class="hidden flex justify-center gap-4 mb-10">
-			<a href="/login" class="text-indigo-400 font-bold hover:underline">Sign In</a>
-			<span class="text-gray-700">|</span>
-			<button id="btn-logout" class="text-gray-500 hover:text-gray-300">Logout</button>
-		</div>
-
-		<div class="flex flex-wrap justify-center gap-3 mb-10 sm:mb-16">
-			<button id="nav-workout" class="feature-pill active px-6 py-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 font-bold text-sm transition hover:bg-indigo-500/20">
-				🏋️ Workout Planning
-			</button>
-			<button id="nav-macros" class="feature-pill px-6 py-2 rounded-full border border-gray-800 bg-gray-900 text-gray-400 font-bold text-sm transition hover:border-gray-700 hover:text-gray-200">
-				🥗 Calorie & Macros
-			</button>
-			<button id="nav-weight" class="feature-pill px-6 py-2 rounded-full border border-gray-800 bg-gray-900 text-gray-400 font-bold text-sm transition hover:border-gray-700 hover:text-gray-200">
-				⚖️ Weight Tracking
-			</button>
-		</div>
-		
-		<!-- Workout Planning Section (Original Feature) -->
-		<div id="workout-section" class="feature-content hidden">
-			<!-- Questionnaire -->
-			<div class="bg-gray-900/50 border border-gray-800 p-4 sm:p-8 rounded-2xl mb-8 sm:mb-12">
-				<h2 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Personalized Fitness Questionnaire</h2>
-				<p class="text-gray-400 mb-6 sm:mb-8 text-sm sm:text-base">Answer these questions to get your custom program.</p>
-				
-				<form id="quiz-form" class="space-y-6 text-left max-w-md mx-auto">
-					<!-- Basics -->
-					<fieldset class="space-y-4">
-						<legend class="text-indigo-400 font-bold text-sm uppercase tracking-widest border-b border-gray-800 pb-1 w-full">The Basics</legend>
-						<div class="grid grid-cols-2 gap-3 sm:gap-4">
-							<div>
-								<label for="age" class="block text-xs font-medium mb-2 text-gray-500">Specific Age</label>
-								<input type="number" id="age" inputmode="numeric" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none text-base" placeholder="25" required />
-							</div>
-							<div>
-								<label for="sex" class="block text-xs font-medium mb-2 text-gray-500">Biological Sex</label>
-								<select id="sex" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none text-base">
-									<option value="male">Male</option>
-									<option value="female">Female</option>
-								</select>
-							</div>
-						</div>
-						<div>
-							<label for="experience" class="block text-xs font-medium mb-2 text-gray-500">Experience Level</label>
-							<select id="experience" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none text-base">
-								<option value="Beginner">Beginner (0-1 yr)</option>
-								<option value="Intermediate">Intermediate (1-3 yrs)</option>
-								<option value="Advanced">Advanced (3+ yrs)</option>
-							</select>
-						</div>
-						<div>
-							<label for="lastWorkout" class="block text-xs font-medium mb-2 text-gray-500">Last time you worked out?</label>
-							<input type="text" id="lastWorkout" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none text-base" placeholder="e.g. 2 days ago, 1 month ago" />
-						</div>
-					</fieldset>
-
-					<!-- Goals & Schedule -->
-					<fieldset class="space-y-4">
-						<legend class="text-indigo-400 font-bold text-sm uppercase tracking-widest border-b border-gray-800 pb-1 w-full">Goals & Schedule</legend>
-						<div>
-							<label for="goal" class="block text-xs font-medium mb-2 text-gray-500">Primary Goal</label>
-							<select id="goal" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none text-base">
-								<option value="Build Muscle">Build Muscle</option>
-								<option value="Lose Weight">Lose Weight</option>
-								<option value="Strength / Powerlifting">Strength / Powerlifting</option>
-								<option value="General Fitness">General Fitness</option>
-							</select>
-						</div>
-						<div class="grid grid-cols-2 gap-3 sm:gap-4">
-							<div>
-								<label for="daysPerWeek" class="block text-xs font-medium mb-2 text-gray-500">Days per week</label>
-								<select id="daysPerWeek" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none text-base">
-									<option value="2">2 Days</option>
-									<option value="3">3 Days</option>
-									<option value="4">4 Days</option>
-									<option value="5">5 Days</option>
-									<option value="6">6 Days</option>
-								</select>
-							</div>
-							<div>
-								<label for="sessionTime" class="block text-xs font-medium mb-2 text-gray-500">Mins per session</label>
-								<select id="sessionTime" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none text-base">
-									<option value="30">30 Mins</option>
-									<option value="45">45 Mins</option>
-									<option value="60">60 Mins</option>
-									<option value="90">90 Mins</option>
-								</select>
-							</div>
-						</div>
-					</fieldset>
-
-					<!-- Environment -->
-					<fieldset class="space-y-4">
-						<legend class="text-indigo-400 font-bold text-sm uppercase tracking-widest border-b border-gray-800 pb-1 w-full">Environment & Safety</legend>
-						<div>
-							<label for="equipment" class="block text-xs font-medium mb-2 text-gray-500">Equipment Available</label>
-							<select id="equipment" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none text-base">
-								<option value="Full Gym">Full Gym</option>
-								<option value="Dumbbells Only">Dumbbells Only</option>
-								<option value="Home Gym (Barbell/Rack)">Home Gym (Barbell/Rack)</option>
-								<option value="No Equipment">No Equipment</option>
-							</select>
-						</div>
-						<div>
-							<label for="injuries" class="block text-xs font-medium mb-2 text-gray-500">Any Injury or Pain?</label>
-							<input type="text" id="injuries" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none text-base" placeholder="e.g. Lower back pain, None" />
-						</div>
-					</fieldset>
-
-					<button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-bold py-4 rounded-lg transition shadow-lg shadow-indigo-500/20 text-base">
-						Generate My AI Program
-					</button>
-				</form>
+<Layout title="FirstRep - Dashboard">
+	<main class="max-w-md mx-auto px-6 py-12 pb-32">
+		<!-- Header -->
+		<header class="flex justify-between items-center mb-10">
+			<div>
+				<h1 class="text-3xl font-black tracking-tight text-white">First<span class="text-indigo-500">Rep</span></h1>
+				<p id="greeting" class="text-gray-500 font-medium">Welcome back</p>
 			</div>
-
-			<!-- Program Display Area -->
-			<div id="program-display" class="hidden text-left bg-gray-900 border border-indigo-500/30 p-4 sm:p-8 rounded-2xl mb-8 sm:mb-12">
-				<h2 id="program-name" class="text-2xl sm:text-3xl font-black mb-2 text-indigo-400"></h2>
-				<p id="program-schedule" class="text-gray-400 mb-4 italic text-sm sm:text-base"></p>
-				<div class="bg-indigo-500/10 border border-indigo-500/20 p-3 sm:p-4 rounded-lg mb-6">
-					<p class="text-sm font-bold text-indigo-300 uppercase tracking-widest mb-1">AI Reasoning</p>
-					<p id="program-reasoning" class="text-sm text-gray-300"></p>
-				</div>
-				
-				<div id="workout-container" class="space-y-6 sm:space-y-8">
-					<!-- Workout days injected here -->
-				</div>
-				
-				<!-- Action Buttons -->
-				<div class="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3">
-					<button id="save-plan-btn" class="flex-1 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white px-6 py-3 rounded-lg text-sm font-bold transition">
-						💾 Save Workout Plan
-					</button>
-					<button onclick="window.print()" class="flex-1 bg-gray-800 hover:bg-gray-700 active:bg-gray-600 text-white px-6 py-3 rounded-lg text-sm font-bold transition">
-						🖨️ Download / Print
-					</button>
-				</div>
-				<p id="save-feedback" class="hidden text-center text-green-400 text-sm mt-3 font-medium"></p>
+			<div id="user-avatar" class="w-10 h-10 bg-gray-800 rounded-full border border-gray-700 flex items-center justify-center text-indigo-400 font-bold">
+				?
 			</div>
-		</div>
+		</header>
 
-		<!-- Macros Section -->
-		<div id="macros-section" class="feature-content hidden text-left max-w-2xl mx-auto">
-			<!-- Daily Dashboard -->
-			<div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-6">
-				<div class="flex items-center justify-between mb-8">
-					<div class="text-center flex-1">
-						<p id="total-cals" class="text-4xl font-black text-white">0</p>
-						<p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Calories</p>
-					</div>
-					<div class="w-px h-10 bg-gray-800"></div>
-					<div class="text-center flex-1">
-						<p id="target-cals" class="text-4xl font-black text-gray-700">2500</p>
-						<p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Target</p>
-					</div>
-				</div>
-				
-				<div class="grid grid-cols-3 gap-4">
-					<div class="bg-gray-800/50 p-3 rounded-xl border border-gray-700/50 text-center">
-						<p id="total-protein" class="font-bold text-indigo-400">0g</p>
-						<p class="text-[9px] text-gray-500 uppercase font-bold">Protein</p>
-					</div>
-					<div class="bg-gray-800/50 p-3 rounded-xl border border-gray-700/50 text-center">
-						<p id="total-carbs" class="font-bold text-green-400">0g</p>
-						<p class="text-[9px] text-gray-500 uppercase font-bold">Carbs</p>
-					</div>
-					<div class="bg-gray-800/50 p-3 rounded-xl border border-gray-700/50 text-center">
-						<p id="total-fat" class="font-bold text-yellow-400">0g</p>
-						<p class="text-[9px] text-gray-500 uppercase font-bold">Fat</p>
-					</div>
-				</div>
+		<!-- Activity Rings / Summary (Native Style) -->
+		<div class="bg-gray-900 border border-gray-800 rounded-3xl p-6 mb-8 shadow-sm">
+			<div class="flex justify-between items-center mb-6">
+				<h2 class="text-sm font-bold uppercase tracking-widest text-gray-500">Today's Summary</h2>
+				<span id="date-display" class="text-xs text-indigo-400 font-bold">Feb 16</span>
 			</div>
-
-			<!-- Meal Lists -->
-			<div class="space-y-4">
-				{['Breakfast', 'Lunch', 'Dinner', 'Snacks'].map(meal => (
-					<div class="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden">
-						<div class="px-5 py-4 flex items-center justify-between border-b border-gray-800">
-							<h3 class="font-bold text-gray-300">{meal}</h3>
-							<button onclick={`window.openFoodSearch('${meal.toLowerCase()}')`} class="w-8 h-8 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full flex items-center justify-center transition active:scale-90">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-									<path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-								</svg>
-							</button>
-						</div>
-						<div id={`meal-list-${meal.toLowerCase()}`} class="divide-y divide-gray-800/50">
-							<!-- Food entries injected here -->
-						</div>
-					</div>
-				))}
-			</div>
-		</div>
-
-		<!-- Weight Section (Placeholder) -->
-		<div id="weight-section" class="feature-content hidden">
-			<div class="bg-gray-900/50 border border-gray-800 p-8 sm:p-12 rounded-2xl text-center">
-				<div class="w-16 h-16 bg-indigo-500/10 text-indigo-400 rounded-full flex items-center justify-center mx-auto mb-6">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
-					</svg>
-				</div>
-				<h2 class="text-2xl font-bold mb-4">Weight Tracking</h2>
-				<p class="text-gray-400 max-w-sm mx-auto mb-8">Log your weigh-ins and visualize your progress over time with interactive charts.</p>
-				<div class="inline-flex items-center px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-500 text-sm font-medium">
-					🚧 Feature Under Development
-				</div>
-			</div>
-		</div>
-
-		<!-- Food Search Modal -->
-		<div id="food-overlay" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-			<div class="bg-gray-900 border border-indigo-500/30 w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
-				<div class="p-6 border-b border-gray-800 bg-gray-900">
-					<div class="flex justify-between items-center mb-4">
-						<h2 class="text-xl font-bold text-indigo-400">Add to <span id="search-meal-name"></span></h2>
-						<button id="food-close" class="text-gray-400 hover:text-white transition">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-							</svg>
-						</button>
-					</div>
-					<div class="relative">
-						<input type="text" id="food-search-input" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 pl-10 focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="Search food (e.g. Chicken, Rice...)" />
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+			
+			<div class="grid grid-cols-2 gap-6">
+				<div class="flex items-center gap-4">
+					<div class="relative w-12 h-12">
+						<svg class="w-12 h-12 -rotate-90">
+							<circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="4" fill="transparent" class="text-gray-800"/>
+							<circle id="cal-ring" cx="24" cy="24" r="20" stroke="currentColor" stroke-width="4" fill="transparent" stroke-dasharray="125.6" stroke-dashoffset="125.6" class="text-indigo-500 transition-all duration-1000"/>
 						</svg>
-					</div>
-				</div>
-				
-				<!-- Results -->
-				<div id="food-results" class="overflow-y-auto p-2 space-y-1 bg-gray-950/30">
-					<!-- Search results here -->
-				</div>
-
-				<!-- Portion Adjuster (Hidden initially) -->
-				<div id="portion-selector" class="hidden p-6 bg-gray-900 border-t border-gray-800">
-					<div class="flex items-center justify-between mb-6">
-						<div>
-							<p id="selected-food-name" class="font-bold text-lg text-white"></p>
-							<p id="selected-food-unit" class="text-xs text-gray-500 uppercase font-bold tracking-wider"></p>
-						</div>
-						<div class="text-right">
-							<p id="preview-cals" class="text-2xl font-black text-indigo-400">0</p>
-							<p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Est. Cals</p>
+						<div class="absolute inset-0 flex items-center justify-center">
+							<span class="text-[10px]">🔥</span>
 						</div>
 					</div>
-					<div class="flex gap-4 items-end mb-6">
-						<div class="flex-1">
-							<label class="block text-xs font-medium mb-2 text-gray-500">Amount / Multiplier</label>
-							<input type="number" id="food-amount" step="0.1" value="1.0" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none text-center text-lg font-bold" />
-						</div>
-						<button id="confirm-add-food" class="flex-[2] bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-lg transition active:scale-95 shadow-lg shadow-indigo-500/20">
-							Add to Diary
-						</button>
-					</div>
-					<div class="grid grid-cols-3 gap-2">
-						<div class="text-center p-2 bg-gray-800/30 rounded-lg border border-gray-800">
-							<p id="preview-protein" class="text-xs font-bold text-gray-300">0g</p>
-							<p class="text-[8px] text-gray-600 uppercase">Prot</p>
-						</div>
-						<div class="text-center p-2 bg-gray-800/30 rounded-lg border border-gray-800">
-							<p id="preview-carbs" class="text-xs font-bold text-gray-300">0g</p>
-							<p class="text-[8px] text-gray-600 uppercase">Carb</p>
-						</div>
-						<div class="text-center p-2 bg-gray-800/30 rounded-lg border border-gray-800">
-							<p id="preview-fat" class="text-xs font-bold text-gray-300">0g</p>
-							<p class="text-[8px] text-gray-600 uppercase">Fat</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Exercise Detail Modal -->
-		<div id="modal-overlay" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-			<div class="bg-gray-900 border border-indigo-500/30 w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto">
-				<div class="relative h-48 sm:h-64 bg-gray-800 flex items-center justify-center overflow-hidden">
-					<img id="modal-image" src="" alt="" class="max-w-full max-h-full object-contain" />
-					<button id="modal-close" class="absolute top-3 right-3 bg-gray-950/50 hover:bg-gray-950 text-white p-3 rounded-full transition tap-target">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-					</button>
-				</div>
-				<div class="p-5 sm:p-8">
-					<h2 id="modal-title" class="text-2xl sm:text-3xl font-black mb-1 text-indigo-400"></h2>
-					<p id="modal-muscles" class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-6"></p>
-					<div class="space-y-4 text-left">
-						<h3 class="text-sm font-bold text-indigo-300 uppercase tracking-widest">How to Perform</h3>
-						<ul id="modal-instructions" class="space-y-3 text-gray-300 list-disc pl-5 text-sm"></ul>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Swap Exercise Modal -->
-		<div id="swap-overlay" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-			<div class="bg-gray-900 border border-indigo-500/30 w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[80vh]">
-				<div class="p-6 border-b border-gray-800 flex justify-between items-center bg-gray-900">
 					<div>
-						<h2 class="text-xl font-bold text-indigo-400">Swap Exercise</h2>
-						<p id="swap-target-name" class="text-xs text-gray-500 uppercase font-bold tracking-wider"></p>
+						<p id="summary-cals" class="text-lg font-black leading-none">0</p>
+						<p class="text-[10px] text-gray-500 uppercase font-bold tracking-tighter">Calories</p>
 					</div>
-					<button id="swap-close" class="text-gray-400 hover:text-white transition">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+				</div>
+				
+				<div class="flex items-center gap-4">
+					<div class="relative w-12 h-12">
+						<svg class="w-12 h-12 -rotate-90">
+							<circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="4" fill="transparent" class="text-gray-800"/>
+							<circle id="pro-ring" cx="24" cy="24" r="20" stroke="currentColor" stroke-width="4" fill="transparent" stroke-dasharray="125.6" stroke-dashoffset="125.6" class="text-green-500 transition-all duration-1000"/>
 						</svg>
-					</button>
-				</div>
-				<div id="swap-list" class="overflow-y-auto p-4 space-y-3 bg-gray-950/30">
-					<!-- Alternatives injected here -->
-				</div>
-				<div class="p-4 bg-gray-900 border-t border-gray-800 text-center">
-					<p class="text-[10px] text-gray-500 uppercase">Select an exercise to replace the current one</p>
+						<div class="absolute inset-0 flex items-center justify-center">
+							<span class="text-[10px]">💪</span>
+						</div>
+					</div>
+					<div>
+						<p id="summary-pro" class="text-lg font-black leading-none">0g</p>
+						<p class="text-[10px] text-gray-500 uppercase font-bold tracking-tighter">Protein</p>
+					</div>
 				</div>
 			</div>
 		</div>
 
-		<script>
-			import programsData from '../data/programs.json';
-			import exerciseDB from '../data/exercise-db.json';
-			import foodDB from '../data/food-db.json';
-			import { supabase } from '../lib/supabase';
-
-			// --- Auth & Session ---
-			const authNav = document.getElementById('auth-nav');
-			const logoutBtn = document.getElementById('btn-logout');
-
-			async function checkUser() {
-				const { data: { user } } = await supabase.auth.getUser();
-				if (user) {
-					authNav.classList.remove('hidden');
-					// We'll use user.id later to sync data
-				} else {
-					// Proactively show login if not authenticated
-					// window.location.href = '/login'; 
-				}
-			}
-			checkUser();
-
-			logoutBtn?.addEventListener('click', async () => {
-				await supabase.auth.signOut();
-				window.location.reload();
-			});
-
-			// --- DOM References ---
-			const form = document.getElementById('quiz-form');
-			const display = document.getElementById('program-display');
-			const overlay = document.getElementById('modal-overlay');
-			const modalClose = document.getElementById('modal-close');
-			const swapOverlay = document.getElementById('swap-overlay');
-			const swapClose = document.getElementById('swap-close');
-			const swapList = document.getElementById('swap-list');
-			const savePlanBtn = document.getElementById('save-plan-btn');
-			const saveFeedback = document.getElementById('save-feedback');
-
-			// Macros DOM
-			const foodOverlay = document.getElementById('food-overlay');
-			const foodClose = document.getElementById('food-close');
-			const foodInput = document.getElementById('food-search-input');
-			const foodResults = document.getElementById('food-results');
-			const portionSelector = document.getElementById('portion-selector');
-			const amountInput = document.getElementById('food-amount');
-			const confirmAddBtn = document.getElementById('confirm-add-food');
-
-			const WORKER_URL = 'https://first-rep-worker.hutzellcreativeco.workers.dev/';
-
-			// --- Macro State ---
-			let currentDiary = JSON.parse(localStorage.getItem('firstrep_diary') || '{}');
-			const todayKey = new Date().toISOString().split('T')[0];
-			if (!currentDiary[todayKey]) {
-				currentDiary[todayKey] = {
-					meals: { breakfast: [], lunch: [], dinner: [], snacks: [] },
-					targets: { calories: 2500, protein: 180, carbs: 250, fat: 70 }
-				};
-			}
-
-			let activeMeal = null;
-			let selectedFood = null;
-
-			// --- Macro Logic ---
-			function updateDiaryDisplay() {
-				const day = currentDiary[todayKey];
-				const totals = { calories: 0, protein: 0, carbs: 0, fat: 0 };
-
-				['breakfast', 'lunch', 'dinner', 'snacks'].forEach(m => {
-					const list = document.getElementById(`meal-list-${m}`);
-					list.innerHTML = day.meals[m].map((entry, idx) => {
-						totals.calories += entry.calories;
-						totals.protein += entry.protein;
-						totals.carbs += entry.carbs;
-						totals.fat += entry.fat;
-
-						return `
-							<div class="px-5 py-3 flex justify-between items-center group">
-								<div class="min-w-0">
-									<p class="text-sm font-bold text-gray-200">${entry.name}</p>
-									<p class="text-xs text-gray-500">${entry.amount}x serving</p>
-								</div>
-								<div class="flex items-center gap-4">
-									<div class="text-right">
-										<p class="text-sm font-black text-indigo-400">${Math.round(entry.calories)}</p>
-										<p class="text-[9px] text-gray-600 uppercase font-bold tracking-tighter">Cals</p>
-									</div>
-									<button onclick="window.removeFood('${m}', ${idx})" class="text-gray-700 hover:text-red-500 transition opacity-0 group-hover:opacity-100 p-1">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-										</svg>
-									</button>
-								</div>
-							</div>
-						`;
-					}).join('');
-				});
-
-				document.getElementById('total-cals').innerText = Math.round(totals.calories);
-				document.getElementById('total-protein').innerText = Math.round(totals.protein) + 'g';
-				document.getElementById('total-carbs').innerText = Math.round(totals.carbs) + 'g';
-				document.getElementById('total-fat').innerText = Math.round(totals.fat) + 'g';
-				
-				localStorage.setItem('firstrep_diary', JSON.stringify(currentDiary));
-			}
-
-			window.openFoodSearch = (meal) => {
-				activeMeal = meal;
-				selectedFood = null;
-				document.getElementById('search-meal-name').innerText = meal;
-				foodOverlay.classList.remove('hidden');
-				portionSelector.classList.add('hidden');
-				foodResults.classList.remove('hidden');
-				foodInput.value = '';
-				foodResults.innerHTML = '';
-				setTimeout(() => foodInput.focus(), 100);
-			};
-
-			window.removeFood = (meal, idx) => {
-				currentDiary[todayKey].meals[meal].splice(idx, 1);
-				updateDiaryDisplay();
-			};
-
-			let searchTimeout = null;
-			foodInput?.addEventListener('input', (e) => {
-				const query = e.target.value.trim();
-				if (query.length < 3) {
-					foodResults.innerHTML = '';
-					return;
-				}
-
-				// Debounce to save API hits
-				clearTimeout(searchTimeout);
-				searchTimeout = setTimeout(async () => {
-					// LOCAL FALLBACK CHECK FIRST
-					const queryLower = query.toLowerCase().replace(/s$/, ''); // Basic singularization
-					const localMatches = foodDB.foods
-						.filter(f => f.name.toLowerCase().includes(queryLower))
-						.slice(0, 5);
-					
-					if (localMatches.length > 0) {
-						window._lastSearchResults = localMatches;
-						foodResults.innerHTML = localMatches.map(f => `
-							<div onclick="window.selectFoodForPortion('${f.id}')" class="p-4 hover:bg-gray-800 transition cursor-pointer flex justify-between items-center rounded-xl border border-transparent hover:border-indigo-500/30">
-								<div>
-									<p class="font-bold text-gray-200">${f.name} <span class="text-[10px] text-indigo-500 font-black ml-1 uppercase">Local</span></p>
-									<p class="text-xs text-gray-500">${f.unit} serving</p>
-								</div>
-								<p class="text-indigo-400 font-bold">${f.calories} cal</p>
-							</div>
-						`).join('');
-						return;
-					}
-
-					foodResults.innerHTML = '<p class="p-4 text-center text-gray-500 animate-pulse">Searching AI Database...</p>';
-					
-					try {
-						const response = await fetch(WORKER_URL, {
-							method: 'POST',
-							headers: { 'Content-Type': 'application/json' },
-							body: JSON.stringify({ query })
-						});
-						
-						if (!response.ok) {
-							const errorText = await response.text();
-							throw new Error(`Worker Error: ${errorText}`);
-						}
-
-						const matches = await response.json();
-						
-						// Store temporarily to allow selection
-						window._lastSearchResults = matches;
-
-						foodResults.innerHTML = matches.map(f => `
-							<div onclick="window.selectFoodForPortion('${f.id}')" class="p-4 hover:bg-gray-800 transition cursor-pointer flex justify-between items-center rounded-xl border border-transparent hover:border-indigo-500/30">
-								<div>
-									<p class="font-bold text-gray-200">${f.name} ${f.source === 'OFF' ? '<span class="text-[9px] text-green-500 font-black ml-1 uppercase border border-green-500/30 px-1 rounded">Brand</span>' : ''}</p>
-									<p class="text-xs text-gray-500">${f.unit} serving</p>
-								</div>
-								<p class="text-indigo-400 font-bold">${f.calories} cal</p>
-							</div>
-						`).join('');
-					} catch (err) {
-						foodResults.innerHTML = '<p class="p-4 text-center text-red-500">Search failed. Try again.</p>';
-					}
-				}, 600);
-			});
-
-			window.selectFoodForPortion = (id) => {
-				selectedFood = window._lastSearchResults.find(f => f.id === id);
-				document.getElementById('selected-food-name').innerText = selectedFood.name;
-				document.getElementById('selected-food-unit').innerText = selectedFood.unit;
-				foodResults.classList.add('hidden');
-				portionSelector.classList.remove('hidden');
-				updatePreview();
-			};
-
-			function updatePreview() {
-				const amt = parseFloat(amountInput.value) || 0;
-				document.getElementById('preview-cals').innerText = Math.round(selectedFood.calories * amt);
-				document.getElementById('preview-protein').innerText = Math.round(selectedFood.protein * amt) + 'g';
-				document.getElementById('preview-carbs').innerText = Math.round(selectedFood.carbs * amt) + 'g';
-				document.getElementById('preview-fat').innerText = Math.round(selectedFood.fat * amt) + 'g';
-			}
-
-			amountInput?.addEventListener('input', updatePreview);
-
-			confirmAddBtn?.addEventListener('click', () => {
-				const amt = parseFloat(amountInput.value) || 0;
-				if (amt <= 0) return;
-
-				const entry = {
-					name: selectedFood.name,
-					amount: amt,
-					calories: selectedFood.calories * amt,
-					protein: selectedFood.protein * amt,
-					carbs: selectedFood.carbs * amt,
-					fat: selectedFood.fat * amt
-				};
-
-				currentDiary[todayKey].meals[activeMeal].push(entry);
-				updateDiaryDisplay();
-				foodOverlay.classList.add('hidden');
-			});
-
-			foodClose?.addEventListener('click', () => foodOverlay.classList.add('hidden'));
-			updateDiaryDisplay();
-
-			// --- Navigation Logic ---
-			const pills = document.querySelectorAll('.feature-pill');
-			const sections = document.querySelectorAll('.feature-content');
-
-			pills.forEach(pill => {
-				pill.addEventListener('click', () => {
-					// Update pills
-					pills.forEach(p => {
-						p.classList.remove('active', 'border-indigo-500/30', 'bg-indigo-500/10', 'text-indigo-400');
-						p.classList.add('border-gray-800', 'bg-gray-900', 'text-gray-400');
-					});
-					pill.classList.add('active', 'border-indigo-500/30', 'bg-indigo-500/10', 'text-indigo-400');
-					pill.classList.remove('border-gray-800', 'bg-gray-900', 'text-gray-400');
-
-					// Update sections
-					const targetId = pill.id.replace('nav-', '') + '-section';
-					sections.forEach(s => s.classList.add('hidden'));
-					document.getElementById(targetId).classList.remove('hidden');
-				});
-			});
-
-			// Track current plan and swap state
-			let currentPlan = null;
-			let activeSwap = { dayIndex: null, exerciseIndex: null };
-
-			// --- Exercise Modal ---
-			function openExerciseModal(name) {
-				const data = exerciseDB.exercises.find(e => e.name === name);
-				if (!data) return;
-				document.getElementById('modal-title').innerText = data.name;
-				document.getElementById('modal-muscles').innerText = `Target: ${data.muscles}`;
-				document.getElementById('modal-image').src = data.image;
-				document.getElementById('modal-instructions').innerHTML = data.instructions.map(i => `<li>${i}</li>`).join('');
-				overlay.classList.remove('hidden');
-			}
-			window.openExerciseModal = openExerciseModal;
-
-			modalClose?.addEventListener('click', () => overlay.classList.add('hidden'));
-			overlay?.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.add('hidden'); });
-
-			// --- Swap Logic ---
-			function openSwapModal(dayIndex, exerciseIndex) {
-				activeSwap = { dayIndex, exerciseIndex };
-				const currentEx = currentPlan.days[dayIndex].exercises[exerciseIndex];
-				const currentExData = exerciseDB.exercises.find(e => e.name === currentEx.exercise);
-				
-				document.getElementById('swap-target-name').innerText = `Replacing: ${currentEx.exercise}`;
-				
-				// Find 4 alternatives targeting similar muscles
-				const mainMuscle = currentExData?.muscles.split(',')[0].trim();
-				const alts = exerciseDB.exercises
-					.filter(e => e.name !== currentEx.exercise && e.muscles.includes(mainMuscle))
-					.sort(() => 0.5 - Math.random())
-					.slice(0, 4);
-
-				swapList.innerHTML = alts.map(alt => `
-					<div onclick="window.confirmSwap('${alt.name.replace(/'/g, "\\'")}')"
-						 class="flex items-center gap-4 bg-gray-800/50 p-4 rounded-xl border border-gray-700 hover:border-indigo-500 hover:bg-gray-800 transition cursor-pointer group">
-						<img src="${alt.image}" class="w-12 h-12 rounded-lg object-cover bg-gray-700" />
-						<div class="flex-1 min-w-0">
-							<p class="font-bold text-gray-100 group-hover:text-indigo-400 transition truncate">${alt.name}</p>
-							<p class="text-[10px] text-gray-500 uppercase tracking-wider">${alt.muscles}</p>
-						</div>
-						<div class="text-indigo-500 opacity-0 group-hover:opacity-100 transition">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-								<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-							</svg>
-						</div>
+		<!-- Navigation List (iOS Style) -->
+		<div class="space-y-4">
+			<a href="/planner" class="group flex items-center justify-between bg-gray-900 border border-gray-800 p-5 rounded-2xl active:scale-[0.98] transition shadow-sm hover:border-indigo-500/30">
+				<div class="flex items-center gap-4">
+					<div class="w-10 h-10 bg-indigo-500/10 text-indigo-400 rounded-xl flex items-center justify-center">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+						</svg>
 					</div>
-				`).join('');
-
-				swapOverlay.classList.remove('hidden');
-			}
-			window.openSwapModal = openSwapModal;
-
-			function confirmSwap(newName) {
-				const { dayIndex, exerciseIndex } = activeSwap;
-				currentPlan.days[dayIndex].exercises[exerciseIndex].exercise = newName;
-				renderPlan(currentPlan);
-				swapOverlay.classList.add('hidden');
-			}
-			window.confirmSwap = confirmSwap;
-
-			swapClose?.addEventListener('click', () => swapOverlay.classList.add('hidden'));
-			swapOverlay?.addEventListener('click', (e) => { if (e.target === swapOverlay) swapOverlay.classList.add('hidden'); });
-
-			// --- Save Plan ---
-			savePlanBtn?.addEventListener('click', () => {
-				if (!currentPlan) return;
-				const saved = JSON.parse(localStorage.getItem('firstrep_plans') || '[]');
-				const planToSave = {
-					...currentPlan,
-					savedAt: new Date().toISOString(),
-					id: Date.now().toString()
-				};
-				saved.push(planToSave);
-				localStorage.setItem('firstrep_plans', JSON.stringify(saved));
-
-				saveFeedback.textContent = '✅ Plan saved! View it on the My Plans page.';
-				saveFeedback.classList.remove('hidden');
-				setTimeout(() => saveFeedback.classList.add('hidden'), 3000);
-			});
-
-			// --- Render Plan ---
-			function renderPlan(plan) {
-				currentPlan = plan;
-				document.getElementById('program-name').innerText = plan.name;
-				document.getElementById('program-schedule').innerText = plan.schedule;
-				document.getElementById('program-reasoning').innerText = plan.reasoning;
-
-				const container = document.getElementById('workout-container');
-				container.innerHTML = plan.days.map((day, dIdx) => `
-					<div class="space-y-3 sm:space-y-4">
-						<h3 class="text-lg sm:text-xl font-bold border-b border-gray-800 pb-2 text-indigo-200">${day.day_label}</h3>
-						<div class="space-y-2 sm:space-y-3">
-							${day.exercises.map((ex, eIdx) => `
-								<div class="flex gap-2 group">
-									<div onclick="window.openExerciseModal('${ex.exercise.replace(/'/g, "\\'")}')" 
-										 class="flex-1 flex justify-between items-center bg-gray-800/50 p-3 sm:p-4 rounded-lg border border-gray-700/50 hover:border-indigo-500/50 hover:bg-gray-800 transition cursor-pointer active:scale-[0.98]">
-										<div class="min-w-0 flex-1 mr-3">
-											<p class="font-bold text-gray-100 group-hover:text-indigo-400 transition text-sm sm:text-base">${ex.exercise}</p>
-											<p class="text-xs text-gray-500">Rest: ${ex.rest}</p>
-										</div>
-										<div class="text-right shrink-0">
-											<p class="text-indigo-400 font-mono font-bold text-sm sm:text-base">${ex.sets} x ${ex.reps}</p>
-										</div>
-									</div>
-									<button onclick="window.openSwapModal(${dIdx}, ${eIdx})" 
-											class="bg-gray-800 border border-gray-700 hover:border-indigo-500 hover:text-indigo-400 px-3 rounded-lg transition flex items-center justify-center text-gray-500"
-											title="Swap Exercise">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-										</svg>
-									</button>
-								</div>
-							`).join('')}
-						</div>
+					<div>
+						<p class="font-bold text-gray-100">Workout Planner</p>
+						<p class="text-xs text-gray-500">AI-customized training plans</p>
 					</div>
-				`).join('') + `
-					<div class="mt-6 sm:mt-8 p-4 sm:p-6 bg-indigo-950/30 border border-indigo-500/20 rounded-xl">
-						<h4 class="text-base sm:text-lg font-bold mb-2 text-indigo-300">4-Week Progression Guide</h4>
-						<ul class="text-sm text-gray-400 space-y-2 list-disc pl-5">
-							<li><strong class="text-gray-200">Week 1:</strong> Find your "Working Weight" (tough but good form).</li>
-							<li><strong class="text-gray-200">Week 2:</strong> Add 2.5–5 lbs to your primary lifts.</li>
-							<li><strong class="text-gray-200">Week 3:</strong> Attempt 1 extra rep on your final set of each exercise.</li>
-							<li><strong class="text-gray-200">Week 4 (Deload):</strong> Use 70% of your Week 3 weight to allow recovery.</li>
-						</ul>
+				</div>
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700 group-hover:text-indigo-400" viewBox="0 0 20 20" fill="currentColor">
+					<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+				</svg>
+			</a>
+
+			<a href="/macros" class="group flex items-center justify-between bg-gray-900 border border-gray-800 p-5 rounded-2xl active:scale-[0.98] transition shadow-sm hover:border-green-500/30">
+				<div class="flex items-center gap-4">
+					<div class="w-10 h-10 bg-green-500/10 text-green-400 rounded-xl flex items-center justify-center">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+						</svg>
 					</div>
-				`;
+					<div>
+						<p class="font-bold text-gray-100">Calories & Macros</p>
+						<p class="text-xs text-gray-500">Log meals and track targets</p>
+					</div>
+				</div>
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700 group-hover:text-green-400" viewBox="0 0 20 20" fill="currentColor">
+					<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+				</svg>
+			</a>
 
-				display.classList.remove('hidden');
-				display.scrollIntoView({ behavior: 'smooth' });
-			}
+			<a href="/weight" class="group flex items-center justify-between bg-gray-900 border border-gray-800 p-5 rounded-2xl active:scale-[0.98] transition shadow-sm hover:border-yellow-500/30">
+				<div class="flex items-center gap-4">
+					<div class="w-10 h-10 bg-yellow-500/10 text-yellow-400 rounded-xl flex items-center justify-center">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+						</svg>
+					</div>
+					<div>
+						<p class="font-bold text-gray-100">Weight Tracking</p>
+						<p class="text-xs text-gray-500">Monitor progress and trends</p>
+					</div>
+				</div>
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700 group-hover:text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+					<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+				</svg>
+			</a>
+		</div>
 
-			// --- Form Submit ---
-			form?.addEventListener('submit', async (e) => {
-				e.preventDefault();
-				const submitBtn = form.querySelector('button[type="submit"]');
-				const originalText = submitBtn.innerText;
-				submitBtn.innerText = '🤖 AI is Generating...';
-				submitBtn.disabled = true;
-
-				const formData = {
-					sex: document.getElementById('sex').value,
-					age: document.getElementById('age').value,
-					goal: document.getElementById('goal').value,
-					experience: document.getElementById('experience').value,
-					lastWorkout: document.getElementById('lastWorkout').value,
-					daysPerWeek: document.getElementById('daysPerWeek').value,
-					sessionTime: document.getElementById('sessionTime').value,
-					equipment: document.getElementById('equipment').value,
-					injuries: document.getElementById('injuries').value,
-				};
-
-				let plan;
-
-				try {
-					const response = await fetch(WORKER_URL, {
-						method: 'POST',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify(formData)
-					});
-					if (!response.ok) throw new Error('Worker failed');
-					plan = await response.json();
-				} catch (err) {
-					console.warn('AI worker unavailable, using static templates:', err.message);
-					// Fallback: find best matching template
-					plan = programsData.baseline_templates.find(t =>
-						t.target.sex === formData.sex && t.target.goal === formData.goal
-					) || programsData.baseline_templates.find(t =>
-						t.target.goal === formData.goal
-					) || programsData.baseline_templates[0];
-				} finally {
-					submitBtn.innerText = originalText;
-					submitBtn.disabled = false;
-				}
-
-				renderPlan(plan);
-			});
-		</script>
+		<!-- Settings / Logout Bottom -->
+		<div class="mt-12 pt-8 border-t border-gray-800">
+			<button id="btn-logout" class="w-full flex items-center justify-center gap-2 text-gray-500 hover:text-red-400 transition text-sm font-bold py-2">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+				</svg>
+				Sign Out
+			</button>
+		</div>
 	</main>
+
+	<!-- Tab Bar (iOS Style) -->
+	<nav class="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-xl border-t border-gray-800 px-6 py-3 flex justify-around items-center z-50">
+		<a href="/" class="flex flex-col items-center gap-1 text-indigo-500">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+				<path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+			</svg>
+			<span class="text-[10px] font-bold">Home</span>
+		</a>
+		<a href="/planner" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-300">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+			</svg>
+			<span class="text-[10px] font-bold">Planner</span>
+		</a>
+		<a href="/macros" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-300">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+			</svg>
+			<span class="text-[10px] font-bold">Macros</span>
+		</a>
+	</nav>
 </Layout>
+
+<script>
+	import { supabase } from '../lib/supabase';
+
+	const logoutBtn = document.getElementById('btn-logout');
+	const dateDisplay = document.getElementById('date-display');
+	const greeting = document.getElementById('greeting');
+	const userAvatar = document.getElementById('user-avatar');
+
+	// Summary stats
+	const sumCals = document.getElementById('summary-cals');
+	const sumPro = document.getElementById('summary-pro');
+	const calRing = document.getElementById('cal-ring') as unknown as SVGCircleElement;
+	const proRing = document.getElementById('pro-ring') as unknown as SVGCircleElement;
+
+	async function init() {
+		const { data: { user } } = await supabase.auth.getUser();
+		if (!user) {
+			window.location.href = '/login';
+			return;
+		}
+
+		// UI Setup
+		const today = new Date();
+		dateDisplay.innerText = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+		userAvatar.innerText = user.email?.[0].toUpperCase() || '?';
+		greeting.innerText = `Hi, ${user.email?.split('@')[0]}`;
+
+		// Fetch Today's Totals from Cloud
+		const todayStr = today.toISOString().split('T')[0];
+		const { data: logs } = await supabase
+			.from('food_logs')
+			.select('calories, protein')
+			.eq('logged_at', todayStr);
+
+		if (logs) {
+			const totalCals = logs.reduce((acc, log) => acc + log.calories, 0);
+			const totalPro = logs.reduce((acc, log) => acc + log.protein, 0);
+
+			sumCals.innerText = Math.round(totalCals).toString();
+			sumPro.innerText = Math.round(totalPro) + 'g';
+
+			// Update Rings (Dash offset logic)
+			const targetCals = 2500;
+			const targetPro = 180;
+			const circumference = 2 * Math.PI * 20; // 125.6
+
+			const calOffset = circumference - (Math.min(totalCals / targetCals, 1) * circumference);
+			const proOffset = circumference - (Math.min(totalPro / targetPro, 1) * circumference);
+
+			setTimeout(() => {
+				if (calRing) calRing.style.strokeDashoffset = calOffset.toString();
+				if (proRing) proRing.style.strokeDashoffset = proOffset.toString();
+			}, 100);
+		}
+	}
+
+	logoutBtn?.addEventListener('click', async () => {
+		await supabase.auth.signOut();
+		window.location.href = '/login';
+	});
+
+	init();
+</script>
