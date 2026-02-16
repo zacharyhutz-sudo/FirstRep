@@ -21,7 +21,7 @@ import Layout from '../layouts/Layout.astro';
 				</div>
 				
 				<div class="space-y-3 pt-4">
-					<button type="submit" id="btn-login" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-xl transition shadow-lg shadow-indigo-500/20 active:scale-[0.98]">
+					<button type="button" id="btn-login-submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-xl transition shadow-lg shadow-indigo-500/20 active:scale-[0.98]">
 						Sign In
 					</button>
 					<button type="button" id="btn-signup" class="w-full bg-transparent border border-gray-700 hover:border-gray-500 text-gray-300 font-bold py-4 rounded-xl transition active:scale-[0.98]">
@@ -44,7 +44,7 @@ import Layout from '../layouts/Layout.astro';
 	const form = document.getElementById('auth-form');
 	const emailInput = document.getElementById('email') as HTMLInputElement;
 	const passwordInput = document.getElementById('password') as HTMLInputElement;
-	const btnLogin = document.getElementById('btn-login');
+	const btnLogin = document.getElementById('btn-login-submit');
 	const btnSignup = document.getElementById('btn-signup');
 	const msg = document.getElementById('auth-msg');
 
@@ -54,41 +54,41 @@ import Layout from '../layouts/Layout.astro';
 		msg.classList.remove('hidden');
 	}
 
-	btnSignup?.addEventListener('click', async () => {
+	async function handleAuth(type: 'login' | 'signup') {
 		const email = emailInput.value;
 		const password = passwordInput.value;
 		if (!email || !password) return showMsg('Enter email and password.', true);
 
-		btnLogin.innerText = 'Creating Account...';
-		const { data, error } = await supabase.auth.signUp({ 
-			email, 
-			password,
-			options: {
-				emailRedirectTo: window.location.origin + '/FirstRep/login/index.html'
-			}
-		});
+		const originalText = type === 'login' ? 'Sign In' : 'Create Account';
+		const loadingText = type === 'login' ? 'Signing In...' : 'Creating Account...';
 		
-		if (error) {
-			showMsg(error.message, true);
-			btnLogin.innerText = 'Sign In';
-		} else {
-			showMsg('Check your email for a confirmation link!');
-			btnLogin.innerText = 'Sign In';
-		}
-	});
+		const targetBtn = type === 'login' ? btnLogin : btnSignup;
+		if (targetBtn) targetBtn.innerText = loadingText;
 
-	form?.addEventListener('submit', async (e) => {
-		e.preventDefault();
-		const email = emailInput.value;
-		const password = passwordInput.value;
-
-		const { error } = await supabase.auth.signInWithPassword({ email, password });
-		if (error) showMsg(error.message, true);
-		else {
-			showMsg('Success! Redirecting...');
-			window.location.href = '/FirstRep/index.html';
+		try {
+			if (type === 'signup') {
+				const { error } = await supabase.auth.signUp({ 
+					email, 
+					password,
+					options: { emailRedirectTo: window.location.origin + '/FirstRep/login/index.html' }
+				});
+				if (error) throw error;
+				showMsg('Check your email for a confirmation link!');
+			} else {
+				const { error } = await supabase.auth.signInWithPassword({ email, password });
+				if (error) throw error;
+				showMsg('Success! Redirecting...');
+				window.location.replace('/FirstRep/index.html');
+			}
+		} catch (err: any) {
+			showMsg(err.message, true);
+		} finally {
+			if (targetBtn) targetBtn.innerText = originalText;
 		}
-	});
+	}
+
+	btnLogin?.addEventListener('click', () => handleAuth('login'));
+	btnSignup?.addEventListener('click', () => handleAuth('signup'));
 
 	async function checkSession() {
 		const { data: { session } } = await supabase.auth.getSession();
