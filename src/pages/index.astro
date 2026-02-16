@@ -161,7 +161,7 @@ import Layout from '../layouts/Layout.astro';
 		
 		if (error || !session) {
 			console.log("No session found, redirecting to login...");
-			window.location.replace('/FirstRep/login/');
+			window.location.href = '/FirstRep/login/index.html';
 			return;
 		}
 
@@ -169,7 +169,7 @@ import Layout from '../layouts/Layout.astro';
 		document.getElementById('main-logout')?.addEventListener('click', async () => {
 			console.log("Signing out...");
 			await supabase.auth.signOut();
-			window.location.replace('/FirstRep/login/');
+			window.location.href = '/FirstRep/login/index.html';
 		});
 
 		const user = session.user;

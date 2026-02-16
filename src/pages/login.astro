@@ -73,7 +73,7 @@ import Layout from '../layouts/Layout.astro';
 		if (error) showMsg(error.message, true);
 		else {
 			showMsg('Success! Redirecting...');
-			window.location.replace('/FirstRep/');
+			window.location.href = '/FirstRep/index.html';
 		}
 	});
 
@@ -81,7 +81,7 @@ import Layout from '../layouts/Layout.astro';
 		const { data: { session } } = await supabase.auth.getSession();
 		if (session) {
 			console.log("Session found, redirecting to home...");
-			window.location.replace('/FirstRep/');
+			window.location.href = '/FirstRep/index.html';
 		}
 	}
 	checkSession();
