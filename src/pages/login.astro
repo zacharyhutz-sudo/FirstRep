@@ -73,14 +73,14 @@ import Layout from '../layouts/Layout.astro';
 		if (error) showMsg(error.message, true);
 		else {
 			showMsg('Success! Redirecting...');
-			window.location.href = '/FirstRep/';
+			window.location.replace('/FirstRep/');
 		}
 	});
 
 	async function checkSession() {
 		const { data: { session } } = await supabase.auth.getSession();
 		if (session) {
-			window.location.href = '/FirstRep/';
+			window.location.replace('/FirstRep/');
 		}
 	}
 	checkSession();

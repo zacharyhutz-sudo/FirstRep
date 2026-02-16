@@ -99,7 +99,7 @@ import Layout from '../layouts/Layout.astro';
 	async function init() {
 		const { data: { session } } = await supabase.auth.getSession();
 		if (!session) {
-			window.location.href = '/FirstRep/login';
+			window.location.replace('/FirstRep/login/');
 			return;
 		}
 		const user = session.user;

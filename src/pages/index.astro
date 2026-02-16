@@ -162,7 +162,7 @@ import Layout from '../layouts/Layout.astro';
 		
 		if (error || !session) {
 			console.log("No session found, redirecting to login...");
-			window.location.href = '/FirstRep/login/';
+			window.location.replace('/FirstRep/login/');
 			return;
 		}
 
