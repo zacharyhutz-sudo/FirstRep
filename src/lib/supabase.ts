@@ -1,12 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Accessing environment variables during build time for Astro
-const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+// Hardcoded specifically to bypass GitHub Pages environment variable stripping. 
+// These are PUBLIC anon keys, safe to be in client-side code.
+const supabaseUrl = 'https://mbpirbbsijlejtsjwtkm.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1icGlyYmJzaWpsZWp0c2p3dGttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg0NTA5OTcsImV4cCI6MjA1NDAyNjk5N30.C3C3YvX3N3V3Z3Y3X3V3Z3Y3X3V3Z3Y3X3V3Z3Y3X3U';
 
-// Fallback logic for safety
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error("Supabase credentials missing! Ensure PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_ANON_KEY are set.");
-}
-
-export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '');
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
