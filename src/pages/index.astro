@@ -26,7 +26,7 @@ import Layout from '../layouts/Layout.astro';
 		</div>
 		
 		<!-- Workout Planning Section (Original Feature) -->
-		<div id="workout-section" class="feature-content">
+		<div id="workout-section" class="feature-content hidden">
 			<!-- Questionnaire -->
 			<div class="bg-gray-900/50 border border-gray-800 p-4 sm:p-8 rounded-2xl mb-8 sm:mb-12">
 				<h2 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Personalized Fitness Questionnaire</h2>
@@ -730,21 +730,5 @@ import Layout from '../layouts/Layout.astro';
 				renderPlan(plan);
 			});
 		</script>
-
-		<!-- Features -->
-		<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-left">
-			<div class="p-5 sm:p-6 border border-gray-800 rounded-xl bg-gray-900/30">
-				<h3 class="font-bold mb-2">Macro Tracking</h3>
-				<p class="text-sm text-gray-500">Combine nutrition with training in one place.</p>
-			</div>
-			<div class="p-5 sm:p-6 border border-gray-800 rounded-xl bg-gray-900/30">
-				<h3 class="font-bold mb-2">Whoop Sync</h3>
-				<p class="text-sm text-gray-500">Coming soon: leverage your recovery data.</p>
-			</div>
-			<div class="p-5 sm:p-6 border border-gray-800 rounded-xl bg-gray-900/30">
-				<h3 class="font-bold mb-2">Cheap & Simple</h3>
-				<p class="text-sm text-gray-500">Just $5/month for AI-personalized coaching.</p>
-			</div>
-		</div>
 	</main>
 </Layout>
