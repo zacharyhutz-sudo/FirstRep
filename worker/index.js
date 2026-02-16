@@ -54,8 +54,16 @@ export default {
 
         let rawText = data.candidates[0].content.parts[0].text;
         
-        // Clean markdown backticks if AI included them
-        rawText = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
+        // Handle Gemini 1.5 JSON cleanup
+        rawText = rawText.replace(/```json\s?|```/g, "").trim();
+        
+        // Ensure it's valid JSON before returning
+        try {
+          JSON.parse(rawText);
+        } catch (e) {
+          // If parsing fails, it might be raw text or poorly formatted
+          throw new Error("AI returned malformed JSON: " + rawText.substring(0, 100));
+        }
 
         return new Response(rawText, {
           headers: { ...corsHeaders, "Content-Type": "application/json" },

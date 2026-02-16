@@ -436,6 +436,26 @@ import Layout from '../layouts/Layout.astro';
 				// Debounce to save API hits
 				clearTimeout(searchTimeout);
 				searchTimeout = setTimeout(async () => {
+					// LOCAL FALLBACK CHECK FIRST
+					const queryLower = query.toLowerCase();
+					const localMatches = foodDB.foods
+						.filter(f => f.name.toLowerCase().includes(queryLower))
+						.slice(0, 5);
+					
+					if (localMatches.length > 0) {
+						window._lastSearchResults = localMatches;
+						foodResults.innerHTML = localMatches.map(f => `
+							<div onclick="window.selectFoodForPortion('${f.id}')" class="p-4 hover:bg-gray-800 transition cursor-pointer flex justify-between items-center rounded-xl border border-transparent hover:border-indigo-500/30">
+								<div>
+									<p class="font-bold text-gray-200">${f.name} <span class="text-[10px] text-indigo-500 font-black ml-1 uppercase">Local</span></p>
+									<p class="text-xs text-gray-500">${f.unit} serving</p>
+								</div>
+								<p class="text-indigo-400 font-bold">${f.calories} cal</p>
+							</div>
+						`).join('');
+						return;
+					}
+
 					foodResults.innerHTML = '<p class="p-4 text-center text-gray-500 animate-pulse">Searching AI Database...</p>';
 					
 					try {
