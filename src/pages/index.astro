@@ -13,6 +13,12 @@ import Layout from '../layouts/Layout.astro';
 		</p>
 
 		<!-- Feature Selection Pills -->
+		<div id="auth-nav" class="hidden flex justify-center gap-4 mb-10">
+			<a href="/login" class="text-indigo-400 font-bold hover:underline">Sign In</a>
+			<span class="text-gray-700">|</span>
+			<button id="btn-logout" class="text-gray-500 hover:text-gray-300">Logout</button>
+		</div>
+
 		<div class="flex flex-wrap justify-center gap-3 mb-10 sm:mb-16">
 			<button id="nav-workout" class="feature-pill active px-6 py-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 font-bold text-sm transition hover:bg-indigo-500/20">
 				🏋️ Workout Planning
@@ -329,6 +335,28 @@ import Layout from '../layouts/Layout.astro';
 			import programsData from '../data/programs.json';
 			import exerciseDB from '../data/exercise-db.json';
 			import foodDB from '../data/food-db.json';
+			import { supabase } from '../lib/supabase';
+
+			// --- Auth & Session ---
+			const authNav = document.getElementById('auth-nav');
+			const logoutBtn = document.getElementById('btn-logout');
+
+			async function checkUser() {
+				const { data: { user } } = await supabase.auth.getUser();
+				if (user) {
+					authNav.classList.remove('hidden');
+					// We'll use user.id later to sync data
+				} else {
+					// Proactively show login if not authenticated
+					// window.location.href = '/login'; 
+				}
+			}
+			checkUser();
+
+			logoutBtn?.addEventListener('click', async () => {
+				await supabase.auth.signOut();
+				window.location.reload();
+			});
 
 			// --- DOM References ---
 			const form = document.getElementById('quiz-form');
