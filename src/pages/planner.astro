@@ -152,19 +152,24 @@ import Layout from '../layouts/Layout.astro';
 
 		const formData = {
 			goal: (document.getElementById('goal') as HTMLSelectElement).value,
-			daysPerWeek: (document.getElementById('daysPerWeek') as HTMLSelectElement).value,
+			daysPerWeek: parseInt((document.getElementById('daysPerWeek') as HTMLSelectElement).value),
 			equipment: (document.getElementById('equipment') as HTMLSelectElement).value,
 			age: 25, sex: 'male', experience: 'Intermediate', injuries: 'None', sessionTime: 60 // Defaults for now
 		};
 
 		try {
+			console.log('Sending request to worker with data:', formData);
 			const res = await fetch(WORKER_URL, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(formData)
 			});
 			
-			if (!res.ok) throw new Error('Worker response failed');
+			if (!res.ok) {
+				const errorText = await res.text();
+				console.error('Worker error body:', errorText);
+				throw new Error(`Worker response failed (${res.status}): ${errorText.substring(0, 100)}`);
+			}
 			const plan = await res.json();
 
 			// Save to cloud
