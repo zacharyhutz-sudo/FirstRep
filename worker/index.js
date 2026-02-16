@@ -16,6 +16,8 @@ export default {
     try {
       const body = await request.json();
       const API_KEY = env.GEMINI_API_KEY;
+
+      if (!API_KEY) throw new Error("GEMINI_API_KEY is missing in worker environment");
       
       // Routing based on request data
       if (body.query) {
@@ -77,7 +79,7 @@ export default {
             }),
           });
           const aiData = await aiRes.json();
-          if (aiData.candidates && aiData.candidates[0]) {
+          if (aiData.candidates && aiData.candidates[0] && aiData.candidates[0].content && aiData.candidates[0].content.parts[0]) {
             let aiText = aiData.candidates[0].content.parts[0].text;
             aiText = aiText.replace(/```json\s?|```/g, "").trim();
             try {
@@ -109,60 +111,40 @@ BODYWEIGHT: Pushups, Air Squats, Burpees, Jumping Jacks, Mountain Climbers, Pull
 FUNCTIONAL/OTHER: Atlas Stone Trainer, Atlas Stones, Axle Deadlift, Backward Drag, Backward Medicine Ball Throw, Balance Board, Ball Leg Curl
 CARDIO: Running (Treadmill), Elliptical Trainer, Rowing Machine, Elevated Treadmill Walk, Stationary Bike`;
 
-      const promptText = `You are an elite, safety-conscious fitness coach for the app "FirstRep". 
-Generate a customized workout plan based on these user stats:
-- Age: ${body.age}
-- Biological Sex: ${body.sex}
-- Goal: ${body.goal}
-- Equipment Available: ${body.equipment}
-- Schedule: ${body.daysPerWeek} days/week, ${body.sessionTime} mins/session
-- Experience: ${body.experience} (Last workout: ${body.lastWorkout})
-- Injury/Pain: ${body.injuries}
+      // Safe defaults for mandatory fields
+      const age = body.age || 25;
+      const sex = body.sex || 'male';
+      const goal = body.goal || 'Build Muscle';
+      const equipment = body.equipment || 'Full Gym';
+      const daysPerWeek = body.daysPerWeek || 3;
+      const sessionTime = body.sessionTime || 60;
+      const experience = body.experience || 'Beginner';
+      const lastWorkout = body.lastWorkout || 'Never';
+      const injuries = body.injuries || 'None';
 
---- CRITICAL HIERARCHY OF ADAPTATION (MANDATORY) ---
+      const promptText = `You are an elite fitness coach. Generate a customized workout plan:
+- Age: ${age}
+- Sex: ${sex}
+- Goal: ${goal}
+- Equipment: ${equipment}
+- Schedule: ${daysPerWeek} days/week, ${sessionTime} mins/session
+- Experience: ${experience}
+- Last workout: ${lastWorkout}
+- Injury: ${injuries}
 
-1. SAFETY FIRST (Pain/Injury):
-   - BACK PAIN: ABSOLUTELY NO spinal compression. Banned: Barbell Squat, Deadlift, Overhead Press, Romanian Deadlift. Replace with: Plank, Dead Bug, Bird-Dog, Glute Bridges.
-   - KNEE PAIN: Banned: Lunges, Deep Squats, Box Jumps. Replace with: Box Step-ups (low box), Glute Bridges, Wall Sits.
-   - SHOULDER PAIN: Banned: Overhead Press, Dips, Wide Grip Pushups. Replace with: Floor Press, Lateral Raises (light), Neutral Grip Rows.
-   - WRIST PAIN: Banned: Standard Pushups, Front Squats. Replace with: Dumbbell Press (neutral grip), Knuckle Pushups, or Cable work.
-   - HIP PAIN: Banned: Deep Sumo Deadlifts, Wide Stance Squats. Replace with: Glute Bridges, Step-ups, or Stationary Bike.
-   - NECK PAIN: Banned: Shrugs, Heavy Barbell Back Squats. Replace with: Goblet Squats, Chest-Supported Rows.
-   - If any pain is mentioned, the ENTIRE workout must be "Low Impact" and focused on stability. Avoid all high-impact jumping/plyometrics.
-
-2. SENIOR SCALING (Age 65+):
-   - OVERRIDE Duration: Regardless of user request, if Age > 65 and Experience is Beginner, limit to 20-25 mins max.
-   - Volume: Max 2-3 sets per exercise.
-   - Intensity: Focus on "Functional Independence" (Balance, Sit-to-Stand, Grip Strength).
-
-3. DE-CONDITIONING (Last Workout > 3 months ago):
-   - If the user hasn't worked out in months, they are "De-conditioned". 
-   - Reduction: Reduce requested session time by 30% for the first week.
-   - Focus: High reps (15+), low weight, focusing on form over load.
-
---- VOLUME & FREQUENCY CONSTRAINTS ---
-- DO NOT CHANGE the number of days per week. If they requested ${body.daysPerWeek} days, you MUST return exactly ${body.daysPerWeek} days.
-- For high-frequency requests (5-6 days) from Beginners or Seniors, reduce the daily load (e.g. fewer sets per day) to ensure recovery, but maintain the requested frequency.
-
-CRITICAL: The "reasoning" field MUST explicitly list every adaptation made (e.g. "Because you mentioned back pain, I removed Deadlifts...").
-
-Return ONLY a JSON object with this structure:
+Return ONLY a JSON object:
 {
   "name": "Plan Name",
-  "schedule": "X days/week | Y mins per session",
-  "reasoning": "Detailed list of safety adaptations based on age, pain, and time since last workout.",
+  "schedule": "X days/week",
+  "reasoning": "Why this plan fits.",
   "days": [
     {
-      "day_label": "Day 1: Title",
-      "exercises": [
-        {"exercise": "Name", "sets": 3, "reps": "10", "rest": "60s"}
-      ]
+      "day_label": "Day 1",
+      "exercises": [{"exercise": "Name", "sets": 3, "reps": "10", "rest": "60s"}]
     }
   ]
 }
-
-Use ONLY exercises from this list (choose based on equipment):
-${exerciseList}`;
+Use ONLY: ${exerciseList}`;
 
       const response = await fetch(url, {
         method: "POST",
@@ -174,6 +156,11 @@ ${exerciseList}`;
       });
 
       const data = await response.json();
+      
+      if (!data.candidates || !data.candidates[0] || !data.candidates[0].content || !data.candidates[0].content.parts[0]) {
+        throw new Error("Invalid AI response: " + JSON.stringify(data));
+      }
+
       const plan = data.candidates[0].content.parts[0].text;
 
       return new Response(plan, {
