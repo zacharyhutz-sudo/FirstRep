@@ -478,7 +478,7 @@ import Layout from '../layouts/Layout.astro';
 						foodResults.innerHTML = matches.map(f => `
 							<div onclick="window.selectFoodForPortion('${f.id}')" class="p-4 hover:bg-gray-800 transition cursor-pointer flex justify-between items-center rounded-xl border border-transparent hover:border-indigo-500/30">
 								<div>
-									<p class="font-bold text-gray-200">${f.name}</p>
+									<p class="font-bold text-gray-200">${f.name} ${f.source === 'OFF' ? '<span class="text-[9px] text-green-500 font-black ml-1 uppercase border border-green-500/30 px-1 rounded">Brand</span>' : ''}</p>
 									<p class="text-xs text-gray-500">${f.unit} serving</p>
 								</div>
 								<p class="text-indigo-400 font-bold">${f.calories} cal</p>

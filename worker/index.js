@@ -19,54 +19,78 @@ export default {
       
       // Routing based on request data
       if (body.query) {
-        // FOOD SEARCH LOGIC
-        const searchUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
-        const searchPrompt = `You are a nutrition database API. Return a JSON array of the top 5 most likely food items matching the query: "${body.query}".
-        Consider plural/singular variations (e.g., "eggs" should match "egg").
-        For each item, provide typical nutritional values for a standard serving size.
-        
-        Structure:
-        [
-          {
-            "id": "unique_string",
-            "name": "Food Name",
-            "unit": "100g or 1 cup, etc",
-            "calories": 100,
-            "protein": 10,
-            "carbs": 20,
-            "fat": 5
-          }
-        ]
-        Return ONLY the JSON array.`;
+        const query = body.query.trim();
+        const results = [];
 
-        const response = await fetch(searchUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: searchPrompt }] }],
-            generationConfig: { response_mime_type: "application/json" }
-          }),
-        });
-        const data = await response.json();
-        
-        if (!data.candidates || !data.candidates[0]) {
-          throw new Error("AI Search limit reached or invalid response");
-        }
-
-        let rawText = data.candidates[0].content.parts[0].text;
-        
-        // Handle Gemini 1.5 JSON cleanup
-        rawText = rawText.replace(/```json\s?|```/g, "").trim();
-        
-        // Ensure it's valid JSON before returning
+        // 1. TRY OPEN FOOD FACTS (OFF) - Best for Branded/UPC
         try {
-          JSON.parse(rawText);
+          const offUrl = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=5`;
+          const offRes = await fetch(offUrl, { headers: { "User-Agent": "FirstRep - Web - 1.0" } });
+          const offData = await offRes.json();
+
+          if (offData.products && offData.products.length > 0) {
+            offData.products.forEach(p => {
+              if (p.nutriments && p.nutriments["energy-kcal_100g"]) {
+                results.push({
+                  id: "off_" + (p.id || p.code),
+                  name: `${p.product_name} ${p.brands ? '(' + p.brands + ')' : ''}`.trim(),
+                  unit: "100g",
+                  calories: Math.round(p.nutriments["energy-kcal_100g"]),
+                  protein: p.nutriments.proteins_100g || 0,
+                  carbs: p.nutriments.carbohydrates_100g || 0,
+                  fat: p.nutriments.fat_100g || 0,
+                  source: "OFF"
+                });
+              }
+            });
+          }
         } catch (e) {
-          // If parsing fails, it might be raw text or poorly formatted
-          throw new Error("AI returned malformed JSON: " + rawText.substring(0, 100));
+          console.error("OFF API Error:", e);
         }
 
-        return new Response(rawText, {
+        // 2. IF OFF IS EMPTY OR FEW RESULTS, FILL WITH GEMINI (Best for Restaurants/Generic)
+        if (results.length < 3) {
+          const searchUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+          const searchPrompt = `You are a nutrition database API. Return a JSON array of 5 food items matching: "${query}".
+          Focus on restaurant meals or generic items if brands are missing.
+          
+          Structure:
+          [
+            {
+              "id": "ai_unique_string",
+              "name": "Food Name (Restaurant Name if applicable)",
+              "unit": "standard serving size",
+              "calories": 100,
+              "protein": 10,
+              "carbs": 20,
+              "fat": 5
+            }
+          ]
+          Return ONLY the JSON array.`;
+
+          const aiRes = await fetch(searchUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: searchPrompt }] }],
+              generationConfig: { response_mime_type: "application/json" }
+            }),
+          });
+          const aiData = await aiRes.json();
+          if (aiData.candidates && aiData.candidates[0]) {
+            let aiText = aiData.candidates[0].content.parts[0].text;
+            aiText = aiText.replace(/```json\s?|```/g, "").trim();
+            try {
+              const aiItems = JSON.parse(aiText);
+              aiItems.forEach(item => {
+                item.source = "AI";
+                results.push(item);
+              });
+            } catch (e) {}
+          }
+        }
+
+        return new Response(JSON.stringify(results.slice(0, 8)), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
