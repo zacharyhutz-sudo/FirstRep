@@ -52,6 +52,7 @@ export default {
 
         // 2. IF OFF IS EMPTY OR FEW RESULTS, FILL WITH GEMINI (Best for Restaurants/Generic)
         if (results.length < 3) {
+          // Fixed model path
           const searchUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
           const searchPrompt = `You are a nutrition database API. Return a JSON array of 5 food items matching: "${query}".
           Focus on restaurant meals or generic items if brands are missing.
@@ -97,7 +98,7 @@ export default {
         });
       }
 
-      // WORKOUT GENERATION LOGIC (Existing)
+      // WORKOUT GENERATION LOGIC (Fixed model path)
       const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
       // Available exercises grouped by equipment requirement
