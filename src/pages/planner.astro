@@ -154,8 +154,21 @@ import Layout from '../layouts/Layout.astro';
 			goal: (document.getElementById('goal') as HTMLSelectElement).value,
 			daysPerWeek: parseInt((document.getElementById('daysPerWeek') as HTMLSelectElement).value),
 			equipment: (document.getElementById('equipment') as HTMLSelectElement).value,
-			age: 25, sex: 'male', experience: 'Intermediate', injuries: 'None', sessionTime: 60 // Defaults for now
+			age: 25, 
+			sex: 'male', 
+			experience: 'Intermediate', 
+			injuries: 'None', 
+			sessionTime: 60,
+			user_id: user.id
 		};
+
+		// 1. Fetch user profile to get real data if available
+		const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+		if (profile) {
+			formData.age = profile.age || 25;
+			formData.sex = profile.sex || 'male';
+			formData.goal = profile.fitness_goal || formData.goal;
+		}
 
 		try {
 			console.log('Sending request to worker with data:', formData);
