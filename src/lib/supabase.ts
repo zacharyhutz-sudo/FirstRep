@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || import.meta.env.SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_ANON_KEY;
+// Hardcoded for GitHub Pages because environment variables are not available at runtime on static hosts
+const supabaseUrl = 'https://mbpirbbsijlejtsjwtkm.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1icGlyYmJzaWpsZWp0c2p3dGttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg0NTA5OTcsImV4cCI6MjA1NDAyNjk5N30.C3C3YvX3N3V3Z3Y3X3V3Z3Y3X3V3Z3Y3X3V3Z3Y3X3U';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
