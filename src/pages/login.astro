@@ -76,4 +76,12 @@ import Layout from '../layouts/Layout.astro';
 			window.location.href = '/FirstRep/';
 		}
 	});
+
+	async function checkSession() {
+		const { data: { session } } = await supabase.auth.getSession();
+		if (session) {
+			window.location.href = '/FirstRep/';
+		}
+	}
+	checkSession();
 </script>

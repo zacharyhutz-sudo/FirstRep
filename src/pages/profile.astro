@@ -1,0 +1,66 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="FirstRep - Profile">
+	<main class="max-w-md mx-auto px-6 py-12 pb-32">
+		<header class="flex items-center gap-4 mb-10">
+			<a href="/FirstRep/" class="p-2 -ml-2 text-gray-400 hover:text-white transition">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+				</svg>
+			</a>
+			<h1 class="text-2xl font-black text-white">Profile</h1>
+		</header>
+
+		<div class="bg-gray-900 border border-gray-800 rounded-3xl p-8 text-center mb-8">
+			<div id="avatar" class="w-20 h-20 bg-indigo-500/10 text-indigo-400 rounded-full flex items-center justify-center text-3xl font-black mx-auto mb-4 border border-indigo-500/20">
+				?
+			</div>
+			<p id="email" class="text-gray-300 font-bold"></p>
+			<p id="joined" class="text-xs text-gray-500 uppercase tracking-widest mt-1"></p>
+		</div>
+
+		<div class="space-y-4">
+			<div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden divide-y divide-gray-800">
+				<div class="p-5 flex justify-between items-center">
+					<span class="text-gray-400 text-sm">App Version</span>
+					<span class="text-white text-sm font-bold">1.0.2</span>
+				</div>
+				<div class="p-5 flex justify-between items-center">
+					<span class="text-gray-400 text-sm">Status</span>
+					<span class="text-green-500 text-sm font-bold">Cloud Synced</span>
+				</div>
+			</div>
+
+			<button id="btn-logout" class="w-full bg-red-500/10 border border-red-500/20 text-red-400 font-bold py-4 rounded-2xl transition active:scale-95 hover:bg-red-500/20">
+				Sign Out
+			</button>
+		</div>
+	</main>
+</Layout>
+
+<script>
+	import { supabase } from '../lib/supabase';
+
+	async function init() {
+		const { data: { session } } = await supabase.auth.getSession();
+		
+		if (!session) {
+			window.location.href = '/FirstRep/login/';
+			return;
+		}
+
+		const user = session.user;
+		document.getElementById('email').innerText = user.email;
+		document.getElementById('avatar').innerText = user.email?.[0].toUpperCase() || '?';
+		document.getElementById('joined').innerText = `Member since ${new Date(user.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`;
+
+		document.getElementById('btn-logout')?.addEventListener('click', async () => {
+			await supabase.auth.signOut();
+			window.location.href = '/FirstRep/login/';
+		});
+	}
+
+	init();
+</script>

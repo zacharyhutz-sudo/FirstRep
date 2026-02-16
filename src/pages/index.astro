@@ -5,6 +5,17 @@ import Layout from '../layouts/Layout.astro';
 <Layout title="FirstRep - Dashboard">
 	<main class="max-w-md mx-auto px-6 py-12 pb-32">
 		<!-- Activity Rings / Summary (Native Style) -->
+		<div class="flex justify-end mb-4">
+			<a href="/FirstRep/profile/" class="flex items-center gap-2 bg-gray-900 border border-gray-800 px-4 py-2 rounded-full hover:border-indigo-500/30 transition shadow-sm active:scale-95">
+				<div class="w-6 h-6 bg-indigo-500/10 text-indigo-400 rounded-full flex items-center justify-center text-[10px] font-bold">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+						<path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+					</svg>
+				</div>
+				<span class="text-xs font-bold text-gray-300">Profile</span>
+			</a>
+		</div>
+
 		<div class="bg-gray-900 border border-gray-800 rounded-3xl p-6 mb-8 shadow-sm">
 			<div class="flex justify-between items-center mb-6">
 				<h2 class="text-sm font-bold uppercase tracking-widest text-gray-500">Today's Summary</h2>
@@ -151,7 +162,7 @@ import Layout from '../layouts/Layout.astro';
 		
 		if (error || !session) {
 			console.log("No session found, redirecting to login...");
-			window.location.href = '/FirstRep/login';
+			window.location.href = '/FirstRep/login/';
 			return;
 		}
 
