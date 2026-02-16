@@ -97,11 +97,12 @@ import Layout from '../layouts/Layout.astro';
 	const WORKER_URL = 'https://first-rep-worker.hutzellcreativeco.workers.dev/';
 
 	async function init() {
-		const { data: { user } } = await supabase.auth.getUser();
-		if (!user) {
+		const { data: { session } } = await supabase.auth.getSession();
+		if (!session) {
 			window.location.href = '/FirstRep/login';
 			return;
 		}
+		const user = session.user;
 
 		// Fetch existing plan
 		const { data: plans } = await supabase

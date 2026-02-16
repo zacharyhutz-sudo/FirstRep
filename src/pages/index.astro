@@ -147,12 +147,14 @@ import Layout from '../layouts/Layout.astro';
 	const proRing = document.getElementById('pro-ring') as unknown as SVGCircleElement;
 
 	async function init() {
-		const { data: { user } } = await supabase.auth.getUser();
-		if (!user) {
+		const { data: { session } } = await supabase.auth.getSession();
+		if (!session) {
 			window.location.href = '/FirstRep/login';
 			return;
 		}
 
+		const user = session.user;
+		const today = new Date();
 		// UI Setup
 		dateDisplay.innerText = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 

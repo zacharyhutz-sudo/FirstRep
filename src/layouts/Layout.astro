@@ -18,19 +18,6 @@ import '../styles/global.css';
 		<title>{title}</title>
 	</head>
 	<body class="bg-gray-950 text-white min-h-screen antialiased">
-		<!-- Navigation -->
-		<nav class="sticky top-0 z-40 bg-gray-950/80 backdrop-blur-md border-b border-gray-800/50">
-			<div class="max-w-4xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
-				<a href="/FirstRep/" class="text-lg font-black tracking-tight">
-					First<span class="text-indigo-500">Rep</span>
-				</a>
-				<div class="flex gap-4 text-sm">
-					<a href="/FirstRep/" class="text-gray-400 hover:text-white transition tap-target">Home</a>
-					<a href="/FirstRep/library/" class="text-gray-400 hover:text-white transition tap-target">Library</a>
-					<a href="/FirstRep/my-plans/" class="text-gray-400 hover:text-white transition tap-target">My Plans</a>
-				</div>
-			</div>
-		</nav>
 		<slot />
 	</body>
 </html>
