@@ -163,19 +163,24 @@ import Layout from '../layouts/Layout.astro';
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(formData)
 			});
+			
+			if (!res.ok) throw new Error('Worker response failed');
 			const plan = await res.json();
 
 			// Save to cloud
-			await supabase.from('workout_plans').insert([{
+			const { error: insertError } = await supabase.from('workout_plans').insert([{
 				user_id: user.id,
 				plan_name: plan.name,
 				schedule_summary: plan.schedule,
 				plan_data: plan
 			}]);
 
+			if (insertError) throw insertError;
+
 			renderPlan(plan);
-		} catch (err) {
-			alert('Failed to generate plan.');
+		} catch (err: any) {
+			console.error('Planner error:', err);
+			alert('Failed to generate plan: ' + err.message);
 		} finally {
 			btn.innerText = 'Generate Plan';
 		}
