@@ -31,7 +31,8 @@ import Layout from '../layouts/Layout.astro';
 					<div>
 						<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Days / Week</label>
 						<select id="daysPerWeek" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-							<option value="3">3 Days</option>
+							<option value="2">2 Days</option>
+							<option value="3" selected>3 Days</option>
 							<option value="4">4 Days</option>
 							<option value="5">5 Days</option>
 						</select>
@@ -41,8 +42,16 @@ import Layout from '../layouts/Layout.astro';
 						<select id="equipment" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
 							<option value="Full Gym">Full Gym</option>
 							<option value="Dumbbells Only">Dumbbells</option>
+							<option value="Bodyweight Only">Bodyweight</option>
 						</select>
 					</div>
+				</div>
+				<div>
+					<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Experience Level</label>
+					<select id="experience" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+						<option value="Beginner">Beginner (0-1 years)</option>
+						<option value="Experienced">Experienced (1+ years)</option>
+					</select>
 				</div>
 				<button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl transition shadow-lg shadow-indigo-500/20 active:scale-95">
 					Generate Plan
@@ -154,22 +163,19 @@ import Layout from '../layouts/Layout.astro';
 			goal: (document.getElementById('goal') as HTMLSelectElement).value,
 			daysPerWeek: parseInt((document.getElementById('daysPerWeek') as HTMLSelectElement).value),
 			equipment: (document.getElementById('equipment') as HTMLSelectElement).value,
+			experience: (document.getElementById('experience') as HTMLSelectElement).value,
 			age: 25, 
 			sex: 'male', 
-			experience: 'Intermediate', 
 			injuries: 'None', 
 			lastWorkout: 'Never',
 			sessionTime: 60
 		};
 
 		// 1. Fetch user profile to get real data if available
-		const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+		const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle();
 		if (profile) {
 			formData.age = profile.age || 25;
 			formData.sex = profile.sex || 'male';
-			formData.goal = profile.fitness_goal || formData.goal;
-			// Ensure these fields exist in your profiles table or add them
-			formData.experience = profile.experience_level || 'Intermediate';
 			formData.injuries = profile.injuries || 'None';
 		}
 
