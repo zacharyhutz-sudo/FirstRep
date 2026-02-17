@@ -136,12 +136,12 @@ import Layout from '../layouts/Layout.astro';
 		const container = document.getElementById('workout-container');
 		container.innerHTML = plan.days.map(day => `
 			<div class="bg-gray-900 border border-gray-800 rounded-3xl p-5 shadow-sm">
-				<h3 class="font-black text-indigo-400 mb-4 border-b border-gray-800 pb-2">${day.day_label}</h3>
+				<h3 class="font-black text-indigo-400 mb-4 border-b border-gray-800 pb-2">${day.day_label || day.label}</h3>
 				<div class="space-y-4">
 					${day.exercises.map(ex => `
 						<div class="flex justify-between items-center">
 							<div>
-								<p class="text-sm font-bold text-gray-200">${ex.exercise}</p>
+								<p class="text-sm font-bold text-gray-200">${ex.exercise || ex.name}</p>
 								<p class="text-[10px] text-gray-600 font-bold uppercase tracking-tight">${ex.rest} rest</p>
 							</div>
 							<p class="text-indigo-400 font-black text-sm">${ex.sets} x ${ex.reps}</p>
