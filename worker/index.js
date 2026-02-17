@@ -44,6 +44,7 @@ export default {
           }
           
           const daysCount = parseInt(body.daysPerWeek) || parseInt(body.days) || 3;
+          const split = body.split || "Full Body";
           const version = body.version || "Version A"; 
           
           const dbResponse = await fetch("https://raw.githubusercontent.com/zacharyhutz-sudo/FirstRep/main/src/data/distilled-programs.json");
@@ -56,6 +57,7 @@ export default {
             p.metadata.equipment === equipment &&
             p.metadata.goal === goal &&
             p.metadata.days === daysCount &&
+            (p.metadata.split === split || !p.metadata.split) &&
             p.metadata.version === version
           );
 
