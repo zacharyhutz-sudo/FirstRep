@@ -53,6 +53,13 @@ import Layout from '../layouts/Layout.astro';
 						<option value="Experienced">Experienced (1+ years)</option>
 					</select>
 				</div>
+				<div>
+					<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Preferred Training Style</label>
+					<select id="splitStyle" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+						<option value="Full Body">Full Body (Every muscle each day)</option>
+						<option value="Split Style">Targeted Split (Push/Pull, Upper/Lower, etc)</option>
+					</select>
+				</div>
 				<button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl transition shadow-lg shadow-indigo-500/20 active:scale-95">
 					Generate Plan
 				</button>
@@ -230,6 +237,7 @@ import Layout from '../layouts/Layout.astro';
 			daysPerWeek: parseInt((document.getElementById('daysPerWeek') as HTMLSelectElement).value),
 			equipment: (document.getElementById('equipment') as HTMLSelectElement).value,
 			experience: (document.getElementById('experience') as HTMLSelectElement).value,
+			split: (document.getElementById('splitStyle') as HTMLSelectElement).value,
 			age: 25, 
 			sex: 'male', 
 			injuries: 'None', 
