@@ -27,8 +27,22 @@ export default {
           const rawExp = body.experience || body.experienceLevel || "Beginner";
           const experience = (rawExp.toLowerCase().includes("beginner")) ? "Beginner" : "Experienced";
           
-          const equipment = body.equipment || "Full Gym";
-          const goal = body.goal || "Build Muscle";
+          const rawEquip = body.equipment || "Full Gym";
+          let equipment = "Full Gym";
+          if (rawEquip.toLowerCase().includes("dumbell") || rawEquip.toLowerCase().includes("dumbbell")) {
+            equipment = "Dumbbells Only";
+          } else if (rawExp.toLowerCase().includes("bodyweight") || rawEquip.toLowerCase().includes("body weight")) {
+            equipment = "Bodyweight Only";
+          }
+          
+          const rawGoal = body.goal || "Build Muscle";
+          let goal = "Build Muscle";
+          if (rawGoal.toLowerCase().includes("strength")) {
+            goal = "Strength";
+          } else if (rawGoal.toLowerCase().includes("loss") || rawGoal.toLowerCase().includes("weight")) {
+            goal = "Weight Loss";
+          }
+          
           const daysCount = parseInt(body.daysPerWeek) || parseInt(body.days) || 3;
           const version = body.version || "Version A"; 
           
