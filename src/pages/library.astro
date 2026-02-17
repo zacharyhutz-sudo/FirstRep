@@ -75,17 +75,17 @@ const sortedGroups = groupOrder.filter(g => muscleGroupMap[g]?.length);
 		</div>
 
 		<!-- Exercise Groups -->
-		<div id="exercise-groups" class="space-y-12">
+		<div id="exercise-groups" class="space-y-12 max-w-full overflow-x-hidden">
 			{sortedGroups.map(group => (
-				<section id={`group-${group.replace(/[^a-zA-Z]/g, '')}`} data-group={group} class="exercise-group">
+				<section id={`group-${group.replace(/[^a-zA-Z]/g, '')}`} data-group={group} class="exercise-group w-full overflow-hidden">
 					<h2 class="text-xs font-black text-indigo-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-3">
 						{group}
 						<div class="h-px bg-indigo-500/20 flex-1"></div>
 					</h2>
-					<div class="grid gap-3">
+					<div class="grid gap-3 w-full overflow-hidden">
 						{muscleGroupMap[group].map(ex => (
 							<div
-								class="exercise-card flex items-center gap-4 bg-gray-900 border border-gray-800 p-3 rounded-2xl transition active:scale-[0.97] cursor-pointer group"
+								class="exercise-card flex items-center gap-4 bg-gray-900 border border-gray-800 p-3 rounded-2xl transition active:scale-[0.97] cursor-pointer group w-full min-w-0 overflow-hidden"
 								data-name={ex.name.toLowerCase()}
 								data-muscles={ex.muscles.toLowerCase()}
 								onclick={`window.openExerciseModal('${ex.name.replace(/'/g, "\\'")}')`}
@@ -95,7 +95,7 @@ const sortedGroups = groupOrder.filter(g => muscleGroupMap[g]?.length);
 								</div>
 								<div class="min-w-0 flex-1 overflow-hidden">
 									<p class="font-bold text-gray-200 group-hover:text-indigo-400 transition text-sm truncate">{ex.name}</p>
-									<p class="text-[10px] font-bold text-gray-600 uppercase tracking-tighter truncate block w-full">{ex.muscles}</p>
+									<p class="text-[10px] font-bold text-gray-600 uppercase tracking-tighter truncate">{ex.muscles}</p>
 								</div>
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700 group-hover:text-indigo-400 shrink-0 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
