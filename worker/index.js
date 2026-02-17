@@ -22,7 +22,9 @@ export default {
       if (body.age !== undefined && !body.query) {
         try {
           const userAge = parseInt(body.age);
-          const ageBracket = userAge < 40 ? "<40" : (userAge <= 60 ? "40-60" : ">60");
+          let ageBracket = "Adult";
+          if (userAge < 30) ageBracket = "Young Adult";
+          else if (userAge > 55) ageBracket = "Senior";
           
           const rawExp = body.experience || body.experienceLevel || "Beginner";
           const experience = (rawExp.toLowerCase().includes("beginner")) ? "Beginner" : "Experienced";
@@ -31,16 +33,20 @@ export default {
           let equipment = "Full Gym";
           if (rawEquip.toLowerCase().includes("dumbell") || rawEquip.toLowerCase().includes("dumbbell")) {
             equipment = "Dumbbells Only";
-          } else if (rawExp.toLowerCase().includes("bodyweight") || rawEquip.toLowerCase().includes("body weight")) {
+          } else if (rawEquip.toLowerCase().includes("bodyweight") || rawEquip.toLowerCase().includes("body weight")) {
             equipment = "Bodyweight Only";
+          } else if (rawEquip.toLowerCase().includes("home")) {
+            equipment = "Home Gym";
+          } else if (rawEquip.toLowerCase().includes("minimal")) {
+            equipment = "Minimal Equipment";
           }
           
           const rawGoal = body.goal || "Build Muscle";
-          let goal = "Build Muscle";
+          let goal = "Muscle Growth";
           if (rawGoal.toLowerCase().includes("strength")) {
             goal = "Strength";
           } else if (rawGoal.toLowerCase().includes("loss") || rawGoal.toLowerCase().includes("weight")) {
-            goal = "Weight Loss";
+            goal = "Fat Loss";
           }
           
           const daysCount = parseInt(body.daysPerWeek) || parseInt(body.days) || 3;
@@ -57,7 +63,7 @@ export default {
             p.metadata.equipment === equipment &&
             p.metadata.goal === goal &&
             p.metadata.days === daysCount &&
-            (p.metadata.split === split || !p.metadata.split) &&
+            p.metadata.split === split &&
             p.metadata.version === version
           );
 
