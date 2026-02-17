@@ -1,0 +1,105 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="FirstRep - Saved Plans">
+	<main class="max-w-md mx-auto px-6 py-12 pb-32">
+		<header class="flex items-center gap-4 mb-10">
+			<a href="/FirstRep/workouts" class="p-2 -ml-2 text-gray-400 hover:text-white transition">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+				</svg>
+			</a>
+			<h1 class="text-2xl font-black text-white italic tracking-tighter">SAVED PLANS</h1>
+		</header>
+
+		<div id="plans-list" class="space-y-4">
+			<!-- Injected -->
+             <div class="flex flex-col items-center justify-center py-20 text-center opacity-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p class="text-sm font-bold text-gray-500 uppercase tracking-widest">Loading your plans...</p>
+            </div>
+		</div>
+	</main>
+
+	<!-- Nav Bar -->
+	<nav class="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-xl border-t border-gray-800 px-6 py-3 flex justify-around items-center z-50">
+		<a href="/FirstRep/" class="flex flex-col items-center gap-1 text-gray-500">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+			</svg>
+			<span class="text-[10px] font-bold">Home</span>
+		</a>
+		<a href="/FirstRep/workouts" class="flex flex-col items-center gap-1 text-indigo-500">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+				<path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+				<path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
+			</svg>
+			<span class="text-[10px] font-bold">Workouts</span>
+		</a>
+		<a href="/FirstRep/macros" class="flex flex-col items-center gap-1 text-gray-500">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+			</svg>
+			<span class="text-[10px] font-bold">Macros</span>
+		</a>
+	</nav>
+</Layout>
+
+<script>
+	import { supabase } from '../lib/supabase';
+
+	async function init() {
+		const { data: { session } } = await supabase.auth.getSession();
+		if (!session) {
+			window.location.href = '/FirstRep/login/index.html';
+			return;
+		}
+
+		const { data: plans, error } = await supabase
+			.from('workout_plans')
+			.select('*')
+			.eq('user_id', session.user.id)
+			.order('created_at', { ascending: false });
+
+		const list = document.getElementById('plans-list');
+		if (!list) return;
+
+		if (error || !plans || plans.length === 0) {
+			list.innerHTML = `
+				<div class="bg-gray-900 border border-gray-800 rounded-3xl p-8 text-center">
+					<p class="text-gray-500 text-sm font-bold uppercase tracking-widest mb-4">No plans saved yet</p>
+					<a href="/FirstRep/planner" class="inline-block bg-indigo-600 text-white px-6 py-2 rounded-full font-bold text-xs uppercase tracking-widest">Build One</a>
+				</div>
+			`;
+			return;
+		}
+
+		list.innerHTML = plans.map(p => `
+			<div class="bg-gray-900 border border-gray-800 rounded-3xl p-6">
+				<div class="flex justify-between items-start mb-4">
+					<div>
+						<h2 class="text-lg font-black text-indigo-400 italic">${p.plan_name}</h2>
+						<p class="text-[10px] text-gray-500 font-black uppercase tracking-widest">${p.schedule_summary}</p>
+					</div>
+					<span class="text-[8px] bg-gray-800 text-gray-400 px-2 py-1 rounded-full font-bold">${new Date(p.created_at).toLocaleDateString()}</span>
+				</div>
+				<div class="grid gap-3 opacity-60 pointer-events-none">
+					${p.plan_data.days.slice(0, 1).map(day => `
+						<div class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">${day.day_label || day.label} preview</div>
+						<div class="flex flex-wrap gap-2">
+							${day.exercises.slice(0, 3).map(ex => `
+								<span class="bg-gray-800 text-gray-300 px-2 py-1 rounded text-[8px]">${ex.exercise || ex.name}</span>
+							`).join('')}
+							<span class="text-[8px] text-gray-600 self-center">...</span>
+						</div>
+					`).join('')}
+				</div>
+			</div>
+		`).join('');
+	}
+
+	init();
+</script>
