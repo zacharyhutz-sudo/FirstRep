@@ -36,131 +36,193 @@ const sortedGroups = groupOrder.filter(g => muscleGroupMap[g]?.length);
 ---
 
 <Layout title="Workout Library – FirstRep">
-  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-14">
-    <!-- Header -->
-    <h1 class="text-3xl sm:text-5xl font-black tracking-tight mb-2">
-      Workout <span class="text-indigo-500">Library</span>
-    </h1>
-    <p class="text-gray-400 mb-6 sm:mb-8 text-sm sm:text-base">Browse all {exerciseDB.exercises.length} exercises by muscle group. Tap any exercise for instructions.</p>
+	<main class="max-w-md mx-auto px-6 py-12 pb-32">
+		<header class="flex items-center gap-4 mb-10">
+			<a href="/FirstRep/workouts" class="p-2 -ml-2 text-gray-400 hover:text-white transition">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+				</svg>
+			</a>
+			<h1 class="text-2xl font-black text-white italic tracking-tighter uppercase">Exercise Library</h1>
+		</header>
 
-    <!-- Search -->
-    <div class="mb-8">
-      <input
-        type="text"
-        id="lib-search"
-        placeholder="Search exercises or muscle groups…"
-        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none text-base placeholder-gray-500"
-      />
-    </div>
+		<p class="text-gray-500 text-xs font-medium mb-8">Browse all {exerciseDB.exercises.length} movements by muscle group. Tap for instructions.</p>
 
-    <!-- Quick Jump -->
-    <div class="flex flex-wrap gap-2 mb-8" id="quick-jump">
-      {sortedGroups.map(g => (
-        <a href={`#group-${g.replace(/[^a-zA-Z]/g, '')}`} class="text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full border border-gray-700 text-gray-400 hover:text-indigo-400 hover:border-indigo-500/50 transition">
-          {g}
-        </a>
-      ))}
-    </div>
+		<!-- Search -->
+		<div class="mb-8 sticky top-4 z-40">
+			<div class="relative">
+				<input
+					type="text"
+					id="lib-search"
+					placeholder="Search exercises or muscles..."
+					class="w-full bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl px-5 py-4 text-sm focus:ring-2 focus:ring-indigo-500 outline-none placeholder:text-gray-600 shadow-xl"
+				/>
+				<div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+					</svg>
+				</div>
+			</div>
+		</div>
 
-    <!-- Exercise Groups -->
-    <div id="exercise-groups" class="space-y-10">
-      {sortedGroups.map(group => (
-        <section id={`group-${group.replace(/[^a-zA-Z]/g, '')}`} data-group={group} class="exercise-group">
-          <h2 class="text-xl sm:text-2xl font-bold text-indigo-400 border-b border-gray-800 pb-2 mb-4">{group}</h2>
-          <div class="grid gap-2 sm:gap-3">
-            {muscleGroupMap[group].map(ex => (
-              <div
-                class="exercise-card flex items-center gap-3 sm:gap-4 bg-gray-800/50 p-3 sm:p-4 rounded-lg border border-gray-700/50 hover:border-indigo-500/50 hover:bg-gray-800 transition cursor-pointer group active:scale-[0.98]"
-                data-name={ex.name.toLowerCase()}
-                data-muscles={ex.muscles.toLowerCase()}
-                onclick={`window.openExerciseModal('${ex.name.replace(/'/g, "\\'")}')`}
-              >
-                <img src={ex.image} alt={ex.name} class="w-14 h-14 sm:w-16 sm:h-16 rounded-lg object-cover bg-gray-700 shrink-0" loading="lazy" />
-                <div class="min-w-0 flex-1">
-                  <p class="font-bold text-gray-100 group-hover:text-indigo-400 transition text-sm sm:text-base truncate">{ex.name}</p>
-                  <p class="text-xs text-gray-500 truncate">{ex.muscles}</p>
-                </div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 group-hover:text-indigo-400 shrink-0 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            ))}
-          </div>
-        </section>
-      ))}
-    </div>
+		<!-- Quick Jump -->
+		<div class="flex flex-wrap gap-2 mb-10" id="quick-jump">
+			{sortedGroups.map(g => (
+				<a href={`#group-${g.replace(/[^a-zA-Z]/g, '')}`} class="text-[9px] font-black uppercase tracking-widest px-3 py-2 rounded-full border border-gray-800 bg-gray-900/50 text-gray-500 hover:text-indigo-400 hover:border-indigo-500/30 transition">
+					{g}
+				</a>
+			))}
+		</div>
 
-    <!-- No Results -->
-    <p id="no-results" class="hidden text-center text-gray-500 py-12 text-lg">No exercises found. Try a different search.</p>
+		<!-- Exercise Groups -->
+		<div id="exercise-groups" class="space-y-12">
+			{sortedGroups.map(group => (
+				<section id={`group-${group.replace(/[^a-zA-Z]/g, '')}`} data-group={group} class="exercise-group">
+					<h2 class="text-xs font-black text-indigo-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-3">
+						{group}
+						<div class="h-px bg-indigo-500/20 flex-1"></div>
+					</h2>
+					<div class="grid gap-3">
+						{muscleGroupMap[group].map(ex => (
+							<div
+								class="exercise-card flex items-center gap-4 bg-gray-900 border border-gray-800 p-3 rounded-2xl transition active:scale-[0.97] cursor-pointer group"
+								data-name={ex.name.toLowerCase()}
+								data-muscles={ex.muscles.toLowerCase()}
+								onclick={`window.openExerciseModal('${ex.name.replace(/'/g, "\\'")}')`}
+							>
+								<div class="relative w-14 h-14 rounded-xl overflow-hidden bg-gray-800 shrink-0 border border-gray-700/50">
+									<img src={ex.image} alt={ex.name} class="w-full h-full object-cover" loading="lazy" />
+								</div>
+								<div class="min-w-0 flex-1">
+									<p class="font-bold text-gray-200 group-hover:text-indigo-400 transition text-sm truncate">{ex.name}</p>
+									<p class="text-[10px] font-bold text-gray-600 uppercase tracking-tighter truncate">{ex.muscles}</p>
+								</div>
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700 group-hover:text-indigo-400 shrink-0 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+								</svg>
+							</div>
+						))}
+					</div>
+				</section>
+			))}
+		</div>
 
-    <!-- Exercise Detail Modal -->
-    <div id="modal-overlay" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div class="bg-gray-900 border border-indigo-500/30 w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto">
-        <div class="relative h-48 sm:h-64 bg-gray-800 flex items-center justify-center overflow-hidden">
-          <img id="modal-image" src="" alt="" class="max-w-full max-h-full object-contain" />
-          <button id="modal-close" class="absolute top-3 right-3 bg-gray-950/50 hover:bg-gray-950 text-white p-3 rounded-full transition tap-target">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-        <div class="p-5 sm:p-8">
-          <h2 id="modal-title" class="text-2xl sm:text-3xl font-black mb-1 text-indigo-400"></h2>
-          <p id="modal-muscles" class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-6"></p>
-          <div class="space-y-4 text-left">
-            <h3 class="text-sm font-bold text-indigo-300 uppercase tracking-widest">How to Perform</h3>
-            <ul id="modal-instructions" class="space-y-3 text-gray-300 list-disc pl-5 text-sm"></ul>
-          </div>
-        </div>
-      </div>
-    </div>
+		<!-- No Results -->
+		<div id="no-results" class="hidden flex flex-col items-center justify-center py-20 text-center opacity-50">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+			</svg>
+			<p class="text-sm font-bold text-gray-500 uppercase tracking-widest">No exercises found</p>
+		</div>
 
-    <script>
-      import exerciseDB from '../data/exercise-db.json';
+		<!-- Exercise Detail Modal -->
+		<div id="modal-overlay" class="hidden fixed inset-0 bg-black/90 backdrop-blur-xl z-[100] flex items-end sm:items-center justify-center">
+			<div class="bg-gray-900 border-t sm:border border-gray-800 w-full max-w-md rounded-t-[2.5rem] sm:rounded-[2.5rem] overflow-hidden shadow-2xl max-h-[92vh] flex flex-col">
+				<!-- Handle for swipe-down feel -->
+				<div class="sm:hidden w-12 h-1.5 bg-gray-800 rounded-full mx-auto mt-4 mb-2"></div>
+				
+				<div class="relative h-64 bg-gray-800 flex items-center justify-center overflow-hidden shrink-0">
+					<img id="modal-image" src="" alt="" class="w-full h-full object-cover" />
+					<div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+					<button id="modal-close" class="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full backdrop-blur-md border border-white/10 active:scale-90 transition">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+						</svg>
+					</button>
+				</div>
 
-      // --- Modal ---
-      const overlay = document.getElementById('modal-overlay')!;
-      const modalClose = document.getElementById('modal-close')!;
+				<div class="p-8 overflow-y-auto">
+					<h2 id="modal-title" class="text-2xl font-black text-white italic tracking-tighter mb-1"></h2>
+					<p id="modal-muscles" class="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-8"></p>
+					
+					<div class="space-y-6">
+						<h3 class="text-xs font-black text-gray-500 uppercase tracking-[0.2em]">Form Instructions</h3>
+						<ul id="modal-instructions" class="space-y-4 text-gray-300"></ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
 
-      function openExerciseModal(name: string) {
-        const data = exerciseDB.exercises.find(e => e.name === name);
-        if (!data) return;
-        document.getElementById('modal-title')!.innerText = data.name;
-        document.getElementById('modal-muscles')!.innerText = `Target: ${data.muscles}`;
-        (document.getElementById('modal-image') as HTMLImageElement).src = data.image;
-        document.getElementById('modal-instructions')!.innerHTML = data.instructions.map(i => `<li>${i}</li>`).join('');
-        overlay.classList.remove('hidden');
-      }
-      (window as any).openExerciseModal = openExerciseModal;
+	<!-- Nav Bar -->
+	<nav class="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-xl border-t border-gray-800 px-6 py-3 flex justify-around items-center z-50">
+		<a href="/FirstRep/" class="flex flex-col items-center gap-1 text-gray-500">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+			</svg>
+			<span class="text-[10px] font-bold">Home</span>
+		</a>
+		<a href="/FirstRep/workouts" class="flex flex-col items-center gap-1 text-indigo-500">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+				<path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+				<path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
+			</svg>
+			<span class="text-[10px] font-bold">Workouts</span>
+		</a>
+		<a href="/FirstRep/macros" class="flex flex-col items-center gap-1 text-gray-500">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+			</svg>
+			<span class="text-[10px] font-bold">Macros</span>
+		</a>
+	</nav>
 
-      modalClose.addEventListener('click', () => overlay.classList.add('hidden'));
-      overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.add('hidden'); });
+	<script>
+		import exerciseDB from '../data/exercise-db.json';
 
-      // --- Search ---
-      const searchInput = document.getElementById('lib-search') as HTMLInputElement;
-      const groups = document.querySelectorAll('.exercise-group');
-      const noResults = document.getElementById('no-results')!;
-      const quickJump = document.getElementById('quick-jump')!;
+		// --- Modal ---
+		const overlay = document.getElementById('modal-overlay')!;
+		const modalClose = document.getElementById('modal-close')!;
 
-      searchInput.addEventListener('input', () => {
-        const q = searchInput.value.toLowerCase().trim();
-        let anyVisible = false;
+		function openExerciseModal(name: string) {
+			const data = exerciseDB.exercises.find(e => e.name === name);
+			if (!data) return;
+			document.getElementById('modal-title')!.innerText = data.name;
+			document.getElementById('modal-muscles')!.innerText = `Target: ${data.muscles}`;
+			(document.getElementById('modal-image') as HTMLImageElement).src = data.image;
+			document.getElementById('modal-instructions')!.innerHTML = data.instructions.map(i => `
+				<li class="flex gap-4">
+					<span class="flex-shrink-0 w-5 h-5 rounded-full bg-indigo-500/10 text-indigo-400 text-[10px] flex items-center justify-center font-black border border-indigo-500/20 mt-0.5">•</span>
+					<span class="text-sm font-medium leading-relaxed">${i}</span>
+				</li>
+			`).join('');
+			overlay.classList.remove('hidden');
+			document.body.style.overflow = 'hidden';
+		}
+		(window as any).openExerciseModal = openExerciseModal;
 
-        groups.forEach(group => {
-          const cards = group.querySelectorAll('.exercise-card') as NodeListOf<HTMLElement>;
-          let groupHasMatch = false;
-          cards.forEach(card => {
-            const match = !q || card.dataset.name!.includes(q) || card.dataset.muscles!.includes(q);
-            card.style.display = match ? '' : 'none';
-            if (match) groupHasMatch = true;
-          });
-          (group as HTMLElement).style.display = groupHasMatch ? '' : 'none';
-          if (groupHasMatch) anyVisible = true;
-        });
+		function closeModal() {
+			overlay.classList.add('hidden');
+			document.body.style.overflow = '';
+		}
 
-        noResults.classList.toggle('hidden', anyVisible);
-        quickJump.style.display = q ? 'none' : '';
-      });
-    </script>
-  </main>
+		modalClose.addEventListener('click', closeModal);
+		overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+
+		// --- Search ---
+		const searchInput = document.getElementById('lib-search') as HTMLInputElement;
+		const groups = document.querySelectorAll('.exercise-group');
+		const noResults = document.getElementById('no-results')!;
+		const quickJump = document.getElementById('quick-jump')!;
+
+		searchInput.addEventListener('input', () => {
+			const q = searchInput.value.toLowerCase().trim();
+			let anyVisible = false;
+
+			groups.forEach(group => {
+				const cards = group.querySelectorAll('.exercise-card') as NodeListOf<HTMLElement>;
+				let groupHasMatch = false;
+				cards.forEach(card => {
+					const match = !q || card.dataset.name!.includes(q) || card.dataset.muscles!.includes(q);
+					card.style.display = match ? '' : 'none';
+					if (match) groupHasMatch = true;
+				});
+				(group as HTMLElement).style.display = groupHasMatch ? '' : 'none';
+				if (groupHasMatch) anyVisible = true;
+			});
+
+			noResults.classList.toggle('hidden', anyVisible);
+			quickJump.style.display = q ? 'none' : '';
+		});
+	</script>
 </Layout>

@@ -10,7 +10,7 @@ import Layout from '../layouts/Layout.astro';
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
 				</svg>
 			</a>
-			<h1 class="text-2xl font-black text-white italic tracking-tighter">SAVED PLANS</h1>
+			<h1 class="text-2xl font-black text-white italic tracking-tighter uppercase">SAVED PLANS</h1>
 		</header>
 
 		<div id="plans-list" class="space-y-4">
@@ -22,6 +22,30 @@ import Layout from '../layouts/Layout.astro';
                 <p class="text-sm font-bold text-gray-500 uppercase tracking-widest">Loading your plans...</p>
             </div>
 		</div>
+
+        <!-- Plan Viewer Modal -->
+        <div id="viewer-overlay" class="hidden fixed inset-0 bg-black/95 backdrop-blur-2xl z-[100] flex flex-col">
+            <header class="p-6 flex items-center justify-between shrink-0 border-b border-gray-800">
+                <div class="flex items-center gap-3">
+                    <button id="viewer-close" class="p-2 -ml-2 text-gray-400 hover:text-white transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <div>
+                        <input id="plan-title-input" class="bg-transparent border-none p-0 text-xl font-black text-indigo-400 italic outline-none focus:ring-0 w-full" />
+                        <p id="plan-meta-text" class="text-[10px] text-gray-500 font-black uppercase tracking-[0.2em]"></p>
+                    </div>
+                </div>
+                <button id="btn-save-title" class="bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full transition active:scale-90">
+                    Rename
+                </button>
+            </header>
+
+            <div id="viewer-content" class="flex-1 overflow-y-auto p-6 space-y-8">
+                <!-- Days injected here -->
+            </div>
+        </div>
 	</main>
 
 	<!-- Nav Bar -->
@@ -51,6 +75,15 @@ import Layout from '../layouts/Layout.astro';
 <script>
 	import { supabase } from '../lib/supabase';
 
+    const overlay = document.getElementById('viewer-overlay')!;
+    const btnClose = document.getElementById('viewer-close')!;
+    const btnSaveTitle = document.getElementById('btn-save-title') as HTMLButtonElement;
+    const titleInput = document.getElementById('plan-title-input') as HTMLInputElement;
+    const metaText = document.getElementById('plan-meta-text')!;
+    const viewerContent = document.getElementById('viewer-content')!;
+
+    let currentPlanId: string | null = null;
+
 	async function init() {
 		const { data: { session } } = await supabase.auth.getSession();
 		if (!session) {
@@ -58,10 +91,14 @@ import Layout from '../layouts/Layout.astro';
 			return;
 		}
 
-		const { data: plans, error } = await supabase
+		await loadPlans(session.user.id);
+	}
+
+    async function loadPlans(userId: string) {
+        const { data: plans, error } = await supabase
 			.from('workout_plans')
 			.select('*')
-			.eq('user_id', session.user.id)
+			.eq('user_id', userId)
 			.order('created_at', { ascending: false });
 
 		const list = document.getElementById('plans-list');
@@ -78,28 +115,91 @@ import Layout from '../layouts/Layout.astro';
 		}
 
 		list.innerHTML = plans.map(p => `
-			<div class="bg-gray-900 border border-gray-800 rounded-3xl p-6">
+			<div class="bg-gray-900 border border-gray-800 rounded-3xl p-6 transition active:scale-[0.98] cursor-pointer group hover:border-indigo-500/30" onclick="window.viewPlan('${p.id}')">
 				<div class="flex justify-between items-start mb-4">
 					<div>
-						<h2 class="text-lg font-black text-indigo-400 italic">${p.plan_name}</h2>
+						<h2 class="text-lg font-black text-indigo-400 italic group-hover:text-indigo-300 transition">${p.plan_name}</h2>
 						<p class="text-[10px] text-gray-500 font-black uppercase tracking-widest">${p.schedule_summary}</p>
 					</div>
-					<span class="text-[8px] bg-gray-800 text-gray-400 px-2 py-1 rounded-full font-bold">${new Date(p.created_at).toLocaleDateString()}</span>
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700 group-hover:text-indigo-400 transition" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                    </svg>
 				</div>
-				<div class="grid gap-3 opacity-60 pointer-events-none">
+				<div class="grid gap-3 opacity-40 pointer-events-none">
 					${p.plan_data.days.slice(0, 1).map(day => `
-						<div class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">${day.day_label || day.label} preview</div>
 						<div class="flex flex-wrap gap-2">
 							${day.exercises.slice(0, 3).map(ex => `
-								<span class="bg-gray-800 text-gray-300 px-2 py-1 rounded text-[8px]">${ex.exercise || ex.name}</span>
+								<span class="bg-gray-800 text-gray-300 px-2 py-1 rounded text-[8px] font-bold uppercase tracking-tighter">${ex.exercise || ex.name}</span>
 							`).join('')}
-							<span class="text-[8px] text-gray-600 self-center">...</span>
+							<span class="text-[8px] text-gray-600 self-center font-black">...</span>
 						</div>
 					`).join('')}
 				</div>
 			</div>
 		`).join('');
-	}
+
+        (window as any).viewPlan = async (id: string) => {
+            const plan = plans.find(p => p.id === id);
+            if (!plan) return;
+
+            currentPlanId = id;
+            titleInput.value = plan.plan_name;
+            metaText.innerText = plan.schedule_summary;
+            
+            viewerContent.innerHTML = plan.plan_data.days.map(day => `
+                <div class="bg-gray-900 border border-gray-800 rounded-3xl p-6 shadow-sm">
+                    <h3 class="font-black text-indigo-400 mb-6 border-b border-gray-800 pb-3 italic uppercase tracking-widest text-xs">${day.day_label || day.label}</h3>
+                    <div class="space-y-6">
+                        ${day.exercises.map(ex => `
+                            <div class="flex justify-between items-center group/ex">
+                                <div class="min-w-0 flex-1">
+                                    <p class="text-sm font-black text-gray-200 uppercase tracking-tight group-hover/ex:text-indigo-300 transition">${ex.exercise || ex.name}</p>
+                                    <p class="text-[10px] text-gray-600 font-black uppercase tracking-[0.2em] mt-0.5">${ex.rest} rest</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-indigo-400 font-black text-xs italic">${ex.sets} <span class="text-gray-600 text-[10px] not-italic">x</span> ${ex.reps}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            overlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        };
+    }
+
+    btnClose.addEventListener('click', () => {
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+    });
+
+    btnSaveTitle.addEventListener('click', async () => {
+        if (!currentPlanId) return;
+        const newTitle = titleInput.value.trim();
+        if (!newTitle) return;
+
+        btnSaveTitle.innerText = 'WAIT...';
+        btnSaveTitle.disabled = true;
+
+        const { error } = await supabase
+            .from('workout_plans')
+            .update({ plan_name: newTitle })
+            .eq('id', currentPlanId);
+
+        if (error) {
+            alert('Error updating title: ' + error.message);
+        } else {
+            btnSaveTitle.innerText = 'DONE!';
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) await loadPlans(user.id);
+            setTimeout(() => {
+                btnSaveTitle.innerText = 'Rename';
+                btnSaveTitle.disabled = false;
+            }, 1500);
+        }
+    });
 
 	init();
 </script>
