@@ -5,7 +5,7 @@ import Layout from '../layouts/Layout.astro';
 <Layout title="FirstRep - AI Workout Planner">
 	<main class="max-w-md mx-auto px-6 py-12 pb-32">
 		<header class="flex items-center gap-4 mb-10">
-			<a href="/FirstRep/" class="p-2 -ml-2 text-gray-400 hover:text-white transition">
+			<a href="/FirstRep/workouts" class="p-2 -ml-2 text-gray-400 hover:text-white transition">
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
 				</svg>
@@ -85,7 +85,6 @@ import Layout from '../layouts/Layout.astro';
                         </div>
                     </div>
 				</div>
-                <!-- Background decorative element -->
                 <div class="absolute right-[-10%] bottom-[-20%] text-indigo-500/5 group-hover:text-indigo-500/10 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-32 w-32" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
@@ -107,12 +106,12 @@ import Layout from '../layouts/Layout.astro';
 			</svg>
 			<span class="text-[10px] font-bold">Home</span>
 		</a>
-		<a href="/FirstRep/planner" class="flex flex-col items-center gap-1 text-indigo-500">
+		<a href="/FirstRep/workouts" class="flex flex-col items-center gap-1 text-indigo-500">
 			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
 				<path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
 				<path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
 			</svg>
-			<span class="text-[10px] font-bold">Planner</span>
+			<span class="text-[10px] font-bold">Workouts</span>
 		</a>
 		<a href="/FirstRep/macros" class="flex flex-col items-center gap-1 text-gray-500">
 			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -121,11 +120,6 @@ import Layout from '../layouts/Layout.astro';
 			<span class="text-[10px] font-bold">Macros</span>
 		</a>
 	</nav>
-</Layout>
-
-<script>
-	import { supabase } from '../lib/supabase';
-
 </Layout>
 
 <!-- Exercise Detail Modal -->
@@ -162,21 +156,19 @@ import Layout from '../layouts/Layout.astro';
     const btnSaveCurrent = document.getElementById('btn-save-current');
     const btnGenerateNew = document.getElementById('btn-generate-new');
 
-    // Modal elements
-    const modalOverlay = document.getElementById('modal-overlay')!;
-    const modalClose = document.getElementById('modal-close')!;
+    const modalOverlay = document.getElementById('modal-overlay');
+    const modalClose = document.getElementById('modal-close');
 
 	const WORKER_URL = 'https://first-rep-worker.hutzellcreativeco.workers.dev/';
     let currentGeneratedPlan = null;
 
-    // Modal Logic
-    function openExerciseModal(name: string) {
-        const data = exerciseDB.exercises.find(e => e.name.toLowerCase() === name.toLowerCase());
+    function openExerciseModal(name) {
+        const data = exerciseDB.exercises.find((e) => e.name.toLowerCase() === name.toLowerCase());
         if (!data) return;
-        document.getElementById('modal-title')!.innerText = data.name;
-        document.getElementById('modal-muscles')!.innerText = `Target: ${data.muscles}`;
-        (document.getElementById('modal-image') as HTMLImageElement).src = data.image;
-        document.getElementById('modal-instructions')!.innerHTML = data.instructions.map(i => `
+        document.getElementById('modal-title').innerText = data.name;
+        document.getElementById('modal-muscles').innerText = `Target: ${data.muscles}`;
+        document.getElementById('modal-image').src = data.image;
+        document.getElementById('modal-instructions').innerHTML = data.instructions.map((i) => `
             <li class="flex gap-4">
                 <span class="flex-shrink-0 w-5 h-5 rounded-full bg-indigo-500/10 text-indigo-400 text-[10px] flex items-center justify-center font-black border border-indigo-500/20 mt-0.5">•</span>
                 <span class="text-sm font-medium leading-relaxed">${i}</span>
@@ -185,7 +177,7 @@ import Layout from '../layouts/Layout.astro';
         modalOverlay.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     }
-    (window as any).openExerciseModal = openExerciseModal;
+    window.openExerciseModal = openExerciseModal;
 
     modalClose.addEventListener('click', () => {
         modalOverlay.classList.add('hidden');
@@ -208,11 +200,11 @@ import Layout from '../layouts/Layout.astro';
 		document.getElementById('plan-schedule').innerText = plan.schedule || (plan.metadata ? plan.metadata.days + ' days/week' : '');
 
 		const container = document.getElementById('workout-container');
-		container.innerHTML = plan.days.map(day => `
+		container.innerHTML = plan.days.map((day) => `
 			<div class="bg-gray-900 border border-gray-800 rounded-3xl p-5 shadow-sm">
 				<h3 class="font-black text-indigo-400 mb-4 border-b border-gray-800 pb-2 italic uppercase tracking-widest text-xs">${day.day_label || day.label}</h3>
 				<div class="space-y-4">
-					${day.exercises.map(ex => `
+					${day.exercises.map((ex) => `
 						<div class="flex justify-between items-center group cursor-pointer active:scale-95 transition" onclick="window.openExerciseModal('${(ex.exercise || ex.name).replace(/'/g, "\\'")}')">
 							<div class="min-w-0 flex-1">
 								<p class="text-sm font-bold text-gray-200 group-hover:text-indigo-400 transition">${ex.exercise || ex.name}</p>
@@ -234,7 +226,7 @@ import Layout from '../layouts/Layout.astro';
 
     btnSaveCurrent?.addEventListener('click', async () => {
         if (!currentGeneratedPlan) return;
-        const btn = btnSaveCurrent as HTMLButtonElement;
+        const btn = btnSaveCurrent;
         const originalText = btn.innerText;
         btn.innerText = 'SAVING...';
         btn.disabled = true;
@@ -274,13 +266,14 @@ import Layout from '../layouts/Layout.astro';
 		btn.innerText = '🤖 Building...';
 
 		const { data: { user } } = await supabase.auth.getUser();
+		if (!user) return;
 
 		const formData = {
-			goal: (document.getElementById('goal') as HTMLSelectElement).value,
-			daysPerWeek: parseInt((document.getElementById('daysPerWeek') as HTMLSelectElement).value),
-			equipment: (document.getElementById('equipment') as HTMLSelectElement).value,
-			experience: (document.getElementById('experience') as HTMLSelectElement).value,
-			split: (document.getElementById('splitStyle') as HTMLSelectElement).value,
+			goal: document.getElementById('goal').value,
+			daysPerWeek: parseInt(document.getElementById('daysPerWeek').value),
+			equipment: document.getElementById('equipment').value,
+			experience: document.getElementById('experience').value,
+			split: document.getElementById('splitStyle').value,
 			age: 25, 
 			sex: 'male', 
 			injuries: 'None', 
@@ -288,7 +281,6 @@ import Layout from '../layouts/Layout.astro';
 			sessionTime: 60
 		};
 
-		// 1. Fetch user profile to get real data if available
 		const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle();
 		if (profile) {
 			formData.age = profile.age || 25;
@@ -297,7 +289,6 @@ import Layout from '../layouts/Layout.astro';
 		}
 
 		try {
-			console.log('Sending request to worker with data:', formData);
 			const res = await fetch(WORKER_URL, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -306,12 +297,11 @@ import Layout from '../layouts/Layout.astro';
 			
 			if (!res.ok) {
 				const errorText = await res.text();
-				console.error('Worker error body:', errorText);
 				throw new Error(`Worker response failed (${res.status}): ${errorText.substring(0, 100)}`);
 			}
 			const plan = await res.json();
             renderPlan(plan);
-		} catch (err: any) {
+		} catch (err) {
 			console.error('Planner error:', err);
 			alert('Failed to generate plan: ' + err.message);
 		} finally {
