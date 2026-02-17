@@ -141,20 +141,6 @@ import Layout from '../layouts/Layout.astro';
 			window.location.href = '/FirstRep/login/index.html';
 			return;
 		}
-		const user = session.user;
-
-		// Fetch existing plan
-		const { data: plans } = await supabase
-			.from('workout_plans')
-			.select('*')
-			.eq('user_id', user.id)
-			.eq('is_active', true)
-			.order('created_at', { ascending: false })
-			.limit(1);
-
-		if (plans?.[0]) {
-			renderPlan(plans[0].plan_data);
-		}
 	}
 
 	function renderPlan(plan) {
