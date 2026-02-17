@@ -17,6 +17,52 @@ export default {
       const body = await request.json();
       const API_KEY = env.GEMINI_API_KEY;
 
+      // 1. WORKOUT GENERATION LOGIC - USE DISTILLED DATABASE
+      if (body.age !== undefined && (body.experience !== undefined || body.experienceLevel !== undefined) && !body.query) {
+        // Convert input to match database keys
+        const userAge = parseInt(body.age);
+        const ageBracket = userAge < 40 ? "<40" : (userAge <= 60 ? "40-60" : ">60");
+        
+        const rawExp = body.experience || body.experienceLevel || "Beginner";
+        const experience = (rawExp.toLowerCase() === "beginner") ? "Beginner" : "Experienced";
+        
+        const equipment = body.equipment || "Full Gym";
+        const goal = body.goal || "Build Muscle";
+        const daysCount = parseInt(body.daysPerWeek) || parseInt(body.days) || 3;
+        const version = body.version || "Version A"; 
+        
+        console.log(`Searching for: ${ageBracket}, ${experience}, ${equipment}, ${goal}, ${daysCount}, ${version}`);
+
+        try {
+          const dbResponse = await fetch("https://raw.githubusercontent.com/zacharyhutz-sudo/FirstRep/main/src/data/distilled-programs.json");
+          const database = await dbResponse.json();
+
+          const planMatch = database.find(p => 
+            p.metadata.age === ageBracket &&
+            p.metadata.experience === experience &&
+            p.metadata.equipment === equipment &&
+            p.metadata.goal === goal &&
+            p.metadata.days === daysCount &&
+            p.metadata.version === version
+          );
+
+          if (planMatch) {
+            return new Response(JSON.stringify({
+              name: planMatch.program_name,
+              schedule: planMatch.metadata.days + " days/week",
+              reasoning: planMatch.reasoning,
+              days: planMatch.days
+            }), {
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+          } else {
+            console.log("No exact match found in database.");
+          }
+        } catch (e) {
+          console.error("Database fetch failed:", e);
+        }
+      }
+
       if (!API_KEY) throw new Error("GEMINI_API_KEY is missing in worker environment");
       
       // Routing based on request data
@@ -52,8 +98,8 @@ export default {
 
         // 2. IF OFF IS EMPTY OR FEW RESULTS, FILL WITH GEMINI (Best for Restaurants/Generic)
         if (results.length < 3) {
-          // Fixed model path
-          const searchUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+          // Defaulting to gemini-2.0-flash-lite for higher rate limits
+          const searchUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${API_KEY}`;
           const searchPrompt = `You are a nutrition database API. Return a JSON array of 5 food items matching: "${query}".
           Focus on restaurant meals or generic items if brands are missing.
           
@@ -98,8 +144,8 @@ export default {
         });
       }
 
-      // WORKOUT GENERATION LOGIC (Fixed model path)
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+      // WORKOUT GENERATION LOGIC (Defaulting to gemini-2.0-flash-lite for stability/rate limits)
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${API_KEY}`;
 
       // Available exercises grouped by equipment requirement
       const exerciseList = `
