@@ -151,7 +151,7 @@ import Layout from '../layouts/Layout.astro';
                     <h3 class="font-black text-indigo-400 mb-6 border-b border-gray-800 pb-3 italic uppercase tracking-widest text-xs">${day.day_label || day.label}</h3>
                     <div class="space-y-6">
                         ${day.exercises.map(ex => `
-                            <div class="flex justify-between items-center group/ex">
+                            <div class="flex justify-between items-center group/ex cursor-pointer active:scale-95 transition" onclick="window.openExerciseModal('${(ex.exercise || ex.name).replace(/'/g, "\\'")}')">
                                 <div class="min-w-0 flex-1">
                                     <p class="text-sm font-black text-gray-200 uppercase tracking-tight group-hover/ex:text-indigo-300 transition">${ex.exercise || ex.name}</p>
                                     <p class="text-[10px] text-gray-600 font-black uppercase tracking-[0.2em] mt-0.5">${ex.rest} rest</p>
