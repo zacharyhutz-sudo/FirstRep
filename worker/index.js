@@ -18,23 +18,22 @@ export default {
       const API_KEY = env.GEMINI_API_KEY;
 
       // 1. WORKOUT GENERATION LOGIC - USE DISTILLED DATABASE
-      if (body.age !== undefined && (body.experience !== undefined || body.experienceLevel !== undefined) && !body.query) {
-        // Convert input to match database keys
-        const userAge = parseInt(body.age);
-        const ageBracket = userAge < 40 ? "<40" : (userAge <= 60 ? "40-60" : ">60");
-        
-        const rawExp = body.experience || body.experienceLevel || "Beginner";
-        const experience = (rawExp.toLowerCase() === "beginner") ? "Beginner" : "Experienced";
-        
-        const equipment = body.equipment || "Full Gym";
-        const goal = body.goal || "Build Muscle";
-        const daysCount = parseInt(body.daysPerWeek) || parseInt(body.days) || 3;
-        const version = body.version || "Version A"; 
-        
-        console.log(`Searching for: ${ageBracket}, ${experience}, ${equipment}, ${goal}, ${daysCount}, ${version}`);
-
+      // This block MUST return a response to avoid falling through to Gemini
+      if (body.age !== undefined && !body.query) {
         try {
+          const userAge = parseInt(body.age);
+          const ageBracket = userAge < 40 ? "<40" : (userAge <= 60 ? "40-60" : ">60");
+          
+          const rawExp = body.experience || body.experienceLevel || "Beginner";
+          const experience = (rawExp.toLowerCase().includes("beginner")) ? "Beginner" : "Experienced";
+          
+          const equipment = body.equipment || "Full Gym";
+          const goal = body.goal || "Build Muscle";
+          const daysCount = parseInt(body.daysPerWeek) || parseInt(body.days) || 3;
+          const version = body.version || "Version A"; 
+          
           const dbResponse = await fetch("https://raw.githubusercontent.com/zacharyhutz-sudo/FirstRep/main/src/data/distilled-programs.json");
+          if (!dbResponse.ok) throw new Error("DB Fetch failed");
           const database = await dbResponse.json();
 
           const planMatch = database.find(p => 
@@ -56,10 +55,17 @@ export default {
               headers: { ...corsHeaders, "Content-Type": "application/json" },
             });
           } else {
-            console.log("No exact match found in database.");
+             // If no exact match, return a helpful error instead of calling Gemini
+             return new Response(JSON.stringify({ 
+               error: "No matching pre-generated plan found.",
+               debug: { ageBracket, experience, equipment, goal, daysCount, version }
+             }), { status: 404, headers: corsHeaders });
           }
         } catch (e) {
-          console.error("Database fetch failed:", e);
+          return new Response(JSON.stringify({ error: "Database system error: " + e.message }), {
+            status: 500,
+            headers: corsHeaders
+          });
         }
       }
 
