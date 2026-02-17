@@ -93,9 +93,9 @@ const sortedGroups = groupOrder.filter(g => muscleGroupMap[g]?.length);
 								<div class="relative w-14 h-14 rounded-xl overflow-hidden bg-gray-800 shrink-0 border border-gray-700/50">
 									<img src={ex.image} alt={ex.name} class="w-full h-full object-cover" loading="lazy" />
 								</div>
-								<div class="min-w-0 flex-1">
+								<div class="min-w-0 flex-1 overflow-hidden">
 									<p class="font-bold text-gray-200 group-hover:text-indigo-400 transition text-sm truncate">{ex.name}</p>
-									<p class="text-[10px] font-bold text-gray-600 uppercase tracking-tighter truncate w-full">{ex.muscles}</p>
+									<p class="text-[10px] font-bold text-gray-600 uppercase tracking-tighter truncate block w-full">{ex.muscles}</p>
 								</div>
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700 group-hover:text-indigo-400 shrink-0 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
