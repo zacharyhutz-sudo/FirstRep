@@ -69,6 +69,11 @@ import Layout from '../layouts/Layout.astro';
 					</select>
 				</div>
 
+				<div>
+					<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Injuries or Limitations</label>
+					<input type="text" id="profile-injuries" placeholder="e.g. Lower back pain, knee injury, none" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none placeholder:text-gray-600" />
+				</div>
+
 				<button id="btn-save-profile" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition active:scale-[0.98] text-sm">
 					Save Changes
 				</button>
@@ -118,6 +123,7 @@ import Layout from '../layouts/Layout.astro';
 			(document.getElementById('profile-weight') as HTMLInputElement).value = profile.weight;
 			(document.getElementById('profile-activity') as HTMLSelectElement).value = profile.activity_level;
 			(document.getElementById('profile-goal') as HTMLSelectElement).value = profile.fitness_goal;
+			(document.getElementById('profile-injuries') as HTMLInputElement).value = profile.injuries || '';
 		}
 
 		// Save Logic
@@ -132,6 +138,7 @@ import Layout from '../layouts/Layout.astro';
 				weight: parseInt((document.getElementById('profile-weight') as HTMLInputElement).value),
 				activity_level: (document.getElementById('profile-activity') as HTMLSelectElement).value,
 				fitness_goal: (document.getElementById('profile-goal') as HTMLSelectElement).value,
+				injuries: (document.getElementById('profile-injuries') as HTMLInputElement).value,
 			}).eq('id', user.id);
 
 			if (error) {

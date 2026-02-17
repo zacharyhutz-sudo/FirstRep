@@ -78,6 +78,10 @@ import Layout from '../layouts/Layout.astro';
 						<option value="muscle-gain">Gain Muscle</option>
 					</select>
 				</div>
+				<div>
+					<label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Injuries or Limitations</label>
+					<input type="text" id="injuries" placeholder="e.g. Lower back pain, none" class="w-full bg-gray-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none placeholder:text-gray-600" />
+				</div>
 			</div>
 
 			<button id="btn-register" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl transition shadow-lg shadow-indigo-500/20 active:scale-[0.98]">
@@ -110,6 +114,7 @@ import Layout from '../layouts/Layout.astro';
 		const sex = (document.getElementById('sex') as HTMLSelectElement).value;
 		const activity = (document.getElementById('activity') as HTMLSelectElement).value;
 		const goal = (document.getElementById('goal') as HTMLSelectElement).value;
+		const injuries = (document.getElementById('injuries') as HTMLInputElement).value;
 
 		if (!email || !password || !age || !height || !weight) {
 			return showMsg('Please fill in all fields.', true);
@@ -149,7 +154,8 @@ import Layout from '../layouts/Layout.astro';
 			height: parseInt(height),
 			weight: parseInt(weight),
 			activity_level: activity,
-			fitness_goal: goal
+			fitness_goal: goal,
+			injuries: injuries
 		}]);
 
 		if (profileError) {
