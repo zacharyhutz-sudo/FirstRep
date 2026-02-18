@@ -1,0 +1,245 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="FirstRep - Nutrition Trends">
+	<main class="max-w-md mx-auto px-6 py-12 pb-32">
+		<header class="flex items-center gap-4 mb-10">
+			<a href="/FirstRep/macros" class="p-2 -ml-2 text-gray-400 hover:text-white transition">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+				</svg>
+			</a>
+			<div>
+				<h1 id="trend-title" class="text-2xl font-black text-white">Trend</h1>
+				<p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest mt-1">Last 30 Days</p>
+			</div>
+		</header>
+
+		<!-- Metric Selector -->
+		<div class="flex gap-2 mb-8 overflow-x-auto pb-2 no-scrollbar">
+			{['Calories', 'Protein', 'Carbs', 'Fat'].map(metric => (
+				<button 
+					data-metric={metric.toLowerCase()} 
+					class="metric-btn whitespace-nowrap px-6 py-3 rounded-2xl border border-gray-800 text-xs font-bold uppercase tracking-widest transition"
+				>
+					{metric}
+				</button>
+			))}
+		</div>
+
+		<!-- Chart Container -->
+		<div class="bg-gray-900 border border-gray-800 rounded-3xl p-6 mb-8">
+			<div class="h-64 w-full relative" id="chart-wrapper">
+				<canvas id="trendsChart"></canvas>
+			</div>
+		</div>
+
+		<!-- Stats Card -->
+		<div class="bg-gray-900 border border-gray-800 rounded-3xl p-6">
+			<div class="flex items-center justify-between mb-6">
+				<h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest">30-Day Summary</h3>
+				<span id="metric-unit" class="text-[10px] bg-indigo-500/10 text-indigo-400 px-2 py-1 rounded-lg font-black uppercase"></span>
+			</div>
+			
+			<div class="grid grid-cols-2 gap-6">
+				<div>
+					<p id="avg-value" class="text-3xl font-black text-white">0</p>
+					<p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest mt-1">Daily Average</p>
+				</div>
+				<div class="text-right">
+					<p id="peak-value" class="text-3xl font-black text-gray-400">0</p>
+					<p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest mt-1">Peak Day</p>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<!-- Nav Bar -->
+	<nav class="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-xl border-t border-gray-800 px-6 py-3 flex justify-around items-center z-50">
+		<a href="/FirstRep/" class="flex flex-col items-center gap-1 text-gray-500">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+			</svg>
+			<span class="text-[10px] font-bold">Home</span>
+		</a>
+		<a href="/FirstRep/planner" class="flex flex-col items-center gap-1 text-gray-500">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+			</svg>
+			<span class="text-[10px] font-bold">Planner</span>
+		</a>
+		<a href="/FirstRep/macros" class="flex flex-col items-center gap-1 text-indigo-500">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+				<path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+			</svg>
+			<span class="text-[10px] font-bold">Macros</span>
+		</a>
+	</nav>
+</Layout>
+
+<script>
+	import { supabase } from '../lib/supabase';
+	import Chart from 'chart.js/auto';
+
+	let chart = null;
+	let currentUser = null;
+	let currentMetric = 'calories';
+	let logData = [];
+
+	const metricBtns = document.querySelectorAll('.metric-btn');
+	const trendTitle = document.getElementById('trend-title');
+	const avgDisplay = document.getElementById('avg-value');
+	const peakDisplay = document.getElementById('peak-value');
+	const unitDisplay = document.getElementById('metric-unit');
+
+	async function init() {
+		const urlParams = new URLSearchParams(window.location.search);
+		currentMetric = urlParams.get('metric') || 'calories';
+		
+		const { data: { session } } = await supabase.auth.getSession();
+		if (!session) {
+			window.location.href = '/FirstRep/login/index.html';
+			return;
+		}
+		currentUser = session.user;
+		
+		await fetchData();
+		updateUI();
+	}
+
+	async function fetchData() {
+		const thirtyDaysAgo = new Date();
+		thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 29);
+		const startDate = thirtyDaysAgo.toISOString().split('T')[0];
+
+		const { data, error } = await supabase
+			.from('food_logs')
+			.select('logged_at, calories, protein, carbs, fat')
+			.eq('user_id', currentUser.id)
+			.gte('logged_at', startDate)
+			.order('logged_at', { ascending: true });
+
+		if (error) return;
+
+		// Group by date
+		const grouped = {};
+		// Pre-fill last 30 days
+		for (let i = 0; i < 30; i++) {
+			const d = new Date();
+			d.setDate(d.getDate() - (29 - i));
+			grouped[d.toISOString().split('T')[0]] = { calories: 0, protein: 0, carbs: 0, fat: 0 };
+		}
+
+		data.forEach(log => {
+			if (grouped[log.logged_at]) {
+				grouped[log.logged_at].calories += log.calories;
+				grouped[log.logged_at].protein += log.protein;
+				grouped[log.logged_at].carbs += log.carbs;
+				grouped[log.logged_at].fat += log.fat;
+			}
+		});
+
+		logData = Object.entries(grouped).map(([date, values]) => ({ date, ...values }));
+	}
+
+	function updateUI() {
+		// Update Buttons
+		metricBtns.forEach(btn => {
+			if (btn.getAttribute('data-metric') === currentMetric) {
+				btn.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
+				btn.classList.remove('text-gray-500', 'border-gray-800');
+			} else {
+				btn.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600');
+				btn.classList.add('text-gray-500', 'border-gray-800');
+			}
+		});
+
+		trendTitle.innerText = currentMetric.charAt(0).toUpperCase() + currentMetric.slice(1) + ' Trends';
+		unitDisplay.innerText = currentMetric === 'calories' ? 'kcal' : 'grams';
+
+		// Calculate Stats
+		const values = logData.map(d => d[currentMetric]);
+		const avg = values.reduce((a, b) => a + b, 0) / values.length;
+		const peak = Math.max(...values);
+
+		avgDisplay.innerText = Math.round(avg).toString();
+		peakDisplay.innerText = Math.round(peak).toString();
+
+		renderChart();
+	}
+
+	function renderChart() {
+		const ctx = document.getElementById('trendsChart') as HTMLCanvasElement;
+		if (chart) chart.destroy();
+
+		chart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: logData.map(d => {
+					const date = new Date(d.date + 'T00:00:00');
+					return date.toLocaleDateString('en-US', { day: 'numeric' });
+				}),
+				datasets: [{
+					data: logData.map(d => d[currentMetric]),
+					backgroundColor: '#6366f1',
+					borderRadius: 6,
+					hoverBackgroundColor: '#818cf8',
+				}]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				plugins: {
+					legend: { display: false },
+					tooltip: {
+						enabled: true,
+						backgroundColor: '#111827',
+						titleFont: { size: 10, weight: 'bold' },
+						bodyFont: { size: 12, weight: 'black' },
+						padding: 12,
+						displayColors: false,
+						callbacks: {
+							label: (ctx) => `${Math.round(ctx.raw)} ${currentMetric === 'calories' ? 'kcal' : 'g'}`
+						}
+					}
+				},
+				scales: {
+					x: {
+						grid: { display: false },
+						ticks: { 
+							color: '#4b5563', 
+							font: { size: 9, weight: 'bold' },
+							maxRotation: 0,
+							autoSkip: true,
+							maxTicksLimit: 7
+						}
+					},
+					y: {
+						grid: { color: '#1f2937' },
+						ticks: { 
+							color: '#4b5563', 
+							font: { size: 9, weight: 'bold' },
+							padding: 10
+						},
+						beginAtZero: true
+					}
+				}
+			}
+		});
+	}
+
+	metricBtns.forEach(btn => {
+		btn.addEventListener('click', () => {
+			currentMetric = btn.getAttribute('data-metric');
+			updateUI();
+		});
+	});
+
+	init();
+</script>
+
+<style>
+	.no-scrollbar::-webkit-scrollbar { display: none; }
+	.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>

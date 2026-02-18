@@ -33,10 +33,10 @@ import Layout from '../layouts/Layout.astro';
 		<!-- Progress Card -->
 		<div class="bg-gray-900 border border-gray-800 rounded-3xl p-6 mb-4">
 			<div class="flex items-center justify-between mb-8">
-				<div class="text-center flex-1">
-					<p id="total-cals" class="text-4xl font-black text-white">0</p>
+				<a href="/FirstRep/trends?metric=calories" class="text-center flex-1 hover:opacity-80 transition group">
+					<p id="total-cals" class="text-4xl font-black text-white group-hover:text-indigo-400">0</p>
 					<p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Calories</p>
-				</div>
+				</a>
 				<div class="w-px h-10 bg-gray-800"></div>
 				<div class="text-center flex-1">
 					<p id="target-cals" class="text-4xl font-black text-gray-700">2500</p>
@@ -45,18 +45,18 @@ import Layout from '../layouts/Layout.astro';
 			</div>
 			
 			<div class="grid grid-cols-3 gap-3">
-				<div class="bg-gray-800/50 p-3 rounded-2xl border border-gray-700/50 text-center">
+				<a href="/FirstRep/trends?metric=protein" class="bg-gray-800/50 p-3 rounded-2xl border border-gray-700/50 text-center hover:border-indigo-500/50 transition">
 					<p id="total-protein" class="font-bold text-indigo-400 text-sm">0g</p>
 					<p class="text-[8px] text-gray-500 uppercase font-bold">Protein</p>
-				</div>
-				<div class="bg-gray-800/50 p-3 rounded-2xl border border-gray-700/50 text-center">
+				</a>
+				<a href="/FirstRep/trends?metric=carbs" class="bg-gray-800/50 p-3 rounded-2xl border border-gray-700/50 text-center hover:border-green-500/50 transition">
 					<p id="total-carbs" class="font-bold text-green-400 text-sm">0g</p>
 					<p class="text-[8px] text-gray-500 uppercase font-bold">Carbs</p>
-				</div>
-				<div class="bg-gray-800/50 p-3 rounded-2xl border border-gray-700/50 text-center">
+				</a>
+				<a href="/FirstRep/trends?metric=fat" class="bg-gray-800/50 p-3 rounded-2xl border border-gray-700/50 text-center hover:border-yellow-500/50 transition">
 					<p id="total-fat" class="font-bold text-yellow-400 text-sm">0g</p>
 					<p class="text-[8px] text-gray-500 uppercase font-bold">Fat</p>
-				</div>
+				</a>
 			</div>
 		</div>
 
