@@ -249,23 +249,72 @@ import Layout from '../layouts/Layout.astro';
 	};
 
 	let searchTimeout = null;
+	const SEARCH_CACHE_KEY = 'firstrep_food_cache';
+
+	function getSearchCache() {
+		try {
+			return JSON.parse(localStorage.getItem(SEARCH_CACHE_KEY) || '{}');
+		} catch { return {}; }
+	}
+
+	function saveToSearchCache(query, results) {
+		const cache = getSearchCache();
+		cache[query.toLowerCase()] = {
+			results,
+			timestamp: Date.now()
+		};
+		// Keep cache small-ish (last 50 searches)
+		const keys = Object.keys(cache);
+		if (keys.length > 50) delete cache[keys[0]];
+		localStorage.setItem(SEARCH_CACHE_KEY, JSON.stringify(cache));
+	}
+
+	// Simple fuzzy search for local DB
+	function fuzzySearchLocal(query) {
+		const queryLower = query.toLowerCase();
+		return foodDB.foods
+			.map(f => {
+				const nameLower = f.name.toLowerCase();
+				let score = 0;
+				if (nameLower.startsWith(queryLower)) score = 10;
+				else if (nameLower.includes(queryLower)) score = 5;
+				// Simple character match ratio
+				const matches = queryLower.split('').filter(char => nameLower.includes(char)).length;
+				score += (matches / queryLower.length) * 2;
+				return { ...f, score };
+			})
+			.filter(f => f.score > 3)
+			.sort((a, b) => b.score - a.score)
+			.slice(0, 5)
+			.map(({score, ...f}) => ({...f, source: 'Local'}));
+	}
+
 	foodInput?.addEventListener('input', (e: any) => {
 		const query = e.target.value.trim();
-		if (query.length < 3) {
+		if (query.length < 2) { // Switched to 2 for faster feedback
 			foodResults.innerHTML = '';
 			return;
 		}
 
-		// 1. Instant Local Search
-		const queryLower = query.toLowerCase().replace(/s$/, '');
-		const localMatches = foodDB.foods
-			.filter(f => f.name.toLowerCase().includes(queryLower))
-			.slice(0, 5)
-			.map(m => ({...m, source: 'Local'}));
-		
+		// 1. Instant Fuzzy Local Search
+		const localMatches = fuzzySearchLocal(query);
 		renderSearchResults(localMatches, true);
 
-		// 2. Debounced Global Search (Faster debounce: 300ms)
+		// 2. Check LocalStorage Cache
+		const cache = getSearchCache();
+		const cached = cache[query.toLowerCase()];
+		if (cached && (Date.now() - cached.timestamp < 86400000)) { // 24h cache
+			const combined = [...localMatches];
+			cached.results.forEach(ai => {
+				if (!combined.some(l => l.name.toLowerCase() === ai.name.toLowerCase())) {
+					combined.push(ai);
+				}
+			});
+			renderSearchResults(combined, false);
+			return;
+		}
+
+		// 3. Debounced Global Search
 		clearTimeout(searchTimeout);
 		searchTimeout = setTimeout(async () => {
 			if (!localMatches.length) {
@@ -280,7 +329,8 @@ import Layout from '../layouts/Layout.astro';
 				});
 				const aiMatches = await response.json();
 				
-				// Combine and avoid duplicates
+				saveToSearchCache(query, aiMatches);
+
 				const combined = [...localMatches];
 				aiMatches.forEach(ai => {
 					if (!combined.some(l => l.name.toLowerCase() === ai.name.toLowerCase())) {
