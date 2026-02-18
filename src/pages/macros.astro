@@ -4,13 +4,30 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="FirstRep - Calorie & Macro Tracker">
 	<main class="max-w-md mx-auto px-6 py-12 pb-32">
-		<header class="flex items-center gap-4 mb-10">
-			<a href="/FirstRep/" class="p-2 -ml-2 text-gray-400 hover:text-white transition">
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-				</svg>
-			</a>
-			<h1 class="text-2xl font-black text-white">Nutrition</h1>
+		<header class="flex items-center justify-between mb-10">
+			<div class="flex items-center gap-4">
+				<a href="/FirstRep/" class="p-2 -ml-2 text-gray-400 hover:text-white transition">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+					</svg>
+				</a>
+				<h1 class="text-2xl font-black text-white">Nutrition</h1>
+			</div>
+			
+			<!-- Date Picker -->
+			<div class="flex items-center gap-2 bg-gray-900 border border-gray-800 rounded-2xl px-3 py-2 shadow-sm">
+				<button id="prev-day" class="text-gray-500 hover:text-indigo-400 transition p-1">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+					</svg>
+				</button>
+				<span id="current-date-display" class="text-[11px] font-bold text-gray-300 uppercase tracking-widest min-w-[100px] text-center">Today</span>
+				<button id="next-day" class="text-gray-500 hover:text-indigo-400 transition p-1">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+					</svg>
+				</button>
+			</div>
 		</header>
 
 		<!-- Progress Card -->
@@ -162,11 +179,48 @@ import Layout from '../layouts/Layout.astro';
 	const confirmAddBtn = document.getElementById('confirm-add-food');
 
 	const WORKER_URL = 'https://first-rep-worker.hutzellcreativeco.workers.dev/';
-	const todayKey = new Date().toISOString().split('T')[0];
-
+	
+	let currentDate = new Date();
 	let activeMeal = null;
 	let selectedFood = null;
 	let currentUser = null;
+
+	const dateDisplay = document.getElementById('current-date-display');
+	const prevDayBtn = document.getElementById('prev-day');
+	const nextDayBtn = document.getElementById('next-day');
+
+	function formatDateKey(date) {
+		return date.toISOString().split('T')[0];
+	}
+
+	function updateDateDisplay() {
+		const today = new Date();
+		const isToday = dateToKey(today) === dateToKey(currentDate);
+		const isYesterday = dateToKey(new Date(today.setDate(today.getDate() - 1))) === dateToKey(currentDate);
+		
+		// Reset today for correct calculation
+		const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+		
+		if (isToday) dateDisplay.innerText = 'Today';
+		else if (isYesterday) dateDisplay.innerText = 'Yesterday';
+		else dateDisplay.innerText = currentDate.toLocaleDateString('en-US', options);
+		
+		fetchLogs();
+	}
+
+	function dateToKey(date) {
+		return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+	}
+
+	prevDayBtn?.addEventListener('click', () => {
+		currentDate.setDate(currentDate.getDate() - 1);
+		updateDateDisplay();
+	});
+
+	nextDayBtn?.addEventListener('click', () => {
+		currentDate.setDate(currentDate.getDate() + 1);
+		updateDateDisplay();
+	});
 
 	async function init() {
 		const { data: { session } } = await supabase.auth.getSession();
@@ -175,15 +229,16 @@ import Layout from '../layouts/Layout.astro';
 			return;
 		}
 		currentUser = session.user;
-		fetchLogs();
+		updateDateDisplay();
 	}
 
 	async function fetchLogs() {
+		const dateKey = formatDateKey(currentDate);
 		const { data: logs, error } = await supabase
 			.from('food_logs')
 			.select('*')
 			.eq('user_id', currentUser.id)
-			.eq('logged_at', todayKey);
+			.eq('logged_at', dateKey);
 
 		if (error) return;
 
@@ -197,32 +252,38 @@ import Layout from '../layouts/Layout.astro';
 
 		['breakfast', 'lunch', 'dinner', 'snacks'].forEach(m => {
 			const list = document.getElementById(`meal-list-${m}`);
-			list.innerHTML = dayData[m].map((entry) => {
-				totals.calories += entry.calories;
-				totals.protein += entry.protein;
-				totals.carbs += entry.carbs;
-				totals.fat += entry.fat;
+			if (!list) return;
 
-				return `
-					<div class="px-5 py-4 flex justify-between items-center group">
-						<div class="min-w-0">
-							<p class="text-sm font-bold text-gray-200 leading-tight">${entry.food_name}</p>
-							<p class="text-[10px] text-gray-500 font-bold uppercase tracking-tight mt-0.5">${entry.amount}x serving</p>
-						</div>
-						<div class="flex items-center gap-4">
-							<div class="text-right">
-								<p class="text-sm font-black text-indigo-400">${Math.round(entry.calories)}</p>
-								<p class="text-[9px] text-gray-600 uppercase font-bold tracking-tighter">Cals</p>
+			if (dayData[m].length === 0) {
+				list.innerHTML = `<p class="px-5 py-6 text-xs text-gray-700 italic font-medium">No items logged</p>`;
+			} else {
+				list.innerHTML = dayData[m].map((entry) => {
+					totals.calories += entry.calories;
+					totals.protein += entry.protein;
+					totals.carbs += entry.carbs;
+					totals.fat += entry.fat;
+
+					return `
+						<div class="px-5 py-4 flex justify-between items-center group animate-in fade-in slide-in-from-bottom-2 duration-300">
+							<div class="min-w-0">
+								<p class="text-sm font-bold text-gray-200 leading-tight">${entry.food_name}</p>
+								<p class="text-[10px] text-gray-500 font-bold uppercase tracking-tight mt-0.5">${entry.amount}x serving</p>
 							</div>
-							<button onclick="window.removeFood('${entry.id}')" class="text-gray-700 hover:text-red-500 transition p-1">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-								</svg>
-							</button>
+							<div class="flex items-center gap-4">
+								<div class="text-right">
+									<p class="text-sm font-black text-indigo-400">${Math.round(entry.calories)}</p>
+									<p class="text-[9px] text-gray-600 uppercase font-bold tracking-tighter">Cals</p>
+								</div>
+								<button onclick="window.removeFood('${entry.id}')" class="text-gray-700 hover:text-red-500 transition p-1">
+									<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+									</svg>
+								</button>
+							</div>
 						</div>
-					</div>
-				`;
-			}).join('');
+					`;
+				}).join('');
+			}
 		});
 
 		document.getElementById('total-cals').innerText = Math.round(totals.calories).toString();
@@ -387,9 +448,11 @@ import Layout from '../layouts/Layout.astro';
 		const amt = parseFloat(amountInput.value) || 0;
 		if (amt <= 0) return;
 
+		const dateKey = formatDateKey(currentDate);
+
 		const { error } = await supabase.from('food_logs').insert([{
 			user_id: currentUser.id,
-			logged_at: todayKey,
+			logged_at: dateKey,
 			meal_type: activeMeal,
 			food_name: selectedFood.name,
 			amount: amt,
