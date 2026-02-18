@@ -96,18 +96,19 @@ export default {
       // Routing based on request data
       if (body.query) {
         const query = body.query.trim();
-        const results = [];
 
-        // 1. TRY OPEN FOOD FACTS (OFF) - Best for Branded/UPC
-        try {
-          const offUrl = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=5`;
-          const offRes = await fetch(offUrl, { headers: { "User-Agent": "FirstRep - Web - 1.0" } });
-          const offData = await offRes.json();
-
-          if (offData.products && offData.products.length > 0) {
-            offData.products.forEach(p => {
-              if (p.nutriments && p.nutriments["energy-kcal_100g"]) {
-                results.push({
+        // RUN SEARCHES IN PARALLEL
+        const [offResults, aiResults] = await Promise.all([
+          // 1. OPEN FOOD FACTS (OFF)
+          (async () => {
+            try {
+              const offUrl = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=5`;
+              const offRes = await fetch(offUrl, { headers: { "User-Agent": "FirstRep - Web - 1.0" } });
+              const offData = await offRes.json();
+              if (!offData.products) return [];
+              return offData.products
+                .filter(p => p.nutriments && p.nutriments["energy-kcal_100g"])
+                .map(p => ({
                   id: "off_" + (p.id || p.code),
                   name: `${p.product_name} ${p.brands ? '(' + p.brands + ')' : ''}`.trim(),
                   unit: "100g",
@@ -116,58 +117,37 @@ export default {
                   carbs: p.nutriments.carbohydrates_100g || 0,
                   fat: p.nutriments.fat_100g || 0,
                   source: "OFF"
-                });
-              }
-            });
-          }
-        } catch (e) {
-          console.error("OFF API Error:", e);
-        }
+                }));
+            } catch (e) { return []; }
+          })(),
 
-        // 2. IF OFF IS EMPTY OR FEW RESULTS, FILL WITH GEMINI (Best for Restaurants/Generic)
-        if (results.length < 3) {
-          // Defaulting to gemini-2.0-flash-lite for higher rate limits
-          const searchUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${API_KEY}`;
-          const searchPrompt = `You are a nutrition database API. Return a JSON array of 5 food items matching: "${query}".
-          Focus on restaurant meals or generic items if brands are missing.
-          
-          Structure:
-          [
-            {
-              "id": "ai_unique_string",
-              "name": "Food Name (Restaurant Name if applicable)",
-              "unit": "standard serving size",
-              "calories": 100,
-              "protein": 10,
-              "carbs": 20,
-              "fat": 5
-            }
-          ]
-          Return ONLY the JSON array.`;
-
-          const aiRes = await fetch(searchUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: searchPrompt }] }],
-              generationConfig: { response_mime_type: "application/json" }
-            }),
-          });
-          const aiData = await aiRes.json();
-          if (aiData.candidates && aiData.candidates[0] && aiData.candidates[0].content && aiData.candidates[0].content.parts[0]) {
-            let aiText = aiData.candidates[0].content.parts[0].text;
-            aiText = aiText.replace(/```json\s?|```/g, "").trim();
+          // 2. GEMINI AI
+          (async () => {
             try {
-              const aiItems = JSON.parse(aiText);
-              aiItems.forEach(item => {
-                item.source = "AI";
-                results.push(item);
-              });
-            } catch (e) {}
-          }
-        }
+              const searchUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${API_KEY}`;
+              const searchPrompt = `You are a nutrition database API. Return a JSON array of 5 food items matching: "${query}".
+              Focus on restaurant meals or generic items if brands are missing.
+              Structure: [{"id": "ai_unique", "name": "Food Name (Restaurant)", "unit": "serving size", "calories": 100, "protein": 10, "carbs": 20, "fat": 5}]
+              Return ONLY the JSON array.`;
 
-        return new Response(JSON.stringify(results.slice(0, 8)), {
+              const aiRes = await fetch(searchUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  contents: [{ parts: [{ text: searchPrompt }] }],
+                  generationConfig: { response_mime_type: "application/json" }
+                }),
+              });
+              const aiData = await aiRes.json();
+              const aiText = aiData.candidates[0].content.parts[0].text.replace(/```json\s?|```/g, "").trim();
+              const items = JSON.parse(aiText);
+              return items.map(item => ({ ...item, source: "AI" }));
+            } catch (e) { return []; }
+          })()
+        ]);
+
+        const combined = [...offResults, ...aiResults].slice(0, 10);
+        return new Response(JSON.stringify(combined), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }

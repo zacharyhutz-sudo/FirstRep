@@ -256,13 +256,21 @@ import Layout from '../layouts/Layout.astro';
 			return;
 		}
 
+		// 1. Instant Local Search
+		const queryLower = query.toLowerCase().replace(/s$/, '');
+		const localMatches = foodDB.foods
+			.filter(f => f.name.toLowerCase().includes(queryLower))
+			.slice(0, 5)
+			.map(m => ({...m, source: 'Local'}));
+		
+		renderSearchResults(localMatches, true);
+
+		// 2. Debounced Global Search (Faster debounce: 300ms)
 		clearTimeout(searchTimeout);
 		searchTimeout = setTimeout(async () => {
-			foodResults.innerHTML = '<p class="p-8 text-center text-gray-500 animate-pulse text-sm">Searching global database...</p>';
-			
-			// Local check
-			const queryLower = query.toLowerCase().replace(/s$/, '');
-			const localMatches = foodDB.foods.filter(f => f.name.toLowerCase().includes(queryLower)).slice(0, 3);
+			if (!localMatches.length) {
+				foodResults.innerHTML = '<p class="p-8 text-center text-gray-500 animate-pulse text-sm">Searching global database...</p>';
+			}
 			
 			try {
 				const response = await fetch(WORKER_URL, {
@@ -272,23 +280,38 @@ import Layout from '../layouts/Layout.astro';
 				});
 				const aiMatches = await response.json();
 				
-				const matches = [...localMatches.map(m => ({...m, source: 'Local'})), ...aiMatches];
-				window['_lastSearchResults'] = matches;
+				// Combine and avoid duplicates
+				const combined = [...localMatches];
+				aiMatches.forEach(ai => {
+					if (!combined.some(l => l.name.toLowerCase() === ai.name.toLowerCase())) {
+						combined.push(ai);
+					}
+				});
 
-				foodResults.innerHTML = matches.map(f => `
-					<div onclick="window.selectFoodForPortion('${f.id}')" class="p-5 hover:bg-gray-800 transition cursor-pointer flex justify-between items-center rounded-2xl border border-transparent hover:border-indigo-500/20 mx-2">
-						<div>
-							<p class="font-bold text-gray-100 text-sm leading-tight">${f.name}</p>
-							<p class="text-[10px] text-gray-500 font-bold uppercase mt-0.5">${f.unit || '100g'} serving</p>
-						</div>
-						<p class="text-indigo-400 font-black text-sm">${Math.round(f.calories)} cal</p>
-					</div>
-				`).join('');
+				renderSearchResults(combined, false);
 			} catch (err) {
-				foodResults.innerHTML = '<p class="p-4 text-center text-red-400">Search failed.</p>';
+				if (!localMatches.length) {
+					foodResults.innerHTML = '<p class="p-4 text-center text-red-400">Search failed.</p>';
+				}
 			}
-		}, 600);
+		}, 300);
 	});
+
+	function renderSearchResults(matches, isPartial) {
+		window['_lastSearchResults'] = matches;
+		foodResults.innerHTML = matches.map(f => `
+			<div onclick="window.selectFoodForPortion('${f.id || f.name}')" class="p-5 hover:bg-gray-800 transition cursor-pointer flex justify-between items-center rounded-2xl border border-transparent hover:border-indigo-500/20 mx-2">
+				<div>
+					<p class="font-bold text-gray-100 text-sm leading-tight">${f.name}</p>
+					<div class="flex items-center gap-2 mt-0.5">
+						<p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">${f.unit || '100g'} serving</p>
+						${f.source ? `<span class="text-[8px] px-1.5 py-0.5 rounded bg-gray-800 text-gray-400 font-black border border-gray-700">${f.source}</span>` : ''}
+					</div>
+				</div>
+				<p class="text-indigo-400 font-black text-sm">${Math.round(f.calories)} cal</p>
+			</div>
+		`).join('') + (isPartial ? '<div class="p-4 text-center"><div class="inline-block w-4 h-4 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin"></div></div>' : '');
+	}
 
 	window.selectFoodForPortion = (id) => {
 		selectedFood = window['_lastSearchResults'].find(f => f.id === id || f.name === id);
