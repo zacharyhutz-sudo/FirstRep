@@ -1,0 +1,298 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="FirstRep - Weight & Activity">
+	<main class="max-w-md mx-auto px-6 py-12 pb-32">
+		<header class="flex items-center justify-between mb-10">
+			<div class="flex items-center gap-4">
+				<a href="/FirstRep/" class="p-2 -ml-2 text-gray-400 hover:text-white transition">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+					</svg>
+				</a>
+				<h1 class="text-2xl font-black text-white">Weight</h1>
+			</div>
+            <button id="add-entry-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition active:scale-95 shadow-lg shadow-indigo-500/20">
+                Log Today
+            </button>
+		</header>
+
+		<!-- Weight Chart -->
+		<div class="bg-gray-900 border border-gray-800 rounded-3xl p-6 mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Weight vs Calories</h3>
+                <div class="flex gap-4">
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2 h-2 rounded-full bg-indigo-500"></div>
+                        <span class="text-[9px] text-gray-400 font-bold uppercase">Weight</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                        <span class="text-[9px] text-gray-400 font-bold uppercase">Burn</span>
+                    </div>
+                </div>
+            </div>
+			<div class="h-64 w-full relative">
+				<canvas id="weightChart"></canvas>
+			</div>
+		</div>
+
+        <!-- Stats Grid -->
+		<div class="grid grid-cols-2 gap-4 mb-8">
+			<div class="bg-gray-900 border border-gray-800 rounded-3xl p-6">
+                <p id="avg-weight" class="text-2xl font-black text-white">--</p>
+                <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mt-1">7-Day Avg Weight</p>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 rounded-3xl p-6">
+                <p id="avg-burn" class="text-2xl font-black text-white">--</p>
+                <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mt-1">7-Day Avg Burn</p>
+            </div>
+		</div>
+
+        <!-- Log List -->
+        <div class="space-y-4">
+            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest px-2">Recent Logs</h3>
+            <div id="logs-list" class="space-y-2">
+                <!-- Log entries injected here -->
+            </div>
+        </div>
+
+        <!-- Log Entry Modal -->
+		<div id="log-overlay" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center">
+			<div class="bg-gray-900 border-t sm:border border-gray-800 w-full max-w-lg rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl">
+				<div class="p-6">
+					<div class="flex justify-between items-center mb-8">
+						<h2 class="text-xl font-bold text-white">Log Entry</h2>
+						<button id="log-close" class="bg-gray-800 p-2 rounded-full text-gray-400">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+							</svg>
+						</button>
+					</div>
+					
+					<div class="space-y-6 mb-8">
+						<div>
+							<label class="text-[10px] text-gray-500 uppercase font-bold tracking-widest mb-2 block">Weight (lbs)</label>
+							<input type="number" id="input-weight" step="0.1" class="w-full bg-gray-800 border-none rounded-2xl px-5 py-4 text-white font-bold text-lg focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="0.0" />
+						</div>
+						<div>
+							<label class="text-[10px] text-gray-500 uppercase font-bold tracking-widest mb-2 block">Calories Burned (Active)</label>
+							<input type="number" id="input-burn" class="w-full bg-gray-800 border-none rounded-2xl px-5 py-4 text-white font-bold text-lg focus:ring-2 focus:ring-green-500 outline-none" placeholder="500" />
+						</div>
+					</div>
+
+					<button id="save-entry-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl transition active:scale-95 shadow-lg shadow-indigo-500/20">
+						Save Entry
+					</button>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<!-- Nav Bar -->
+	<nav class="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-xl border-t border-gray-800 px-6 py-3 flex justify-around items-center z-50">
+		<a href="/FirstRep/" class="flex flex-col items-center gap-1 text-gray-500">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+			</svg>
+			<span class="text-[10px] font-bold">Home</span>
+		</a>
+		<a href="/FirstRep/planner" class="flex flex-col items-center gap-1 text-gray-500">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+			</svg>
+			<span class="text-[10px] font-bold">Planner</span>
+		</a>
+		<a href="/FirstRep/macros" class="flex flex-col items-center gap-1 text-indigo-500">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+				<path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+			</svg>
+			<span class="text-[10px] font-bold">Macros</span>
+		</a>
+	</nav>
+</Layout>
+
+<script>
+	import { supabase } from '../lib/supabase';
+	import Chart from 'chart.js/auto';
+
+	let chart = null;
+	let currentUser = null;
+	let logData = [];
+
+	const logOverlay = document.getElementById('log-overlay');
+	const addBtn = document.getElementById('add-entry-btn');
+	const closeBtn = document.getElementById('log-close');
+	const saveBtn = document.getElementById('save-entry-btn');
+    const logsList = document.getElementById('logs-list');
+    
+    const inputWeight = document.getElementById('input-weight') as HTMLInputElement;
+    const inputBurn = document.getElementById('input-burn') as HTMLInputElement;
+
+    const avgWeightDisplay = document.getElementById('avg-weight');
+    const avgBurnDisplay = document.getElementById('avg-burn');
+
+	async function init() {
+		const { data: { session } } = await supabase.auth.getSession();
+		if (!session) {
+			window.location.href = '/FirstRep/login/index.html';
+			return;
+		}
+		currentUser = session.user;
+		
+		await fetchData();
+		renderUI();
+	}
+
+	async function fetchData() {
+		const thirtyDaysAgo = new Date();
+		thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 29);
+		const startDate = thirtyDaysAgo.toISOString().split('T')[0];
+
+		const { data, error } = await supabase
+			.from('weight_logs')
+			.select('*')
+			.eq('user_id', currentUser.id)
+			.gte('logged_at', startDate)
+			.order('logged_at', { ascending: true });
+
+		if (error) return;
+		logData = data;
+	}
+
+	function renderUI() {
+        // Stats
+        if (logData.length > 0) {
+            const last7 = logData.slice(-7);
+            const wAvg = last7.reduce((a, b) => a + b.weight, 0) / last7.length;
+            const bAvg = last7.reduce((a, b) => a + (b.calories_burned || 0), 0) / last7.length;
+            
+            avgWeightDisplay.innerText = wAvg.toFixed(1) + ' lbs';
+            avgBurnDisplay.innerText = Math.round(bAvg) + ' kcal';
+        }
+
+        // List
+        logsList.innerHTML = [...logData].reverse().map(log => `
+            <div class="bg-gray-900/50 border border-gray-800 rounded-2xl px-5 py-4 flex justify-between items-center">
+                <div>
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">${new Date(log.logged_at + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                    <p class="text-lg font-black text-white mt-0.5">${log.weight} <span class="text-[10px] text-gray-500 uppercase font-bold">lbs</span></p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs font-bold text-green-500 uppercase tracking-widest">Active Burn</p>
+                    <p class="text-lg font-black text-gray-300 mt-0.5">${log.calories_burned || 0} <span class="text-[10px] text-gray-600 uppercase font-bold">kcal</span></p>
+                </div>
+            </div>
+        `).join('');
+
+		renderChart();
+	}
+
+	function renderChart() {
+		const ctx = document.getElementById('weightChart') as HTMLCanvasElement;
+		if (chart) chart.destroy();
+
+		chart = new Chart(ctx, {
+			type: 'line',
+			data: {
+				labels: logData.map(d => {
+					const date = new Date(d.logged_at + 'T00:00:00');
+					return date.toLocaleDateString('en-US', { day: 'numeric' });
+				}),
+				datasets: [
+                    {
+                        label: 'Weight',
+                        data: logData.map(d => d.weight),
+                        borderColor: '#6366f1',
+                        backgroundColor: '#6366f120',
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'yWeight',
+                        pointRadius: 2
+                    },
+                    {
+                        label: 'Active Burn',
+                        data: logData.map(d => d.calories_burned),
+                        borderColor: '#22c55e',
+                        borderDash: [5, 5],
+                        tension: 0.4,
+                        yAxisID: 'yBurn',
+                        pointRadius: 0
+                    }
+                ]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				plugins: {
+					legend: { display: false },
+					tooltip: {
+						mode: 'index',
+						intersect: false,
+                        backgroundColor: '#111827',
+                        padding: 12,
+                        titleFont: { size: 10 },
+                        bodyFont: { size: 12, weight: 'bold' }
+					}
+				},
+				scales: {
+					x: {
+						grid: { display: false },
+						ticks: { 
+							color: '#4b5563', 
+							font: { size: 9, weight: 'bold' },
+							maxTicksLimit: 7
+						}
+					},
+					yWeight: {
+						position: 'left',
+                        grid: { color: '#1f2937' },
+						ticks: { 
+							color: '#6366f1', 
+							font: { size: 9, weight: 'bold' }
+						},
+                        title: { display: true, text: 'LBS', color: '#6366f1', font: { size: 8, weight: 'black' } }
+					},
+                    yBurn: {
+						position: 'right',
+                        grid: { display: false },
+						ticks: { 
+							color: '#22c55e', 
+							font: { size: 9, weight: 'bold' }
+						},
+                        title: { display: true, text: 'KCAL', color: '#22c55e', font: { size: 8, weight: 'black' } }
+					}
+				}
+			}
+		});
+	}
+
+	addBtn?.addEventListener('click', () => logOverlay.classList.remove('hidden'));
+	closeBtn?.addEventListener('click', () => logOverlay.classList.add('hidden'));
+
+    saveBtn?.addEventListener('click', async () => {
+        const weight = parseFloat(inputWeight.value);
+        const burn = parseInt(inputBurn.value);
+        if (!weight) return;
+
+        const dateKey = new Date().toISOString().split('T')[0];
+
+        const { error } = await supabase
+            .from('weight_logs')
+            .upsert({
+                user_id: currentUser.id,
+                logged_at: dateKey,
+                weight,
+                calories_burned: burn
+            }, { onConflict: 'user_id,logged_at' });
+
+        if (!error) {
+            logOverlay.classList.add('hidden');
+            await fetchData();
+            renderUI();
+        }
+    });
+
+	init();
+</script>
