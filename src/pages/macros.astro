@@ -410,25 +410,44 @@ import Layout from '../layouts/Layout.astro';
 
 	function renderSearchResults(matches, isPartial) {
 		window['_lastSearchResults'] = matches;
-		foodResults.innerHTML = matches.map(f => `
-			<div onclick="window.selectFoodForPortion('${f.id || f.name}')" class="p-5 hover:bg-gray-800 transition cursor-pointer flex justify-between items-center rounded-2xl border border-transparent hover:border-indigo-500/20 mx-2">
-				<div>
-					<p class="font-bold text-gray-100 text-sm leading-tight">${f.name}</p>
-					<div class="flex items-center gap-2 mt-0.5">
-						<p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">${f.unit || '100g'} serving</p>
-						${f.source ? `<span class="text-[8px] px-1.5 py-0.5 rounded bg-gray-800 text-gray-400 font-black border border-gray-700">${f.source}</span>` : ''}
+		foodResults.innerHTML = matches.map(f => {
+			let unitDisplay = f.unit || '100g';
+			
+			// Handle mL to fl oz conversion for liquids
+			if (unitDisplay.toLowerCase().includes('ml')) {
+				const mlValue = parseFloat(unitDisplay) || 100;
+				const flOz = (mlValue * 0.033814).toFixed(1);
+				unitDisplay = `${unitDisplay} (${flOz} fl oz)`;
+			}
+
+			return `
+				<div onclick="window.selectFoodForPortion('${f.id || f.name}')" class="p-5 hover:bg-gray-800 transition cursor-pointer flex justify-between items-center rounded-2xl border border-transparent hover:border-indigo-500/20 mx-2">
+					<div>
+						<p class="font-bold text-gray-100 text-sm leading-tight">${f.name}</p>
+						<div class="flex items-center gap-2 mt-0.5">
+							<p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">${unitDisplay} serving</p>
+							${f.source ? `<span class="text-[8px] px-1.5 py-0.5 rounded bg-gray-800 text-gray-400 font-black border border-gray-700">${f.source}</span>` : ''}
+						</div>
 					</div>
+					<p class="text-indigo-400 font-black text-sm">${Math.round(f.calories)} cal</p>
 				</div>
-				<p class="text-indigo-400 font-black text-sm">${Math.round(f.calories)} cal</p>
-			</div>
-		`).join('') + (isPartial ? '<div class="p-4 text-center"><div class="inline-block w-4 h-4 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin"></div></div>' : '');
+			`;
+		}).join('') + (isPartial ? '<div class="p-4 text-center"><div class="inline-block w-4 h-4 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin"></div></div>' : '');
 	}
 
 	window.selectFoodForPortion = (id) => {
 		selectedFood = window['_lastSearchResults'].find(f => f.id === id || f.name === id);
 		if (!selectedFood) return;
+
+		let unitDisplay = selectedFood.unit || '100g';
+		if (unitDisplay.toLowerCase().includes('ml')) {
+			const mlValue = parseFloat(unitDisplay) || 100;
+			const flOz = (mlValue * 0.033814).toFixed(1);
+			unitDisplay = `${unitDisplay} (${flOz} fl oz)`;
+		}
+
 		document.getElementById('selected-food-name').innerText = selectedFood.name;
-		document.getElementById('selected-food-unit').innerText = `${selectedFood.unit || '100g'} serving`;
+		document.getElementById('selected-food-unit').innerText = `${unitDisplay} serving`;
 		foodResults.classList.add('hidden');
 		portionSelector.classList.remove('hidden');
 		updatePreview();
