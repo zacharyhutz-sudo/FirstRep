@@ -148,8 +148,10 @@ import Layout from '../layouts/Layout.astro';
 		document.querySelectorAll('.complete-set-btn').forEach(btn => {
 			btn.addEventListener('click', () => {
 				const row = btn.closest('.set-row');
-				const isComplete = row.classList.toggle('is-complete');
-				if (isComplete && restEnabled) startRestTimer();
+				if (row) {
+					const isComplete = row.classList.toggle('is-complete');
+					if (isComplete && restEnabled) startRestTimer();
+				}
 			});
 		});
 	}

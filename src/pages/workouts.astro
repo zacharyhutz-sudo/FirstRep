@@ -140,10 +140,11 @@ import Layout from '../layouts/Layout.astro';
 		// Attach Listeners
 		document.querySelectorAll('.plan-card').forEach(card => {
 			card.addEventListener('click', (e) => {
-				if ((e.target as HTMLElement).closest('.delete-btn')) return;
+				const target = e.target as HTMLElement;
+				if (target.closest('.delete-btn')) return;
 				const planId = card.getAttribute('data-id');
 				const plan = plans.find(p => p.id === planId);
-				openPreview(plan);
+				if (plan) openPreview(plan);
 			});
 		});
 
@@ -152,8 +153,10 @@ import Layout from '../layouts/Layout.astro';
 				e.stopPropagation();
 				if (!confirm('Delete this workout plan forever?')) return;
 				const planId = btn.getAttribute('data-id');
-				await supabase.from('workout_plans').delete().eq('id', planId);
-				loadPlans();
+				if (planId) {
+					await supabase.from('workout_plans').delete().eq('id', planId);
+					loadPlans();
+				}
 			});
 		});
 	}
