@@ -235,26 +235,39 @@ import Layout from '../layouts/Layout.astro';
         if (!user) return;
 
         try {
-            // Transform the AI plan (which has days/sections) into a flat exercise list for the session logger
-            // We'll take the first day's exercises for the 'exercises' column
-            const allExercises = currentGeneratedPlan.days?.[0]?.exercises || [];
-            const mappedExercises = allExercises.map(ex => ({
-                exercise_name: ex.exercise || ex.name,
+            console.log("Raw AI Plan:", currentGeneratedPlan);
+            
+            // AI plans usually have a 'days' array. Each day has 'exercises'.
+            // For now, we'll flatten the first day's exercises for the logger.
+            const firstDay = currentGeneratedPlan.days?.[0] || currentGeneratedPlan.workouts?.[0];
+            const allExercises = firstDay?.exercises || [];
+            
+            console.log("Extracted Exercises:", allExercises);
+
+            const mappedExercises = allExercises.map((ex: any) => ({
+                exercise_name: ex.exercise || ex.name || "Unknown Exercise",
                 sets: parseInt(ex.sets) || 3,
                 reps: parseInt(ex.reps) || 12,
                 rest: ex.rest || '90s'
             }));
 
-            const { error } = await supabase.from('workout_plans').insert([{
+            const payload = {
                 user_id: user.id,
-                plan_name: currentGeneratedPlan.name,
+                plan_name: currentGeneratedPlan.name || "New Workout Plan",
                 schedule_summary: currentGeneratedPlan.schedule || (currentGeneratedPlan.metadata ? currentGeneratedPlan.metadata.days + ' days/week' : 'Custom Plan'),
                 plan_data: currentGeneratedPlan,
-                exercises: mappedExercises, // CRITICAL: Actually saving the exercises here
+                exercises: mappedExercises,
                 is_active: true
-            }]);
+            };
 
-            if (error) throw error;
+            console.log("Pushing Payload to Supabase:", payload);
+
+            const { error } = await supabase.from('workout_plans').insert([payload]);
+
+            if (error) {
+                console.error("Supabase Insertion Error:", error);
+                throw error;
+            }
             
             btn.innerText = 'SAVED!';
             setTimeout(() => {
