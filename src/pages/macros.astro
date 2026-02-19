@@ -484,7 +484,7 @@ import Layout from '../layouts/Layout.astro';
 			}
 			
 			const controller = new AbortController();
-			const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second limit
+			const timeoutId = setTimeout(() => controller.abort(), 8000); // Increased to 8 seconds
 
 			try {
 				const response = await fetch(WORKER_URL, {
@@ -508,10 +508,20 @@ import Layout from '../layouts/Layout.astro';
 
 				renderSearchResults(combined, false);
 			} catch (err) {
-				console.log("Global search timed out or failed, showing local only.");
+				if (err.name === 'AbortError') {
+					console.log("Global search timed out, showing local only.");
+				} else {
+					console.error("Global search failed:", err);
+				}
+				
 				renderSearchResults(localMatches, false);
 				if (!localMatches.length) {
-					foodResults.innerHTML = '<p class="p-4 text-center text-gray-500">No results found. Try a broader search.</p>';
+					foodResults.innerHTML = `
+						<div class="p-8 text-center">
+							<p class="text-gray-500 text-sm mb-4">No instant matches found.</p>
+							<button onclick="location.reload()" class="text-xs font-black text-indigo-400 uppercase tracking-widest border border-indigo-500/20 px-4 py-2 rounded-full hover:bg-indigo-500/10 transition">Retry Search</button>
+						</div>
+					`;
 				}
 			}
 		}, 300);
