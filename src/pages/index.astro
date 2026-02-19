@@ -265,34 +265,59 @@ import Layout from '../layouts/Layout.astro';
             if (planExEl && plan) planExEl.innerText = `${plan.exercises?.length || 0} Exercises`;
         }
 
-        // 5. Fetch Recent Completed Workouts
-        const { data: recentWorkouts } = await supabase
-            .from('completed_workouts')
-            .select('*')
-            .eq('user_id', user.id)
-            .order('completed_at', { ascending: false })
-            .limit(3);
+        // 5. Fetch Recent Activity (Workouts & Weight/Burn)
+        const [{ data: recentWorkouts }, { data: recentWeight }] = await Promise.all([
+            supabase
+                .from('completed_workouts')
+                .select('*')
+                .eq('user_id', user.id)
+                .order('completed_at', { ascending: false })
+                .limit(5),
+            supabase
+                .from('weight_logs')
+                .select('*')
+                .eq('user_id', user.id)
+                .order('logged_at', { ascending: false })
+                .limit(5)
+        ]);
 
         const activityList = document.getElementById('recent-activity-list');
         if (activityList) {
-            if (recentWorkouts && recentWorkouts.length > 0) {
-                activityList.innerHTML = recentWorkouts.map(w => {
-                    const date = new Date(w.completed_at);
-                    const isToday = date.toDateString() === new Date().toDateString();
-                    const dateLabel = isToday ? 'Today' : date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            // Combine and sort by date
+            const activities = [
+                ...(recentWorkouts || []).map(w => ({ ...w, type: 'workout', date: new Date(w.completed_at) })),
+                ...(recentWeight || []).map(w => ({ ...w, type: 'weight', date: new Date(w.logged_at + 'T00:00:00') }))
+            ].sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, 5);
+
+            if (activities.length > 0) {
+                activityList.innerHTML = activities.map(act => {
+                    const isToday = act.date.toDateString() === new Date().toDateString();
+                    const dateLabel = isToday ? 'Today' : act.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
                     
-                    return `
-                        <div class="bg-gray-900/40 border border-gray-800/50 p-4 rounded-2xl flex justify-between items-center">
-                            <div>
-                                <p class="text-[10px] font-black text-gray-600 uppercase tracking-tighter">${dateLabel}</p>
-                                <p class="font-bold text-gray-300">${w.workout_name}</p>
+                    if (act.type === 'workout') {
+                        return `
+                            <div class="bg-gray-900/40 border border-gray-800/50 p-4 rounded-2xl flex justify-between items-center group">
+                                <div>
+                                    <p class="text-[10px] font-black text-gray-600 uppercase tracking-tighter">${dateLabel}</p>
+                                    <p class="font-bold text-gray-300">${act.workout_name}</p>
+                                </div>
+                                <span class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Workout</span>
                             </div>
-                            <span class="text-[10px] font-black uppercase tracking-widest text-green-400">Completed</span>
-                        </div>
-                    `;
+                        `;
+                    } else {
+                        return `
+                            <div class="bg-gray-900/40 border border-gray-800/50 p-4 rounded-2xl flex justify-between items-center group">
+                                <div>
+                                    <p class="text-[10px] font-black text-gray-600 uppercase tracking-tighter">${dateLabel}</p>
+                                    <p class="font-bold text-gray-300">${act.weight} ${act.unit} • ${act.calories_burned || 0} kcal</p>
+                                </div>
+                                <span class="text-[10px] font-black uppercase tracking-widest text-green-400">Weight & Burn</span>
+                            </div>
+                        `;
+                    }
                 }).join('');
             } else {
-                activityList.innerHTML = `<p class="text-xs text-gray-600 font-bold text-center py-4 italic">No workouts logged yet. Time to hit the gym!</p>`;
+                activityList.innerHTML = `<p class="text-xs text-gray-600 font-bold text-center py-4 italic">No recent activity.</p>`;
             }
         }
 	}
