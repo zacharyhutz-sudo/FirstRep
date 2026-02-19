@@ -96,49 +96,42 @@ export default {
       // Routing based on request data
       if (body.query) {
         let query = body.query.trim();
-        
-        // CLEANUP: Handle percentages and common symbols for finicky APIs
-        // Also strip common "filler" words that can mess up brand matching
-        const cleanQuery = query
-          .replace(/%/g, ' percent')
-          .replace(/\+/g, ' ')
-          .trim();
+        const USDA_KEY = env.USDA_API_KEY || "nkbewHWAcNS5jFZuP9Hfs6SEgj2bGoiAdLNDmg6N"; // Using provided key
 
         // RUN SEARCHES IN PARALLEL
-        const [offResults, aiResults] = await Promise.all([
-          // 1. OPEN FOOD FACTS (OFF)
+        const [usdaResults, aiResults] = await Promise.all([
+          // 1. USDA FOODDATA CENTRAL
           (async () => {
             try {
-              // Using the cleaned query for OFF but also adding brand-specific filters if it looks like a brand
-              const offUrl = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(cleanQuery)}&search_simple=1&action=process&json=1&page_size=8`;
-              const offRes = await fetch(offUrl, { headers: { "User-Agent": "FirstRep - Web - 1.0" } });
-              const offData = await offRes.json();
-              if (!offData.products) return [];
-              return offData.products
-                .filter(p => p.nutriments && (p.nutriments["energy-kcal_100g"] || p.nutriments["energy-kcal_serving"]))
-                .map(p => {
-                  const cals = p.nutriments["energy-kcal_100g"] || p.nutriments["energy-kcal_serving"];
-                  return {
-                    id: "off_" + (p.id || p.code),
-                    name: `${p.product_name || 'Unknown'} ${p.brands ? '(' + p.brands + ')' : ''}`.trim(),
-                    unit: p.serving_size || "100g",
-                    calories: Math.round(cals),
-                    protein: p.nutriments.proteins_100g || p.nutriments.proteins_serving || 0,
-                    carbs: p.nutriments.carbohydrates_100g || p.nutriments.carbohydrates_serving || 0,
-                    fat: p.nutriments.fat_100g || p.nutriments.fat_serving || 0,
-                    source: "OFF"
-                  };
-                });
+              const usdaUrl = `https://api.nal.usda.gov/fdc/v1/foods/search?query=${encodeURIComponent(query)}&pageSize=8&api_key=${USDA_KEY}`;
+              const res = await fetch(usdaUrl);
+              const data = await res.json();
+              if (!data.foods) return [];
+              
+              return data.foods.map(f => {
+                const getNutrient = (id) => f.foodNutrients.find(n => n.nutrientId === id || n.nutrientNumber === id.toString())?.value || 0;
+                // USDA Nutrient IDs: 1008 (Calories), 1003 (Protein), 1005 (Carbs), 1004 (Fat)
+                return {
+                  id: "usda_" + f.fdcId,
+                  name: f.description.toLowerCase().replace(/\b\w/g, l => l.toUpperCase()),
+                  unit: f.servingSize ? `${f.servingSize}${f.servingSizeUnit || 'g'}` : "100g",
+                  calories: Math.round(getNutrient(1008)),
+                  protein: parseFloat(getNutrient(1003).toFixed(1)),
+                  carbs: parseFloat(getNutrient(1005).toFixed(1)),
+                  fat: parseFloat(getNutrient(1004).toFixed(1)),
+                  source: "USDA"
+                };
+              });
             } catch (e) { return []; }
           })(),
 
-          // 2. GEMINI AI
+          // 2. GEMINI AI (Fallback/Smart Matching)
           (async () => {
             try {
               const searchUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${API_KEY}`;
-              const searchPrompt = `You are a nutrition database API. Return a JSON array of 6 food items matching: "${query}".
-              If the query contains a brand (e.g., "Taco Bell", "Fairlife", "Chipotle"), prioritize exact matches for that brand's menu.
-              Structure: [{"id": "ai_unique", "name": "Specific Food Name (Brand)", "unit": "serving size", "calories": 100, "protein": 10, "carbs": 20, "fat": 5}]
+              const searchPrompt = `You are a nutrition database API. Return a JSON array of 5 food items matching: "${query}".
+              Focus on items NOT likely to be in a government database (branded snacks, specific restaurant meals, protein bars).
+              Structure: [{"id": "ai_unique", "name": "Food Name (Brand)", "unit": "serving size", "calories": 100, "protein": 10, "carbs": 20, "fat": 5}]
               Return ONLY the JSON array.`;
 
               const aiRes = await fetch(searchUrl, {
@@ -157,7 +150,7 @@ export default {
           })()
         ]);
 
-        const combined = [...offResults, ...aiResults].slice(0, 10);
+        const combined = [...usdaResults, ...aiResults].slice(0, 10);
         return new Response(JSON.stringify(combined), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
