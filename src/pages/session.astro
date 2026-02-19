@@ -1,0 +1,231 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="FirstRep - Active Session">
+	<main class="max-w-md mx-auto px-6 py-8 pb-32">
+		<!-- Active Header -->
+		<header class="flex justify-between items-center mb-8">
+			<div>
+				<p id="workout-duration" class="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-1">00:00</p>
+				<h1 id="active-workout-name" class="text-2xl font-black text-white italic tracking-tighter">Session</h1>
+			</div>
+			<button id="finish-workout" class="bg-indigo-600 text-white text-[10px] font-black uppercase px-6 py-3 rounded-full shadow-lg shadow-indigo-500/20 active:scale-95 transition tracking-widest">
+				Finish
+			</button>
+		</header>
+
+		<!-- Exercise List -->
+		<div id="active-exercise-list" class="space-y-8">
+			<!-- Exercises injected here -->
+		</div>
+
+		<!-- Rest Timer Overlay (Toggleable) -->
+		<div id="rest-timer-bar" class="hidden fixed bottom-24 left-6 right-6 bg-indigo-600 rounded-2xl p-4 flex justify-between items-center shadow-2xl animate-bounce-subtle z-40">
+			<div class="flex items-center gap-3">
+				<div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+					</svg>
+				</div>
+				<div>
+					<p class="text-[8px] font-black text-indigo-200 uppercase tracking-widest">Rest Timer</p>
+					<p id="rest-time-left" class="text-lg font-black text-white leading-none">01:30</p>
+				</div>
+			</div>
+			<button id="skip-rest" class="text-[10px] font-black text-white uppercase tracking-widest bg-white/10 px-4 py-2 rounded-lg">Skip</button>
+		</div>
+
+        <!-- Timer Toggle -->
+        <div class="fixed bottom-28 right-6 z-30">
+            <button id="toggle-timer-settings" class="w-10 h-10 bg-gray-900 border border-gray-800 rounded-full flex items-center justify-center text-gray-500 shadow-xl active:scale-90 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                </svg>
+            </button>
+        </div>
+	</main>
+
+    <!-- Timer Settings Modal -->
+    <div id="timer-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-[70] flex items-center justify-center px-6">
+        <div class="bg-gray-950 border border-gray-800 w-full max-w-xs rounded-[2.5rem] p-8">
+            <h3 class="text-xl font-black text-white italic tracking-tighter mb-6">Timer Settings</h3>
+            <div class="flex items-center justify-between mb-8">
+                <span class="text-sm font-bold text-gray-300 uppercase tracking-widest">Enable Rest Timer</span>
+                <button id="rest-timer-toggle" class="w-12 h-6 rounded-full bg-indigo-600 relative transition-colors">
+                    <div id="toggle-knob" class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full transition-all translate-x-0"></div>
+                </button>
+            </div>
+            <button id="close-timer-modal" class="w-full bg-gray-900 text-white font-black py-4 rounded-xl uppercase text-xs tracking-widest">Done</button>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    @keyframes bounce-subtle {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+    .animate-bounce-subtle { animation: bounce-subtle 3s ease-in-out infinite; }
+</style>
+
+<script>
+	import { supabase } from '../lib/supabase';
+
+	let plan = null;
+    let workoutStartTime = Date.now();
+    let restEnabled = localStorage.getItem('restEnabled') !== 'false';
+    let restInterval = null;
+
+	async function init() {
+		const urlParams = new URLSearchParams(window.location.search);
+		const planId = urlParams.get('id');
+
+		if (!planId) return window.location.href = '/FirstRep/workouts';
+
+		const { data: { session } } = await supabase.auth.getSession();
+		if (!session) return window.location.href = '/FirstRep/login/index.html';
+
+		const { data: workout } = await supabase.from('workout_plans').select('*').eq('id', planId).single();
+		plan = workout;
+		document.getElementById('active-workout-name').innerText = plan.plan_name;
+
+        // UI Setup
+        setupToggleUI();
+		renderExercises();
+        startGlobalTimer();
+	}
+
+    function setupToggleUI() {
+        const modal = document.getElementById('timer-modal');
+        const knob = document.getElementById('toggle-knob');
+        const bg = document.getElementById('rest-timer-toggle');
+
+        const updateUI = () => {
+            knob.style.transform = restEnabled ? 'translateX(0)' : 'translateX(-24px)';
+            bg.style.backgroundColor = restEnabled ? '#4f46e5' : '#1f2937';
+        };
+
+        document.getElementById('toggle-timer-settings').addEventListener('click', () => modal.classList.remove('hidden'));
+        document.getElementById('close-timer-modal').addEventListener('click', () => modal.classList.add('hidden'));
+        
+        bg.addEventListener('click', () => {
+            restEnabled = !restEnabled;
+            localStorage.setItem('restEnabled', restEnabled.toString());
+            updateUI();
+        });
+
+        updateUI();
+    }
+
+	function renderExercises() {
+		const list = document.getElementById('active-exercise-list');
+		list.innerHTML = (plan.exercises || []).map((ex, exIdx) => `
+			<div class="exercise-group">
+				<h3 class="text-xl font-black text-white italic tracking-tighter mb-4">${ex.exercise_name}</h3>
+				<div class="space-y-3">
+					${Array.from({ length: ex.sets }).map((_, setIdx) => `
+						<div class="set-row flex items-center justify-between bg-gray-900/50 border border-gray-800 p-4 rounded-2xl transition group" data-ex="${ex.exercise_name}" data-set="${setIdx + 1}">
+							<div class="flex items-center gap-4">
+								<span class="text-[10px] font-black text-gray-700 uppercase">${setIdx + 1}</span>
+								<div class="flex gap-2">
+									<input type="number" placeholder="kg" class="w-16 bg-transparent text-white font-black text-lg focus:outline-none placeholder:text-gray-800" />
+									<input type="number" placeholder="reps" value="${ex.reps}" class="w-16 bg-transparent text-gray-400 font-bold focus:outline-none placeholder:text-gray-800" />
+								</div>
+							</div>
+							<button class="complete-set-btn w-10 h-10 rounded-full border-2 border-gray-800 flex items-center justify-center transition active:scale-90 group-[.is-complete]:bg-green-500 group-[.is-complete]:border-green-500">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-transparent group-[.is-complete]:text-white" viewBox="0 0 20 20" fill="currentColor">
+									<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+								</svg>
+							</button>
+						</div>
+					`).join('')}
+				</div>
+			</div>
+		`).join('');
+
+		// Attach Listeners
+		document.querySelectorAll('.complete-set-btn').forEach(btn => {
+			btn.addEventListener('click', () => {
+				const row = btn.closest('.set-row');
+				const isComplete = row.classList.toggle('is-complete');
+				if (isComplete && restEnabled) startRestTimer();
+			});
+		});
+	}
+
+    function startGlobalTimer() {
+        setInterval(() => {
+            const elapsed = Math.floor((Date.now() - workoutStartTime) / 1000);
+            const mins = Math.floor(elapsed / 60).toString().padStart(2, '0');
+            const secs = (elapsed % 60).toString().padStart(2, '0');
+            document.getElementById('workout-duration').innerText = `${mins}:${secs}`;
+        }, 1000);
+    }
+
+    function startRestTimer() {
+        clearInterval(restInterval);
+        const bar = document.getElementById('rest-timer-bar');
+        const display = document.getElementById('rest-time-left');
+        let timeLeft = 90; // 90 seconds default
+
+        bar.classList.remove('hidden');
+        
+        restInterval = setInterval(() => {
+            timeLeft--;
+            const mins = Math.floor(timeLeft / 60);
+            const secs = (timeLeft % 60).toString().padStart(2, '0');
+            display.innerText = `0${mins}:${secs}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(restInterval);
+                bar.classList.add('hidden');
+                // Play subtle sound or haptic (via JS)
+            }
+        }, 1000);
+    }
+
+    document.getElementById('skip-rest').addEventListener('click', () => {
+        clearInterval(restInterval);
+        document.getElementById('rest-timer-bar').classList.add('hidden');
+    });
+
+	document.getElementById('finish-workout').addEventListener('click', async () => {
+		if (!confirm('Ready to log this session?')) return;
+		
+        const { data: { user } } = await supabase.auth.getUser();
+        const duration = Math.floor((Date.now() - workoutStartTime) / 60000);
+        
+        // 1. Log Session
+        const { data: workoutLog, error: wError } = await supabase.from('completed_workouts').insert({
+            user_id: user.id,
+            plan_id: plan.id,
+            workout_name: plan.plan_name,
+            duration_minutes: duration
+        }).select().single();
+
+        if (wError) return alert('Error logging workout');
+
+        // 2. Log Individual Sets
+        const completedRows = document.querySelectorAll('.set-row.is-complete');
+        const setLogs = Array.from(completedRows).map(row => {
+            const inputs = row.querySelectorAll('input');
+            return {
+                user_id: user.id,
+                completed_workout_id: workoutLog.id,
+                exercise_name: row.getAttribute('data-ex'),
+                set_number: parseInt(row.getAttribute('data-set')),
+                weight: parseFloat(inputs[0].value) || 0,
+                reps: parseInt(inputs[1].value) || 0
+            };
+        });
+
+        if (setLogs.length > 0) {
+            await supabase.from('set_logs').insert(setLogs);
+        }
+
+		window.location.href = '/FirstRep/';
+	});
+
+	init();
+</script>
