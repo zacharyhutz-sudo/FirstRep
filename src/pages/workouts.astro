@@ -39,11 +39,27 @@ import Layout from '../layouts/Layout.astro';
 		<div class="bg-gray-950 w-full max-w-lg rounded-t-[2.5rem] sm:rounded-[2.5rem] overflow-hidden border-t border-gray-800 flex flex-col max-h-[90vh]">
 			<div class="p-8 flex flex-col h-full overflow-hidden">
 				<div class="flex justify-between items-start mb-6">
-					<div>
-						<h2 id="preview-name" class="text-3xl font-black text-white italic tracking-tighter">Workout Name</h2>
+					<div class="flex-1 mr-4">
+						<div class="flex items-center group">
+							<h2 id="preview-name" class="text-3xl font-black text-white italic tracking-tighter">Workout Name</h2>
+							<button id="edit-name-btn" class="ml-3 p-2 text-gray-600 hover:text-indigo-400 transition opacity-0 group-hover:opacity-100 focus:opacity-100">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+									<path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+								</svg>
+							</button>
+						</div>
+						<!-- Inline Edit Input -->
+						<div id="edit-name-container" class="hidden flex items-center gap-2 mt-1">
+							<input type="text" id="edit-name-input" class="bg-gray-900 border border-indigo-500/50 rounded-xl px-4 py-2 text-white font-bold text-lg w-full focus:outline-none focus:ring-2 focus:ring-indigo-500/20" />
+							<button id="save-name-btn" class="bg-indigo-600 text-white p-2 rounded-xl active:scale-90 transition">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+									<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+								</svg>
+							</button>
+						</div>
 						<p id="preview-meta" class="text-xs font-bold text-indigo-400 uppercase tracking-widest mt-1">6 Exercises • 45 Min</p>
 					</div>
-					<button id="close-preview" class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center text-gray-400">
+					<button id="close-preview" class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 active:scale-90 transition shrink-0">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
 							<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
 						</svg>
@@ -54,29 +70,34 @@ import Layout from '../layouts/Layout.astro';
 					<!-- Exercises listed here -->
 				</div>
 
-				<button id="start-workout-btn" class="w-full bg-indigo-600 text-white font-black py-5 rounded-2xl shadow-xl shadow-indigo-500/20 active:scale-95 transition tracking-widest uppercase italic text-sm">
-					Start Session
-				</button>
+				<div class="flex flex-col gap-3">
+					<button id="set-active-btn" class="w-full bg-gray-900 border border-gray-800 text-gray-300 font-black py-4 rounded-2xl active:scale-95 transition tracking-widest uppercase text-xs">
+						Set as Active Plan
+					</button>
+					<button id="start-workout-btn" class="w-full bg-indigo-600 text-white font-black py-5 rounded-2xl shadow-xl shadow-indigo-500/20 active:scale-95 transition tracking-widest uppercase italic text-sm">
+						Start Session
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
 
 	<!-- Nav Bar -->
 	<nav class="fixed bottom-0 left-0 right-0 bg-black/60 backdrop-blur-2xl border-t border-gray-800/50 px-6 py-3 flex justify-around items-center z-50">
-		<a href="/FirstRep/" class="flex flex-col items-center gap-1 text-gray-600">
+		<a href="/FirstRep/" class="flex flex-col items-center gap-1 text-gray-600 hover:text-gray-300 transition">
 			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
 			</svg>
 			<span class="text-[9px] font-black uppercase tracking-tighter">Home</span>
 		</a>
-		<a href="/FirstRep/workouts" class="flex flex-col items-center gap-1 text-indigo-400">
+		<a href="/FirstRep/workouts" class="flex flex-col items-center gap-1 text-indigo-400 transition">
 			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
 				<path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
 				<path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
 			</svg>
 			<span class="text-[9px] font-black uppercase tracking-tighter">Log</span>
 		</a>
-		<a href="/FirstRep/macros" class="flex flex-col items-center gap-1 text-gray-600">
+		<a href="/FirstRep/macros" class="flex flex-col items-center gap-1 text-gray-600 hover:text-gray-300 transition">
 			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
 			</svg>
@@ -95,9 +116,16 @@ import Layout from '../layouts/Layout.astro';
 	const previewMeta = document.getElementById('preview-meta');
 	const previewExercises = document.getElementById('preview-exercises');
 	const startBtn = document.getElementById('start-workout-btn');
+	const setActiveBtn = document.getElementById('set-active-btn');
 	const closePreview = document.getElementById('close-preview');
 
+	const editNameBtn = document.getElementById('edit-name-btn');
+	const editNameContainer = document.getElementById('edit-name-container');
+	const editNameInput = document.getElementById('edit-name-input') as HTMLInputElement;
+	const saveNameBtn = document.getElementById('save-name-btn');
+
 	let selectedPlan = null;
+	let allPlans = [];
 
 	async function init() {
 		const { data: { session } } = await supabase.auth.getSession();
@@ -115,6 +143,7 @@ import Layout from '../layouts/Layout.astro';
 			.order('created_at', { ascending: false });
 
 		if (!plans) return;
+		allPlans = plans;
 
 		plansGrid.innerHTML = '';
 		const activePlan = plans.find(p => p.is_active);
@@ -143,7 +172,7 @@ import Layout from '../layouts/Layout.astro';
 				const target = e.target as HTMLElement;
 				if (target.closest('.delete-btn')) return;
 				const planId = card.getAttribute('data-id');
-				const plan = plans.find(p => p.id === planId);
+				const plan = allPlans.find(p => p.id === planId);
 				if (plan) openPreview(plan);
 			});
 		});
@@ -192,6 +221,8 @@ import Layout from '../layouts/Layout.astro';
 	function openPreview(plan) {
 		selectedPlan = plan;
 		previewName.innerText = plan.plan_name;
+		previewName.classList.remove('hidden');
+		editNameContainer.classList.add('hidden');
 		previewMeta.innerText = `${plan.exercises?.length || 0} Exercises • ~45 Min`;
 		
 		previewExercises.innerHTML = (plan.exercises || []).map(ex => `
@@ -206,18 +237,59 @@ import Layout from '../layouts/Layout.astro';
 			</div>
 		`).join('');
 
+		setActiveBtn.innerText = plan.is_active ? 'Currently Active' : 'Set as Active Plan';
+		setActiveBtn.disabled = plan.is_active;
+
 		previewModal.classList.remove('hidden');
 	}
 
-	startBtn.addEventListener('click', async () => {
+	// Edit Name Handlers
+	editNameBtn.addEventListener('click', () => {
+		previewName.classList.add('hidden');
+		editNameContainer.classList.remove('hidden');
+		editNameInput.value = selectedPlan.plan_name;
+		editNameInput.focus();
+	});
+
+	saveNameBtn.addEventListener('click', async () => {
+		const newName = editNameInput.value.trim();
+		if (!newName || !selectedPlan) return;
+
+		const { error } = await supabase
+			.from('workout_plans')
+			.update({ plan_name: newName })
+			.eq('id', selectedPlan.id);
+
+		if (!error) {
+			selectedPlan.plan_name = newName;
+			previewName.innerText = newName;
+			previewName.classList.remove('hidden');
+			editNameContainer.classList.add('hidden');
+			loadPlans();
+		}
+	});
+
+	setActiveBtn.addEventListener('click', async () => {
 		if (!selectedPlan) return;
 		
-		// Mark as active in Supabase
 		const { data: { user } } = await supabase.auth.getUser();
 		await supabase.from('workout_plans').update({ is_active: false }).eq('user_id', user.id);
 		await supabase.from('workout_plans').update({ is_active: true }).eq('id', selectedPlan.id);
 
-		// Redirect to new session logger (to be built)
+		setActiveBtn.innerText = 'Activated!';
+		loadPlans();
+		setTimeout(() => {
+			previewModal.classList.add('hidden');
+		}, 600);
+	});
+
+	startBtn.addEventListener('click', async () => {
+		if (!selectedPlan) return;
+		
+		const { data: { user } } = await supabase.auth.getUser();
+		await supabase.from('workout_plans').update({ is_active: false }).eq('user_id', user.id);
+		await supabase.from('workout_plans').update({ is_active: true }).eq('id', selectedPlan.id);
+
 		window.location.href = `/FirstRep/session?id=${selectedPlan.id}`;
 	});
 
