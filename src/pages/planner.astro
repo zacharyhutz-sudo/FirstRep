@@ -226,7 +226,7 @@ import Layout from '../layouts/Layout.astro';
 
     btnSaveCurrent?.addEventListener('click', async () => {
         if (!currentGeneratedPlan) return;
-        const btn = btnSaveCurrent;
+        const btn = btnSaveCurrent as HTMLButtonElement;
         const originalText = btn.innerText;
         btn.innerText = 'SAVING...';
         btn.disabled = true;
@@ -235,11 +235,22 @@ import Layout from '../layouts/Layout.astro';
         if (!user) return;
 
         try {
+            // Transform the AI plan (which has days/sections) into a flat exercise list for the session logger
+            // We'll take the first day's exercises for the 'exercises' column
+            const allExercises = currentGeneratedPlan.days?.[0]?.exercises || [];
+            const mappedExercises = allExercises.map(ex => ({
+                exercise_name: ex.exercise || ex.name,
+                sets: parseInt(ex.sets) || 3,
+                reps: parseInt(ex.reps) || 12,
+                rest: ex.rest || '90s'
+            }));
+
             const { error } = await supabase.from('workout_plans').insert([{
                 user_id: user.id,
                 plan_name: currentGeneratedPlan.name,
                 schedule_summary: currentGeneratedPlan.schedule || (currentGeneratedPlan.metadata ? currentGeneratedPlan.metadata.days + ' days/week' : 'Custom Plan'),
                 plan_data: currentGeneratedPlan,
+                exercises: mappedExercises, // CRITICAL: Actually saving the exercises here
                 is_active: true
             }]);
 
