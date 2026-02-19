@@ -2,67 +2,86 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="FirstRep - Track Weight">
+<Layout title="FirstRep - Track Weight & Burn">
 	<main class="max-w-md mx-auto px-6 py-8 pb-32">
 		<header class="flex justify-between items-end mb-8">
 			<div>
 				<p class="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-1">Measurements</p>
-				<h1 class="text-3xl font-black text-white italic tracking-tighter">Weight</h1>
+				<h1 class="text-3xl font-black text-white italic tracking-tighter">Weight & Burn</h1>
 			</div>
 		</header>
 
-        <!-- Calories Burned Stat (Wide) -->
-        <div class="bg-indigo-600 rounded-[2.5rem] p-8 mb-8 relative overflow-hidden shadow-xl shadow-indigo-500/20 active:scale-[0.98] transition group">
-            <div class="relative z-10">
-                <p class="text-[10px] font-black text-indigo-200 uppercase tracking-[0.2em] mb-2">Calories Burned (Est.)</p>
-                <h2 id="calories-burned" class="text-4xl font-black text-white italic tracking-tighter mb-1">0</h2>
-                <p class="text-xs font-bold text-indigo-100/60 uppercase tracking-widest">Across all logged sessions</p>
-            </div>
-            <div class="absolute right-[-5%] bottom-[-20%] text-white/10 rotate-12">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-32 w-32" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.334-.398-1.817a1 1 0 00-1.514-.857 6.628 6.628 0 00-3.388 5.71c0 3.716 3.017 6.733 6.733 6.733 3.716 0 6.733-3.017 6.733-6.733 0-1.547-.522-2.973-1.413-4.108.384.428.636.917.756 1.442a1 1 0 101.942-.466c-.183-.76-.475-1.472-.861-2.112-.4-.662-.9-1.257-1.487-1.758a1 1 0 00-1.474.322c-.104.2-.187.41-.252.628-.063.21-.11.425-.143.644a4.935 4.935 0 01-1.077-1.507c-.19-.383-.346-.782-.47-1.189a10.89 10.89 0 01-.284-1.21 11.084 11.084 0 01-.137-1.15z" clip-rule="evenodd" />
-                </svg>
-            </div>
-        </div>
-
-		<!-- Log Weight Card -->
+		<!-- Log Entry Card -->
 		<div class="bg-gray-900 border border-gray-800 rounded-[2.5rem] p-8 mb-8">
-			<form id="weight-form" class="space-y-6">
-				<div class="relative">
-					<input 
-						type="number" 
-						step="0.1" 
-						id="weight-input" 
-						placeholder="00.0" 
-						class="w-full bg-gray-950 border border-gray-800 rounded-2xl px-6 py-5 text-3xl font-black text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-center"
-						required
-					/>
-					<span id="unit-label" class="absolute right-6 top-1/2 -translate-y-1/2 text-sm font-black text-gray-700 uppercase tracking-widest">LBS</span>
-				</div>
+			<form id="log-form" class="space-y-6">
+                <div>
+                    <label class="text-[10px] text-gray-500 uppercase font-bold tracking-widest mb-3 block">Body Weight</label>
+                    <div class="relative">
+                        <input 
+                            type="number" 
+                            step="0.1" 
+                            id="weight-input" 
+                            placeholder="00.0" 
+                            class="w-full bg-gray-950 border border-gray-800 rounded-2xl px-6 py-5 text-3xl font-black text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-center"
+                            required
+                        />
+                        <span id="unit-label" class="absolute right-6 top-1/2 -translate-y-1/2 text-sm font-black text-gray-700 uppercase tracking-widest">LBS</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[10px] text-gray-500 uppercase font-bold tracking-widest mb-3 block">Calories Burned</label>
+                    <div class="relative">
+                        <input 
+                            type="number" 
+                            id="burn-input" 
+                            placeholder="0" 
+                            class="w-full bg-gray-950 border border-gray-800 rounded-2xl px-6 py-5 text-3xl font-black text-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-center"
+                            required
+                        />
+                        <span class="absolute right-6 top-1/2 -translate-y-1/2 text-[10px] font-black text-gray-700 uppercase tracking-widest">KCAL</span>
+                    </div>
+                </div>
+
 				<button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-5 rounded-2xl shadow-xl shadow-indigo-500/20 transition active:scale-95 tracking-widest uppercase italic text-sm">
-					Save Entry
+					Save Daily Entry
 				</button>
 			</form>
 		</div>
 
-		<!-- Graph Section -->
+		<!-- Custom Line Chart -->
 		<section class="mb-8">
-			<h3 class="text-xs font-black text-gray-500 uppercase tracking-widest mb-6">Progress</h3>
-            <div class="bg-gray-900/40 border border-gray-800/50 rounded-[2rem] p-6 h-48 flex items-end justify-between gap-2 relative overflow-hidden">
-                <div id="graph-bars" class="flex items-end justify-between w-full h-full relative z-10">
-                    <!-- Bars injected by JS -->
+			<h3 class="text-xs font-black text-gray-500 uppercase tracking-widest mb-6">Progress (Last 7 Days)</h3>
+            <div class="bg-gray-900/40 border border-gray-800/50 rounded-[2rem] p-6 h-64 relative overflow-hidden flex flex-col justify-between">
+                <!-- SVG Line Chart -->
+                <div class="flex-1 relative">
+                    <svg id="progress-chart" class="w-full h-full overflow-visible" preserveAspectRatio="none">
+                        <path id="weight-line" fill="none" stroke="#4f46e5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="transition-all duration-1000" />
+                        <path id="burn-line" fill="none" stroke="#818cf8" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round" stroke-linejoin="round" class="opacity-50 transition-all duration-1000" />
+                    </svg>
                 </div>
-                <!-- Zero line background -->
-                <div class="absolute bottom-6 left-0 right-0 h-px bg-gray-800/50 z-0"></div>
+                <!-- X-Axis Labels -->
+                <div id="chart-labels" class="flex justify-between mt-4">
+                    <!-- Labels injected -->
+                </div>
+            </div>
+            <div class="flex justify-center gap-6 mt-4">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-0.5 bg-indigo-500"></span>
+                    <span class="text-[10px] font-black text-gray-500 uppercase">Weight</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-0.5 bg-indigo-400 border-t border-dashed border-gray-900"></span>
+                    <span class="text-[10px] font-black text-gray-500 uppercase">Burn</span>
+                </div>
             </div>
 		</section>
 
 		<!-- History -->
 		<section>
-			<h3 class="text-xs font-black text-gray-500 uppercase tracking-widest mb-6">Recent History</h3>
+			<h3 class="text-xs font-black text-gray-500 uppercase tracking-widest mb-6">History</h3>
 			<div id="weight-history" class="space-y-3">
 				<!-- Injected by JS -->
-				<div class="animate-pulse bg-gray-900/40 h-16 rounded-2xl"></div>
 				<div class="animate-pulse bg-gray-900/40 h-16 rounded-2xl"></div>
 			</div>
 		</section>
@@ -100,12 +119,14 @@ import Layout from '../layouts/Layout.astro';
 <script>
 	import { supabase } from '../lib/supabase';
 
-	const form = document.getElementById('weight-form');
-	const input = document.getElementById('weight-input') as HTMLInputElement;
+	const form = document.getElementById('log-form');
+	const weightInput = document.getElementById('weight-input') as HTMLInputElement;
+	const burnInput = document.getElementById('burn-input') as HTMLInputElement;
 	const historyList = document.getElementById('weight-history');
 	const unitLabel = document.getElementById('unit-label');
-    const caloriesBurnedEl = document.getElementById('calories-burned');
-    const graphBars = document.getElementById('graph-bars');
+    const chartLabels = document.getElementById('chart-labels');
+    const weightLine = document.getElementById('weight-line');
+    const burnLine = document.getElementById('burn-line');
 
 	async function init() {
 		const { data: { session } } = await supabase.auth.getSession();
@@ -114,23 +135,8 @@ import Layout from '../layouts/Layout.astro';
 		const unit = localStorage.getItem('weightUnit') || 'lbs';
 		if (unitLabel) unitLabel.innerText = unit.toUpperCase();
 
-		await loadStats();
 		await loadHistory();
 	}
-
-    async function loadStats() {
-        const { data: { user } } = await supabase.auth.getUser();
-        
-        // Estimate calories burned (300 per session avg)
-        const { count } = await supabase
-            .from('completed_workouts')
-            .select('*', { count: 'exact', head: true })
-            .eq('user_id', user.id);
-            
-        if (caloriesBurnedEl) {
-            caloriesBurnedEl.innerText = ((count || 0) * 300).toLocaleString();
-        }
-    }
 
 	async function loadHistory() {
 		const { data: { user } } = await supabase.auth.getUser();
@@ -139,7 +145,7 @@ import Layout from '../layouts/Layout.astro';
 			.select('*')
 			.eq('user_id', user.id)
 			.order('logged_at', { ascending: false })
-			.limit(10);
+			.limit(7);
 
 		if (historyList) {
 			if (logs && logs.length > 0) {
@@ -149,44 +155,69 @@ import Layout from '../layouts/Layout.astro';
 						<div class="bg-gray-900/40 border border-gray-800/50 p-4 rounded-2xl flex justify-between items-center">
 							<div>
 								<p class="text-[10px] font-black text-gray-600 uppercase tracking-tighter">${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-								<p class="font-bold text-gray-300">${log.weight} ${log.unit}</p>
+								<p class="font-bold text-gray-300">${log.weight} ${log.unit} • <span class="text-indigo-400">${log.calories_burned || 0} kcal</span></p>
 							</div>
 						</div>
 					`;
 				}).join('');
 
-                // Render Graph
-                const reversed = [...logs].reverse();
-                const minWeight = Math.min(...reversed.map(l => l.weight)) - 5;
-                const maxWeight = Math.max(...reversed.map(l => l.weight)) + 5;
-                const range = maxWeight - minWeight;
-
-                if (graphBars) {
-                    graphBars.innerHTML = reversed.map(log => {
-                        const height = ((log.weight - minWeight) / range) * 100;
-                        return `
-                            <div class="flex flex-col items-center gap-2 group flex-1">
-                                <div class="w-full bg-indigo-500/20 rounded-t-lg relative overflow-hidden h-32 flex items-end">
-                                    <div class="w-full bg-indigo-500 transition-all duration-1000" style="height: ${height}%"></div>
-                                </div>
-                                <span class="text-[8px] font-black text-gray-600 uppercase">${new Date(log.logged_at).toLocaleDateString('en-US', { day: 'numeric' })}</span>
-                            </div>
-                        `;
-                    }).join('');
-                }
+                renderLineChart(logs);
 			} else {
 				historyList.innerHTML = `<p class="text-xs text-gray-600 font-bold text-center py-4 italic">No entries yet.</p>`;
-                if (graphBars) graphBars.innerHTML = '';
 			}
 		}
 	}
 
+    function renderLineChart(logs) {
+        const data = [...logs].reverse();
+        if (data.length < 2) return;
+
+        const width = 300; // viewBox width
+        const height = 150; // viewBox height
+
+        // Normalize Weight
+        const weights = data.map(l => l.weight);
+        const minW = Math.min(...weights) - 2;
+        const maxW = Math.max(...weights) + 2;
+        const wRange = maxW - minW;
+
+        // Normalize Burn
+        const burns = data.map(l => l.calories_burned || 0);
+        const minB = Math.min(...burns) - 50;
+        const maxB = Math.max(...burns) + 50;
+        const bRange = maxB - minB;
+
+        const getX = (i) => (i / (data.length - 1)) * 100 + '%';
+        const getY = (val, min, range) => height - ((val - min) / range) * height;
+
+        // Create paths
+        let wPath = `M 0 ${getY(weights[0], minW, wRange)}`;
+        let bPath = `M 0 ${getY(burns[0], minB, bRange)}`;
+
+        data.forEach((log, i) => {
+            const x = (i / (data.length - 1)) * 100;
+            wPath += ` L ${x} ${getY(log.weight, minW, wRange)}`;
+            bPath += ` L ${x} ${getY(log.calories_burned || 0, minB, bRange)}`;
+        });
+
+        if (weightLine) weightLine.setAttribute('d', wPath);
+        if (burnLine) burnLine.setAttribute('d', bPath);
+
+        // Labels
+        if (chartLabels) {
+            chartLabels.innerHTML = data.map(l => `
+                <span class="text-[8px] font-black text-gray-600 uppercase">
+                    ${new Date(l.logged_at).toLocaleDateString('en-US', { day: 'numeric' })}
+                </span>
+            `).join('');
+        }
+    }
+
 	form?.addEventListener('submit', async (e) => {
 		e.preventDefault();
-		const weight = parseFloat(input.value);
+		const weight = parseFloat(weightInput.value);
+		const burn = parseInt(burnInput.value);
 		const unit = localStorage.getItem('weightUnit') || 'lbs';
-
-		if (!weight) return;
 
 		const { data: { user } } = await supabase.auth.getUser();
 		if (!user) return;
@@ -194,16 +225,18 @@ import Layout from '../layouts/Layout.astro';
 		const { error } = await supabase.from('weight_logs').insert([{
 			user_id: user.id,
 			weight: weight,
+			calories_burned: burn,
 			unit: unit,
 			logged_at: new Date().toISOString().split('T')[0]
 		}]);
 
 		if (!error) {
-			input.value = '';
+			weightInput.value = '';
+			burnInput.value = '';
 			await loadHistory();
-			await loadStats();
 		} else {
-			alert('Error logging weight: ' + error.message);
+            console.error("Save Error:", error);
+			alert('Error logging entry: ' + error.message);
 		}
 	});
 
