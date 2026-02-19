@@ -29,6 +29,11 @@ import Layout from '../layouts/Layout.astro';
 						<h3 id="display-cals" class="text-3xl font-black text-white leading-none">0</h3>
 						<span class="text-[10px] text-gray-600 font-bold uppercase mb-1">/ <span id="target-cals">2500</span></span>
 					</div>
+                    <!-- Protein Add-on -->
+                    <div class="mt-2 flex items-center gap-1.5">
+                        <span id="display-protein" class="text-xs font-black text-indigo-400">0g</span>
+                        <span class="text-[8px] font-bold text-gray-600 uppercase tracking-widest">Protein</span>
+                    </div>
 				</div>
                 <div class="absolute right-[-10px] top-[-10px] opacity-10 group-hover:opacity-20 transition-opacity">
                     <svg class="w-24 h-24 -rotate-90">
@@ -53,6 +58,24 @@ import Layout from '../layouts/Layout.astro';
                     </svg>
                 </div>
 			</div>
+
+            <!-- 30D Averages Row -->
+            <div class="col-span-2 grid grid-cols-2 gap-4">
+                <div class="bg-gray-900 border border-gray-800 rounded-[2rem] p-5">
+                    <p class="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">30D Weight Avg</p>
+                    <div class="flex items-baseline gap-1">
+                        <span id="avg-weight" class="text-xl font-black text-white italic">--</span>
+                        <span id="avg-weight-unit" class="text-[8px] font-bold text-gray-600 uppercase">lbs</span>
+                    </div>
+                </div>
+                <div class="bg-gray-900 border border-gray-800 rounded-[2rem] p-5">
+                    <p class="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">30D Burn Avg</p>
+                    <div class="flex items-baseline gap-1">
+                        <span id="avg-burn" class="text-xl font-black text-green-400 italic">--</span>
+                        <span class="text-[8px] font-bold text-gray-600 uppercase">kcal</span>
+                    </div>
+                </div>
+            </div>
 
             <!-- Workout Status Card (Wide) -->
 			<div class="col-span-2 bg-indigo-600 rounded-[2rem] p-6 relative overflow-hidden shadow-xl shadow-indigo-500/20 active:scale-[0.98] transition cursor-pointer group">
@@ -192,8 +215,13 @@ import Layout from '../layouts/Layout.astro';
 
 		if (logs) {
 			const totalCals = logs.reduce((acc, log) => acc + log.calories, 0);
+			const totalProtein = logs.reduce((acc, log) => acc + (log.protein || 0), 0);
+			
 			const displayCalsEl = document.getElementById('display-cals');
 			if (displayCalsEl) displayCalsEl.innerText = Math.round(totalCals).toString();
+
+            const displayProteinEl = document.getElementById('display-protein');
+            if (displayProteinEl) displayProteinEl.innerText = Math.round(totalProtein) + 'g';
 
 			// Update Ring
 			const circum = 238.7;
@@ -203,6 +231,27 @@ import Layout from '../layouts/Layout.astro';
 				if (ringCals) ringCals.style.strokeDashoffset = calOffset.toString();
 			}, 100);
 		}
+
+        // 3.5 Fetch Weight/Burn Stats (30D)
+        const { data: weightLogs } = await supabase
+            .from('weight_logs')
+            .select('weight, calories_burned, unit')
+            .eq('user_id', user.id)
+            .order('logged_at', { ascending: false })
+            .limit(30);
+
+        if (weightLogs && weightLogs.length > 0) {
+            const avgWeight = weightLogs.reduce((acc, l) => acc + l.weight, 0) / weightLogs.length;
+            const avgBurn = weightLogs.reduce((acc, l) => acc + (l.calories_burned || 0), 0) / weightLogs.length;
+            
+            const avgWeightEl = document.getElementById('avg-weight');
+            const avgBurnEl = document.getElementById('avg-burn');
+            const weightUnitEl = document.getElementById('avg-weight-unit');
+
+            if (avgWeightEl) avgWeightEl.innerText = avgWeight.toFixed(1);
+            if (avgBurnEl) avgBurnEl.innerText = Math.round(avgBurn).toLocaleString();
+            if (weightUnitEl) weightUnitEl.innerText = (weightLogs[0].unit || 'lbs').toLowerCase();
+        }
 
         // 4. Fetch Active Workout Plan
         const { data: plan } = await supabase.from('workout_plans').select('*').eq('user_id', user.id).eq('is_active', true).maybeSingle();
