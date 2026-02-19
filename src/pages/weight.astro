@@ -45,7 +45,7 @@ import Layout from '../layouts/Layout.astro';
                             type="number" 
                             id="burn-input" 
                             placeholder="0" 
-                            class="w-full bg-gray-950 border border-gray-800 rounded-2xl px-6 py-5 text-3xl font-black text-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-center"
+                            class="w-full bg-gray-950 border border-gray-800 rounded-2xl px-6 py-5 text-3xl font-black text-green-400 focus:outline-none focus:ring-2 focus:ring-green-500/20 text-center"
                             required
                         />
                         <span class="absolute right-6 top-1/2 -translate-y-1/2 text-[10px] font-black text-gray-700 uppercase tracking-widest">KCAL</span>
@@ -58,39 +58,66 @@ import Layout from '../layouts/Layout.astro';
 			</form>
 		</div>
 
-		<!-- Custom Line Chart -->
+		<!-- Advanced Chart Section -->
 		<section class="mb-8">
-			<h3 class="text-xs font-black text-gray-500 uppercase tracking-widest mb-6">Progress (Last 7 Days)</h3>
-            <div class="bg-gray-900/40 border border-gray-800/50 rounded-[2rem] p-6 h-64 relative overflow-hidden flex flex-col justify-between">
-                <!-- SVG Line Chart -->
-                <div class="flex-1 relative">
-                    <svg id="progress-chart" class="w-full h-full overflow-visible" preserveAspectRatio="none">
-                        <path id="weight-line" fill="none" stroke="#4f46e5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="transition-all duration-1000" />
-                        <path id="burn-line" fill="none" stroke="#818cf8" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round" stroke-linejoin="round" class="opacity-50 transition-all duration-1000" />
+			<h3 class="text-xs font-black text-gray-500 uppercase tracking-widest mb-6 px-1">Performance Chart</h3>
+            <div class="bg-gray-900/40 border border-gray-800/50 rounded-[2rem] p-6 relative overflow-visible">
+                <!-- Dual Axis Labels -->
+                <div class="flex justify-between mb-4 px-2">
+                    <div class="text-[8px] font-black text-indigo-400 uppercase tracking-widest">Weight (Left)</div>
+                    <div class="text-[8px] font-black text-green-400 uppercase tracking-widest text-right">Burn (Right)</div>
+                </div>
+
+                <div class="h-48 relative px-8">
+                    <!-- Y-Axis Ticks (Weight) -->
+                    <div id="y-weight-ticks" class="absolute left-0 top-0 bottom-0 w-8 flex flex-col justify-between text-[7px] font-bold text-indigo-500/50 py-1"></div>
+                    <!-- Y-Axis Ticks (Burn) -->
+                    <div id="y-burn-ticks" class="absolute right-0 top-0 bottom-0 w-8 flex flex-col justify-between text-[7px] font-bold text-green-500/50 text-right py-1"></div>
+                    
+                    <!-- SVG Chart -->
+                    <svg id="progress-chart" class="w-full h-full overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <!-- Horizontal Grid Lines -->
+                        <line x1="0" y1="0" x2="100" y2="0" stroke="white" stroke-opacity="0.05" stroke-width="0.5" />
+                        <line x1="0" y1="25" x2="100" y2="25" stroke="white" stroke-opacity="0.05" stroke-width="0.5" />
+                        <line x1="0" y1="50" x2="100" y2="50" stroke="white" stroke-opacity="0.05" stroke-width="0.5" />
+                        <line x1="0" y1="75" x2="100" y2="75" stroke="white" stroke-opacity="0.05" stroke-width="0.5" />
+                        <line x1="0" y1="100" x2="100" y2="100" stroke="white" stroke-opacity="0.05" stroke-width="0.5" />
+
+                        <path id="weight-line" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path id="burn-line" fill="none" stroke="#22c55e" stroke-width="2" stroke-dasharray="3 3" stroke-linecap="round" stroke-linejoin="round" />
+                        
+                        <!-- Data Points -->
+                        <g id="chart-points"></g>
                     </svg>
                 </div>
+
                 <!-- X-Axis Labels -->
-                <div id="chart-labels" class="flex justify-between mt-4">
-                    <!-- Labels injected -->
-                </div>
+                <div id="chart-labels" class="flex justify-between px-8 mt-4"></div>
             </div>
-            <div class="flex justify-center gap-6 mt-4">
-                <div class="flex items-center gap-2">
-                    <span class="w-3 h-0.5 bg-indigo-500"></span>
-                    <span class="text-[10px] font-black text-gray-500 uppercase">Weight</span>
+
+            <!-- 30 Day Averages -->
+            <div class="grid grid-cols-2 gap-4 mt-4">
+                <div class="bg-gray-900 border border-gray-800 rounded-3xl p-5">
+                    <p class="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">30D Weight Avg</p>
+                    <div class="flex items-baseline gap-1">
+                        <span id="avg-weight" class="text-xl font-black text-white italic">--</span>
+                        <span id="avg-weight-unit" class="text-[8px] font-bold text-gray-600 uppercase">lbs</span>
+                    </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="w-3 h-0.5 bg-indigo-400 border-t border-dashed border-gray-900"></span>
-                    <span class="text-[10px] font-black text-gray-500 uppercase">Burn</span>
+                <div class="bg-gray-900 border border-gray-800 rounded-3xl p-5">
+                    <p class="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">30D Burn Avg</p>
+                    <div class="flex items-baseline gap-1">
+                        <span id="avg-burn" class="text-xl font-black text-green-400 italic">--</span>
+                        <span class="text-[8px] font-bold text-gray-600 uppercase">kcal</span>
+                    </div>
                 </div>
             </div>
 		</section>
 
 		<!-- History -->
 		<section>
-			<h3 class="text-xs font-black text-gray-500 uppercase tracking-widest mb-6">History</h3>
+			<h3 class="text-xs font-black text-gray-500 uppercase tracking-widest mb-6">Recent History</h3>
 			<div id="weight-history" class="space-y-3">
-				<!-- Injected by JS -->
 				<div class="animate-pulse bg-gray-900/40 h-16 rounded-2xl"></div>
 			</div>
 		</section>
@@ -138,6 +165,11 @@ import Layout from '../layouts/Layout.astro';
     const chartLabels = document.getElementById('chart-labels');
     const weightLine = document.getElementById('weight-line');
     const burnLine = document.getElementById('burn-line');
+    const weightTicksEl = document.getElementById('y-weight-ticks');
+    const burnTicksEl = document.getElementById('y-burn-ticks');
+    const chartPoints = document.getElementById('chart-points');
+    const avgWeightEl = document.getElementById('avg-weight');
+    const avgBurnEl = document.getElementById('avg-burn');
 
     let allLogs = [];
 
@@ -147,13 +179,12 @@ import Layout from '../layouts/Layout.astro';
 
 		const unit = localStorage.getItem('weightUnit') || 'lbs';
 		if (unitLabel) unitLabel.innerText = unit.toUpperCase();
+        const weightUnitEl = document.getElementById('avg-weight-unit');
+        if (weightUnitEl) weightUnitEl.innerText = unit.toLowerCase();
 
-        // Default to today
         dateInput.value = new Date().toISOString().split('T')[0];
-
 		await loadHistory();
 
-        // If date changes, check if we have an existing entry to pre-fill
         dateInput.addEventListener('change', () => {
             const existing = allLogs.find(l => l.logged_at === dateInput.value);
             if (existing) {
@@ -175,18 +206,18 @@ import Layout from '../layouts/Layout.astro';
 			.select('*')
 			.eq('user_id', user.id)
 			.order('logged_at', { ascending: false })
-			.limit(10);
+			.limit(30);
 
 		if (historyList) {
             allLogs = logs || [];
 			if (logs && logs.length > 0) {
-				historyList.innerHTML = logs.map(log => {
+				historyList.innerHTML = logs.slice(0, 10).map(log => {
 					const date = new Date(log.logged_at);
 					return `
 						<div class="bg-gray-900/40 border border-gray-800/50 p-4 rounded-2xl flex justify-between items-center group">
 							<div>
 								<p class="text-[10px] font-black text-gray-600 uppercase tracking-tighter">${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-								<p class="font-bold text-gray-300">${log.weight} ${log.unit} • <span class="text-indigo-400">${log.calories_burned || 0} kcal</span></p>
+								<p class="font-bold text-gray-300">${log.weight} ${log.unit} • <span class="text-green-400">${log.calories_burned || 0} kcal</span></p>
 							</div>
                             <button class="edit-past-btn opacity-0 group-hover:opacity-100 p-2 text-gray-700 hover:text-indigo-400 transition" data-date="${log.logged_at}">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -211,48 +242,94 @@ import Layout from '../layouts/Layout.astro';
                     });
                 });
 
-                renderLineChart(logs.slice(0, 7));
+                renderDualLineChart(logs.slice(0, 7).reverse());
+                calculateAverages(logs);
 			} else {
 				historyList.innerHTML = `<p class="text-xs text-gray-600 font-bold text-center py-4 italic">No entries yet.</p>`;
 			}
 		}
 	}
 
-    function renderLineChart(logs) {
-        const data = [...logs].reverse();
+    function calculateAverages(logs) {
+        if (!logs.length) return;
+        const totalWeight = logs.reduce((acc, l) => acc + l.weight, 0);
+        const totalBurn = logs.reduce((acc, l) => acc + (l.calories_burned || 0), 0);
+        
+        if (avgWeightEl) avgWeightEl.innerText = (totalWeight / logs.length).toFixed(1);
+        if (avgBurnEl) avgBurnEl.innerText = Math.round(totalBurn / logs.length).toLocaleString();
+    }
+
+    function renderDualLineChart(data) {
         if (data.length < 2) return;
 
-        const width = 300; 
-        const height = 150; 
+        // Configuration
+        const height = 100; // viewBox height
+        const padding = 2; // Offset from edges
 
+        // Weight Range (Left Axis)
         const weights = data.map(l => l.weight);
         const minW = Math.min(...weights) - 2;
         const maxW = Math.max(...weights) + 2;
         const wRange = maxW - minW;
 
+        // Burn Range (Right Axis)
         const burns = data.map(l => l.calories_burned || 0);
-        const minB = Math.min(...burns) - 50;
-        const maxB = Math.max(...burns) + 50;
+        const minB = Math.max(0, Math.min(...burns) - 100);
+        const maxB = Math.max(...burns) + 100;
         const bRange = maxB - minB;
 
+        // Set Y-Ticks
+        if (weightTicksEl) {
+            weightTicksEl.innerHTML = `
+                <span>${maxW.toFixed(0)}</span>
+                <span>${(minW + wRange * 0.75).toFixed(0)}</span>
+                <span>${(minW + wRange * 0.5).toFixed(0)}</span>
+                <span>${(minW + wRange * 0.25).toFixed(0)}</span>
+                <span>${minW.toFixed(0)}</span>
+            `;
+        }
+        if (burnTicksEl) {
+            burnTicksEl.innerHTML = `
+                <span>${maxB.toFixed(0)}</span>
+                <span>${Math.round(minB + bRange * 0.75)}</span>
+                <span>${Math.round(minB + bRange * 0.5)}</span>
+                <span>${Math.round(minB + bRange * 0.25)}</span>
+                <span>${minB.toFixed(0)}</span>
+            `;
+        }
+
+        const getX = (i) => (i / (data.length - 1)) * 100;
         const getY = (val, min, range) => height - ((val - min) / range) * height;
 
-        let wPath = `M 0 ${getY(weights[0], minW, wRange)}`;
-        let bPath = `M 0 ${getY(burns[0], minB, bRange)}`;
+        // Build Paths
+        let wPath = `M ${getX(0)} ${getY(weights[0], minW, wRange)}`;
+        let bPath = `M ${getX(0)} ${getY(burns[0], minB, bRange)}`;
+        let circles = '';
 
         data.forEach((log, i) => {
-            const x = (i / (data.length - 1)) * 100;
-            wPath += ` L ${x} ${getY(log.weight, minW, wRange)}`;
-            bPath += ` L ${x} ${getY(log.calories_burned || 0, minB, bRange)}`;
+            const x = getX(i);
+            const yW = getY(log.weight, minW, wRange);
+            const yB = getY(log.calories_burned || 0, minB, bRange);
+            
+            wPath += ` L ${x} ${yW}`;
+            bPath += ` L ${x} ${yB}`;
+            
+            // Circles for clarity
+            circles += `
+                <circle cx="${x}" cy="${yW}" r="1.5" fill="#6366f1" />
+                <circle cx="${x}" cy="${yB}" r="1.5" fill="#22c55e" />
+            `;
         });
 
         if (weightLine) weightLine.setAttribute('d', wPath);
         if (burnLine) burnLine.setAttribute('d', bPath);
+        if (chartPoints) chartPoints.innerHTML = circles;
 
+        // Labels
         if (chartLabels) {
             chartLabels.innerHTML = data.map(l => `
                 <span class="text-[8px] font-black text-gray-600 uppercase">
-                    ${new Date(l.logged_at).toLocaleDateString('en-US', { day: 'numeric' })}
+                    ${new Date(l.logged_at + 'T00:00:00').toLocaleDateString('en-US', { day: 'numeric' })}
                 </span>
             `).join('');
         }
