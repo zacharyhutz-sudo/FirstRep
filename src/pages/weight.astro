@@ -14,6 +14,15 @@ import Layout from '../layouts/Layout.astro';
 		<!-- Log Entry Card -->
 		<div class="bg-gray-900 border border-gray-800 rounded-[2.5rem] p-8 mb-8">
 			<form id="log-form" class="space-y-6">
+                <div class="flex justify-between items-center mb-2">
+                    <label class="text-[10px] text-gray-500 uppercase font-bold tracking-widest block">Entry Date</label>
+                    <input 
+                        type="date" 
+                        id="entry-date" 
+                        class="bg-gray-950 border border-gray-800 rounded-lg px-3 py-1 text-[10px] font-black text-indigo-400 uppercase focus:outline-none"
+                    />
+                </div>
+
                 <div>
                     <label class="text-[10px] text-gray-500 uppercase font-bold tracking-widest mb-3 block">Body Weight</label>
                     <div class="relative">
@@ -43,8 +52,8 @@ import Layout from '../layouts/Layout.astro';
                     </div>
                 </div>
 
-				<button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-5 rounded-2xl shadow-xl shadow-indigo-500/20 transition active:scale-95 tracking-widest uppercase italic text-sm">
-					Save Daily Entry
+				<button type="submit" id="save-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-5 rounded-2xl shadow-xl shadow-indigo-500/20 transition active:scale-95 tracking-widest uppercase italic text-sm">
+					Save Entry
 				</button>
 			</form>
 		</div>
@@ -122,11 +131,15 @@ import Layout from '../layouts/Layout.astro';
 	const form = document.getElementById('log-form');
 	const weightInput = document.getElementById('weight-input') as HTMLInputElement;
 	const burnInput = document.getElementById('burn-input') as HTMLInputElement;
+    const dateInput = document.getElementById('entry-date') as HTMLInputElement;
+    const saveBtn = document.getElementById('save-btn');
 	const historyList = document.getElementById('weight-history');
 	const unitLabel = document.getElementById('unit-label');
     const chartLabels = document.getElementById('chart-labels');
     const weightLine = document.getElementById('weight-line');
     const burnLine = document.getElementById('burn-line');
+
+    let allLogs = [];
 
 	async function init() {
 		const { data: { session } } = await supabase.auth.getSession();
@@ -135,7 +148,24 @@ import Layout from '../layouts/Layout.astro';
 		const unit = localStorage.getItem('weightUnit') || 'lbs';
 		if (unitLabel) unitLabel.innerText = unit.toUpperCase();
 
+        // Default to today
+        dateInput.value = new Date().toISOString().split('T')[0];
+
 		await loadHistory();
+
+        // If date changes, check if we have an existing entry to pre-fill
+        dateInput.addEventListener('change', () => {
+            const existing = allLogs.find(l => l.logged_at === dateInput.value);
+            if (existing) {
+                weightInput.value = existing.weight.toString();
+                burnInput.value = (existing.calories_burned || 0).toString();
+                saveBtn.innerText = 'Update Entry';
+            } else {
+                weightInput.value = '';
+                burnInput.value = '';
+                saveBtn.innerText = 'Save Entry';
+            }
+        });
 	}
 
 	async function loadHistory() {
@@ -145,23 +175,43 @@ import Layout from '../layouts/Layout.astro';
 			.select('*')
 			.eq('user_id', user.id)
 			.order('logged_at', { ascending: false })
-			.limit(7);
+			.limit(10);
 
 		if (historyList) {
+            allLogs = logs || [];
 			if (logs && logs.length > 0) {
 				historyList.innerHTML = logs.map(log => {
 					const date = new Date(log.logged_at);
 					return `
-						<div class="bg-gray-900/40 border border-gray-800/50 p-4 rounded-2xl flex justify-between items-center">
+						<div class="bg-gray-900/40 border border-gray-800/50 p-4 rounded-2xl flex justify-between items-center group">
 							<div>
 								<p class="text-[10px] font-black text-gray-600 uppercase tracking-tighter">${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
 								<p class="font-bold text-gray-300">${log.weight} ${log.unit} • <span class="text-indigo-400">${log.calories_burned || 0} kcal</span></p>
 							</div>
+                            <button class="edit-past-btn opacity-0 group-hover:opacity-100 p-2 text-gray-700 hover:text-indigo-400 transition" data-date="${log.logged_at}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                </svg>
+                            </button>
 						</div>
 					`;
 				}).join('');
 
-                renderLineChart(logs);
+                document.querySelectorAll('.edit-past-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const date = btn.getAttribute('data-date');
+                        const entry = allLogs.find(l => l.logged_at === date);
+                        if (entry) {
+                            dateInput.value = entry.logged_at;
+                            weightInput.value = entry.weight.toString();
+                            burnInput.value = (entry.calories_burned || 0).toString();
+                            saveBtn.innerText = 'Update Entry';
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                    });
+                });
+
+                renderLineChart(logs.slice(0, 7));
 			} else {
 				historyList.innerHTML = `<p class="text-xs text-gray-600 font-bold text-center py-4 italic">No entries yet.</p>`;
 			}
@@ -172,25 +222,21 @@ import Layout from '../layouts/Layout.astro';
         const data = [...logs].reverse();
         if (data.length < 2) return;
 
-        const width = 300; // viewBox width
-        const height = 150; // viewBox height
+        const width = 300; 
+        const height = 150; 
 
-        // Normalize Weight
         const weights = data.map(l => l.weight);
         const minW = Math.min(...weights) - 2;
         const maxW = Math.max(...weights) + 2;
         const wRange = maxW - minW;
 
-        // Normalize Burn
         const burns = data.map(l => l.calories_burned || 0);
         const minB = Math.min(...burns) - 50;
         const maxB = Math.max(...burns) + 50;
         const bRange = maxB - minB;
 
-        const getX = (i) => (i / (data.length - 1)) * 100 + '%';
         const getY = (val, min, range) => height - ((val - min) / range) * height;
 
-        // Create paths
         let wPath = `M 0 ${getY(weights[0], minW, wRange)}`;
         let bPath = `M 0 ${getY(burns[0], minB, bRange)}`;
 
@@ -203,7 +249,6 @@ import Layout from '../layouts/Layout.astro';
         if (weightLine) weightLine.setAttribute('d', wPath);
         if (burnLine) burnLine.setAttribute('d', bPath);
 
-        // Labels
         if (chartLabels) {
             chartLabels.innerHTML = data.map(l => `
                 <span class="text-[8px] font-black text-gray-600 uppercase">
@@ -218,15 +263,12 @@ import Layout from '../layouts/Layout.astro';
 		const weight = parseFloat(weightInput.value);
 		const burn = parseInt(burnInput.value);
 		const unit = localStorage.getItem('weightUnit') || 'lbs';
+        const dateKey = dateInput.value;
 
 		const { data: { user } } = await supabase.auth.getUser();
 		if (!user) return;
 
-        const dateKey = new Date().toISOString().split('T')[0];
-
-        // Try to update first, if it fails because it doesn't exist, we insert
-        // This handles the "one entry per day" constraint gracefully
-		const { error: upsertError } = await supabase.from('weight_logs').upsert({
+		const { error } = await supabase.from('weight_logs').upsert({
 			user_id: user.id,
 			weight: weight,
 			calories_burned: burn,
@@ -234,13 +276,15 @@ import Layout from '../layouts/Layout.astro';
 			logged_at: dateKey
 		}, { onConflict: 'user_id,logged_at' });
 
-		if (!upsertError) {
+		if (!error) {
 			weightInput.value = '';
 			burnInput.value = '';
+            dateInput.value = new Date().toISOString().split('T')[0];
+            saveBtn.innerText = 'Save Entry';
 			await loadHistory();
 		} else {
-            console.error("Save Error:", upsertError);
-			alert('Error logging entry: ' + upsertError.message);
+            console.error("Save Error:", error);
+			alert('Error logging entry: ' + error.message);
 		}
 	});
 
