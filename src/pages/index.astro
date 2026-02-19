@@ -30,7 +30,6 @@ import Layout from '../layouts/Layout.astro';
 						<span class="text-[10px] text-gray-600 font-bold uppercase mb-1">/ <span id="target-cals">2500</span></span>
 					</div>
 				</div>
-                <!-- Mini Ring -->
                 <div class="absolute right-[-10px] top-[-10px] opacity-10 group-hover:opacity-20 transition-opacity">
                     <svg class="w-24 h-24 -rotate-90">
                         <circle cx="48" cy="48" r="38" stroke="currentColor" stroke-width="8" fill="transparent" class="text-gray-700"/>
@@ -39,20 +38,18 @@ import Layout from '../layouts/Layout.astro';
                 </div>
 			</div>
 
-			<!-- Protein Progress Card -->
+			<!-- Streak Card -->
 			<div class="col-span-1 bg-gray-900 border border-gray-800 rounded-[2rem] p-5 flex flex-col justify-between relative overflow-hidden group">
 				<div class="relative z-10">
-					<p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4">Protein</p>
+					<p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4">Streak</p>
 					<div class="flex items-end gap-1">
-						<h3 id="display-protein" class="text-3xl font-black text-white leading-none">0<span class="text-sm">g</span></h3>
-						<span class="text-[10px] text-gray-600 font-bold uppercase mb-1">/ <span id="target-protein">180</span>g</span>
+						<h3 id="display-streak" class="text-3xl font-black text-white leading-none">0</h3>
+						<span class="text-[10px] text-gray-600 font-bold uppercase mb-1">Days</span>
 					</div>
 				</div>
-                <!-- Mini Ring -->
-                <div class="absolute right-[-10px] top-[-10px] opacity-10 group-hover:opacity-20 transition-opacity">
-                    <svg class="w-24 h-24 -rotate-90">
-                        <circle cx="48" cy="48" r="38" stroke="currentColor" stroke-width="8" fill="transparent" class="text-gray-700"/>
-                        <circle id="ring-protein" cx="48" cy="48" r="38" stroke="currentColor" stroke-width="8" fill="transparent" stroke-dasharray="238.7" stroke-dashoffset="238.7" class="text-green-500 transition-all duration-1000"/>
+                <div class="absolute right-0 bottom-[-10px] text-orange-500/10 group-hover:text-orange-500/20 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.334-.398-1.817a1 1 0 00-1.514-.857 6.628 6.628 0 00-3.388 5.71c0 3.716 3.017 6.733 6.733 6.733 3.716 0 6.733-3.017 6.733-6.733 0-1.547-.522-2.973-1.413-4.108.384.428.636.917.756 1.442a1 1 0 101.942-.466c-.183-.76-.475-1.472-.861-2.112-.4-.662-.9-1.257-1.487-1.758a1 1 0 00-1.474.322c-.104.2-.187.41-.252.628-.063.21-.11.425-.143.644a4.935 4.935 0 01-1.077-1.507c-.19-.383-.346-.782-.47-1.189a10.89 10.89 0 01-.284-1.21 11.084 11.084 0 01-.137-1.15z" clip-rule="evenodd" />
                     </svg>
                 </div>
 			</div>
@@ -63,19 +60,19 @@ import Layout from '../layouts/Layout.astro';
                 <div class="relative z-10 flex justify-between items-center">
                     <div>
                         <p class="text-[10px] font-black text-indigo-200 uppercase tracking-[0.2em] mb-1">Today's Session</p>
-                        <h2 id="active-workout-name" class="text-2xl font-black text-white italic tracking-tight">Push Day A</h2>
+                        <h2 id="active-workout-name" class="text-2xl font-black text-white italic tracking-tight">Loading...</h2>
                         <div class="flex gap-4 mt-4">
                             <div class="flex items-center gap-1.5">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span class="text-xs font-bold text-indigo-100">45 Min</span>
+                                <span id="active-workout-duration" class="text-xs font-bold text-indigo-100">45 Min</span>
                             </div>
                             <div class="flex items-center gap-1.5">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                 </svg>
-                                <span class="text-xs font-bold text-indigo-100">6 Exercises</span>
+                                <span id="active-workout-exercises" class="text-xs font-bold text-indigo-100">-- Exercises</span>
                             </div>
                         </div>
                     </div>
@@ -85,7 +82,6 @@ import Layout from '../layouts/Layout.astro';
                         </svg>
                     </div>
                 </div>
-                <!-- Abstract BG element -->
                 <div class="absolute right-[-5%] bottom-[-20%] text-white/10 rotate-12">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-32 w-32" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
@@ -113,20 +109,9 @@ import Layout from '../layouts/Layout.astro';
         <!-- Weekly Activity List -->
         <div class="mt-4">
             <h3 class="text-xs font-black text-gray-500 uppercase tracking-widest mb-6">Recent Activity</h3>
-            <div class="space-y-3">
-                {[
-                    { label: 'Yesterday', title: 'Pull Day B', status: 'Completed', color: 'text-green-400' },
-                    { label: 'Feb 17', title: 'Upper Body Power', status: 'Completed', color: 'text-green-400' },
-                    { label: 'Feb 16', title: 'Active Recovery', status: 'Skipped', color: 'text-gray-600' }
-                ].map(item => (
-                    <div class="bg-gray-900/40 border border-gray-800/50 p-4 rounded-2xl flex justify-between items-center">
-                        <div>
-                            <p class="text-[10px] font-black text-gray-600 uppercase tracking-tighter">{item.label}</p>
-                            <p class="font-bold text-gray-300">{item.title}</p>
-                        </div>
-                        <span class={`text-[10px] font-black uppercase tracking-widest ${item.color}`}>{item.status}</span>
-                    </div>
-                ))}
+            <div id="recent-activity-list" class="space-y-3">
+                <div class="animate-pulse bg-gray-900/40 h-16 rounded-2xl"></div>
+                <div class="animate-pulse bg-gray-900/40 h-16 rounded-2xl"></div>
             </div>
         </div>
 	</main>
@@ -176,17 +161,22 @@ import Layout from '../layouts/Layout.astro';
             dateEl.innerText = today.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
         }
 
-        // Fetch Profile for Goals
+        // 1. Fetch Profile & Targets
         const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle();
         const targets = {
             calories: profile?.daily_goals?.calories || 2500,
             protein: profile?.daily_goals?.protein || 180
         };
 
-        document.getElementById('target-cals').innerText = targets.calories;
-        document.getElementById('target-protein').innerText = targets.protein;
+        const targetCalsEl = document.getElementById('target-cals');
+        if (targetCalsEl) targetCalsEl.innerText = targets.calories.toString();
 
-		// Fetch Today's Food Logs
+        // 2. Fetch Streak
+        const { data: streakData, error: streakError } = await supabase.rpc('get_workout_streak', { user_uuid: user.id });
+        const streakEl = document.getElementById('display-streak');
+        if (streakEl) streakEl.innerText = streakData || "0";
+
+		// 3. Fetch Today's Food Logs
 		const todayStr = today.toISOString().split('T')[0];
 		const { data: logs } = await supabase
 			.from('food_logs')
@@ -196,28 +186,56 @@ import Layout from '../layouts/Layout.astro';
 
 		if (logs) {
 			const totalCals = logs.reduce((acc, log) => acc + log.calories, 0);
-			const totalPro = logs.reduce((acc, log) => acc + log.protein, 0);
+			const displayCalsEl = document.getElementById('display-cals');
+			if (displayCalsEl) displayCalsEl.innerText = Math.round(totalCals).toString();
 
-			document.getElementById('display-cals').innerText = Math.round(totalCals).toString();
-			document.getElementById('display-protein').innerHTML = `${Math.round(totalPro)}<span class="text-sm">g</span>`;
-
-			// Update Rings
-			const circum = 238.7; // 2 * PI * 38
+			// Update Ring
+			const circum = 238.7;
 			const calOffset = circum - (Math.min(totalCals / targets.calories, 1) * circum);
-			const proOffset = circum - (Math.min(totalPro / targets.protein, 1) * circum);
-
 			setTimeout(() => {
 				const ringCals = document.getElementById('ring-cals');
-				const ringPro = document.getElementById('ring-protein');
 				if (ringCals) ringCals.style.strokeDashoffset = calOffset.toString();
-				if (ringPro) ringPro.style.strokeDashoffset = proOffset.toString();
 			}, 100);
 		}
 
-        // Fetch Active Workout Plan
+        // 4. Fetch Active Workout Plan
         const { data: plan } = await supabase.from('workout_plans').select('*').eq('user_id', user.id).eq('is_active', true).maybeSingle();
-        if (plan) {
-            document.getElementById('active-workout-name').innerText = plan.plan_name;
+        const planNameEl = document.getElementById('active-workout-name');
+        if (planNameEl) {
+            planNameEl.innerText = plan ? plan.plan_name : "No Active Plan";
+            const planExEl = document.getElementById('active-workout-exercises');
+            if (planExEl && plan) planExEl.innerText = `${plan.exercises?.length || 0} Exercises`;
+        }
+
+        // 5. Fetch Recent Completed Workouts
+        const { data: recentWorkouts } = await supabase
+            .from('completed_workouts')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('completed_at', { ascending: false })
+            .limit(3);
+
+        const activityList = document.getElementById('recent-activity-list');
+        if (activityList) {
+            if (recentWorkouts && recentWorkouts.length > 0) {
+                activityList.innerHTML = recentWorkouts.map(w => {
+                    const date = new Date(w.completed_at);
+                    const isToday = date.toDateString() === new Date().toDateString();
+                    const dateLabel = isToday ? 'Today' : date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                    
+                    return `
+                        <div class="bg-gray-900/40 border border-gray-800/50 p-4 rounded-2xl flex justify-between items-center">
+                            <div>
+                                <p class="text-[10px] font-black text-gray-600 uppercase tracking-tighter">${dateLabel}</p>
+                                <p class="font-bold text-gray-300">${w.workout_name}</p>
+                            </div>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-green-400">Completed</span>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                activityList.innerHTML = `<p class="text-xs text-gray-600 font-bold text-center py-4 italic">No workouts logged yet. Time to hit the gym!</p>`;
+            }
         }
 	}
 
