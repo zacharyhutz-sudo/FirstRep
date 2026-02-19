@@ -247,19 +247,23 @@ import Layout from '../layouts/Layout.astro';
                 rest: ex.rest || '90s'
             }));
 
-            // THE FIX: We are verifying column names. 
-            // If the insert fails, we'll try an alternative set of keys.
+            // Check if user already has an active plan
+            const { data: existingPlans } = await supabase
+                .from('workout_plans')
+                .select('id')
+                .eq('user_id', user.id)
+                .eq('is_active', true);
+            
+            const shouldBeActive = !existingPlans || existingPlans.length === 0;
+
             const payload: any = {
                 user_id: user.id,
                 plan_name: currentGeneratedPlan.name || "New Workout Plan",
-                is_active: true
+                is_active: shouldBeActive, // Only set active if it's the first one
+                schedule_summary: currentGeneratedPlan.schedule || (currentGeneratedPlan.metadata ? currentGeneratedPlan.metadata.days + ' days/week' : 'Custom Plan'),
+                plan_data: currentGeneratedPlan,
+                exercises: mappedExercises
             };
-
-            // Checking if columns use underscores or camelCase
-            // Most of our other tables use underscores.
-            payload.schedule_summary = currentGeneratedPlan.schedule || (currentGeneratedPlan.metadata ? currentGeneratedPlan.metadata.days + ' days/week' : 'Custom Plan');
-            payload.plan_data = currentGeneratedPlan;
-            payload.exercises = mappedExercises;
 
             console.log("Attempting Insert with Payload:", payload);
 
