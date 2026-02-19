@@ -126,6 +126,7 @@ import Layout from '../layouts/Layout.astro';
 
 	let selectedPlan = null;
 	let allPlans = [];
+	let nextRecommendedDayIdx = 0;
 
 	async function init() {
 		const { data: { session } } = await supabase.auth.getSession();
@@ -239,17 +240,16 @@ import Layout from '../layouts/Layout.astro';
 		previewMeta.innerText = `${days.length} Day Program`;
 
 		// Determine which day to highlight
-		let currentDayIdx = 0;
+		nextRecommendedDayIdx = 0;
 		if (lastWorkout && lastWorkout.workout_name.startsWith(plan.plan_name)) {
-			// Extract day number or label if possible, else just cycle
 			const lastDayLabel = lastWorkout.workout_name.split(' - ')[1];
 			const lastIdx = days.findIndex(d => (d.day_label || d.label) === lastDayLabel);
-			if (lastIdx !== -1) currentDayIdx = (lastIdx + 1) % days.length;
+			if (lastIdx !== -1) nextRecommendedDayIdx = (lastIdx + 1) % days.length;
 		}
 		
 		if (days.length > 0) {
 			previewExercises.innerHTML = days.map((day, idx) => {
-				const isCurrent = idx === currentDayIdx;
+				const isCurrent = idx === nextRecommendedDayIdx;
 				return `
 					<div class="day-section space-y-3 mb-6 p-4 rounded-2xl transition-colors ${isCurrent ? 'bg-indigo-500/10 border border-indigo-500/20' : ''}" data-day-idx="${idx}">
 						<div class="flex justify-between items-center px-2">
@@ -343,7 +343,8 @@ import Layout from '../layouts/Layout.astro';
 		await supabase.from('workout_plans').update({ is_active: false }).eq('user_id', user.id);
 		await supabase.from('workout_plans').update({ is_active: true }).eq('id', selectedPlan.id);
 
-		window.location.href = `/FirstRep/session?id=${selectedPlan.id}`;
+		// FIX: Use the nextRecommendedDayIdx calculated in openPreview
+		window.location.href = `/FirstRep/session?id=${selectedPlan.id}&day=${nextRecommendedDayIdx}`;
 	});
 
 	closePreview.addEventListener('click', () => {
