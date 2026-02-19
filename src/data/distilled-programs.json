@@ -78482,14 +78482,38 @@
           {
             "name": "Barbell Bench Press",
             "sets": "4",
-            "reps": "8",
+            "reps": "8-10",
             "rest": "120s"
           },
           {
-            "name": "Military Press",
-            "sets": "4",
-            "reps": "10",
-            "rest": "120s"
+            "name": "Overhead Press",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "90s"
+          },
+          {
+            "name": "Dumbbell Incline Press",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "90s"
+          },
+          {
+            "name": "Dumbbell Lateral Raises",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "60s"
+          },
+          {
+            "name": "Tricep Pushdowns",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "60s"
+          },
+          {
+            "name": "Cable Flys",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "60s"
           }
         ]
       },
@@ -78497,16 +78521,40 @@
         "label": "Day 2: Pull",
         "exercises": [
           {
-            "name": "Deadlift",
+            "name": "Deadlifts",
             "sets": "3",
-            "reps": "5",
+            "reps": "5-8",
             "rest": "180s"
           },
           {
-            "name": "Weighted Chin-ups",
+            "name": "Barbell Rows",
             "sets": "4",
-            "reps": "8",
-            "rest": "120s"
+            "reps": "8-10",
+            "rest": "90s"
+          },
+          {
+            "name": "Pull-ups",
+            "sets": "3",
+            "reps": "Failure",
+            "rest": "90s"
+          },
+          {
+            "name": "Face Pulls",
+            "sets": "3",
+            "reps": "15-20",
+            "rest": "60s"
+          },
+          {
+            "name": "Bicep Curls",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "60s"
+          },
+          {
+            "name": "Hammer Curls",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "60s"
           }
         ]
       },
@@ -78514,15 +78562,39 @@
         "label": "Day 3: Legs",
         "exercises": [
           {
-            "name": "Back Squat",
+            "name": "Barbell Squats",
             "sets": "4",
-            "reps": "8",
+            "reps": "6-8",
             "rest": "150s"
           },
           {
-            "name": "Leg Curl",
+            "name": "Romanian Deadlifts",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "120s"
+          },
+          {
+            "name": "Leg Press",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "90s"
+          },
+          {
+            "name": "Leg Curls",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "60s"
+          },
+          {
+            "name": "Calf Raises",
             "sets": "4",
-            "reps": "12",
+            "reps": "15-20",
+            "rest": "60s"
+          },
+          {
+            "name": "Walking Lunges",
+            "sets": "3",
+            "reps": "12/leg",
             "rest": "90s"
           }
         ]
@@ -78546,10 +78618,40 @@
         "label": "Day 1: Push",
         "exercises": [
           {
-            "name": "Incline BB Press",
+            "name": "Barbell Bench Press",
             "sets": "4",
-            "reps": "8",
+            "reps": "8-10",
             "rest": "120s"
+          },
+          {
+            "name": "Overhead Press",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "90s"
+          },
+          {
+            "name": "Dumbbell Incline Press",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "90s"
+          },
+          {
+            "name": "Dumbbell Lateral Raises",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "60s"
+          },
+          {
+            "name": "Tricep Pushdowns",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "60s"
+          },
+          {
+            "name": "Cable Flys",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "60s"
           }
         ]
       },
@@ -78557,10 +78659,40 @@
         "label": "Day 2: Pull",
         "exercises": [
           {
-            "name": "Barbell Row",
+            "name": "Deadlifts",
+            "sets": "3",
+            "reps": "5-8",
+            "rest": "180s"
+          },
+          {
+            "name": "Barbell Rows",
             "sets": "4",
-            "reps": "8",
-            "rest": "120s"
+            "reps": "8-10",
+            "rest": "90s"
+          },
+          {
+            "name": "Pull-ups",
+            "sets": "3",
+            "reps": "Failure",
+            "rest": "90s"
+          },
+          {
+            "name": "Face Pulls",
+            "sets": "3",
+            "reps": "15-20",
+            "rest": "60s"
+          },
+          {
+            "name": "Bicep Curls",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "60s"
+          },
+          {
+            "name": "Hammer Curls",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "60s"
           }
         ]
       },
@@ -78568,10 +78700,40 @@
         "label": "Day 3: Legs",
         "exercises": [
           {
-            "name": "Hack Squat",
+            "name": "Barbell Squats",
             "sets": "4",
-            "reps": "10",
+            "reps": "6-8",
+            "rest": "150s"
+          },
+          {
+            "name": "Romanian Deadlifts",
+            "sets": "3",
+            "reps": "10-12",
             "rest": "120s"
+          },
+          {
+            "name": "Leg Press",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "90s"
+          },
+          {
+            "name": "Leg Curls",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "60s"
+          },
+          {
+            "name": "Calf Raises",
+            "sets": "4",
+            "reps": "15-20",
+            "rest": "60s"
+          },
+          {
+            "name": "Walking Lunges",
+            "sets": "3",
+            "reps": "12/leg",
+            "rest": "90s"
           }
         ]
       }
@@ -79052,10 +79214,40 @@
         "label": "Day 1: Push",
         "exercises": [
           {
-            "name": "BB Bench Press",
+            "name": "Barbell Bench Press",
             "sets": "4",
-            "reps": "8",
+            "reps": "8-10",
             "rest": "120s"
+          },
+          {
+            "name": "Overhead Press",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "90s"
+          },
+          {
+            "name": "Dumbbell Incline Press",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "90s"
+          },
+          {
+            "name": "Dumbbell Lateral Raises",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "60s"
+          },
+          {
+            "name": "Tricep Pushdowns",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "60s"
+          },
+          {
+            "name": "Cable Flys",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "60s"
           }
         ]
       },
@@ -79063,10 +79255,40 @@
         "label": "Day 2: Pull",
         "exercises": [
           {
-            "name": "BB Row",
+            "name": "Deadlifts",
+            "sets": "3",
+            "reps": "5-8",
+            "rest": "180s"
+          },
+          {
+            "name": "Barbell Rows",
             "sets": "4",
-            "reps": "8",
-            "rest": "120s"
+            "reps": "8-10",
+            "rest": "90s"
+          },
+          {
+            "name": "Pull-ups",
+            "sets": "3",
+            "reps": "Failure",
+            "rest": "90s"
+          },
+          {
+            "name": "Face Pulls",
+            "sets": "3",
+            "reps": "15-20",
+            "rest": "60s"
+          },
+          {
+            "name": "Bicep Curls",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "60s"
+          },
+          {
+            "name": "Hammer Curls",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "60s"
           }
         ]
       },
@@ -79074,10 +79296,40 @@
         "label": "Day 3: Legs",
         "exercises": [
           {
-            "name": "BB Squat",
+            "name": "Barbell Squats",
             "sets": "4",
-            "reps": "8",
+            "reps": "6-8",
             "rest": "150s"
+          },
+          {
+            "name": "Romanian Deadlifts",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "120s"
+          },
+          {
+            "name": "Leg Press",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "90s"
+          },
+          {
+            "name": "Leg Curls",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "60s"
+          },
+          {
+            "name": "Calf Raises",
+            "sets": "4",
+            "reps": "15-20",
+            "rest": "60s"
+          },
+          {
+            "name": "Walking Lunges",
+            "sets": "3",
+            "reps": "12/leg",
+            "rest": "90s"
           }
         ]
       },
@@ -79122,10 +79374,40 @@
         "label": "Day 1: Push",
         "exercises": [
           {
-            "name": "Military Press",
+            "name": "Barbell Bench Press",
             "sets": "4",
-            "reps": "8",
+            "reps": "8-10",
             "rest": "120s"
+          },
+          {
+            "name": "Overhead Press",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "90s"
+          },
+          {
+            "name": "Dumbbell Incline Press",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "90s"
+          },
+          {
+            "name": "Dumbbell Lateral Raises",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "60s"
+          },
+          {
+            "name": "Tricep Pushdowns",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "60s"
+          },
+          {
+            "name": "Cable Flys",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "60s"
           }
         ]
       },
@@ -79133,10 +79415,40 @@
         "label": "Day 2: Pull",
         "exercises": [
           {
-            "name": "Weighted Pull-ups",
+            "name": "Deadlifts",
+            "sets": "3",
+            "reps": "5-8",
+            "rest": "180s"
+          },
+          {
+            "name": "Barbell Rows",
             "sets": "4",
-            "reps": "8",
-            "rest": "120s"
+            "reps": "8-10",
+            "rest": "90s"
+          },
+          {
+            "name": "Pull-ups",
+            "sets": "3",
+            "reps": "Failure",
+            "rest": "90s"
+          },
+          {
+            "name": "Face Pulls",
+            "sets": "3",
+            "reps": "15-20",
+            "rest": "60s"
+          },
+          {
+            "name": "Bicep Curls",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "60s"
+          },
+          {
+            "name": "Hammer Curls",
+            "sets": "3",
+            "reps": "10-12",
+            "rest": "60s"
           }
         ]
       },
@@ -79144,10 +79456,40 @@
         "label": "Day 3: Legs",
         "exercises": [
           {
-            "name": "Front Squat",
+            "name": "Barbell Squats",
             "sets": "4",
-            "reps": "8",
+            "reps": "6-8",
+            "rest": "150s"
+          },
+          {
+            "name": "Romanian Deadlifts",
+            "sets": "3",
+            "reps": "10-12",
             "rest": "120s"
+          },
+          {
+            "name": "Leg Press",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "90s"
+          },
+          {
+            "name": "Leg Curls",
+            "sets": "3",
+            "reps": "12-15",
+            "rest": "60s"
+          },
+          {
+            "name": "Calf Raises",
+            "sets": "4",
+            "reps": "15-20",
+            "rest": "60s"
+          },
+          {
+            "name": "Walking Lunges",
+            "sets": "3",
+            "reps": "12/leg",
+            "rest": "90s"
           }
         ]
       },
