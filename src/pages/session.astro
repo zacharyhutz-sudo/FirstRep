@@ -46,16 +46,27 @@ import Layout from '../layouts/Layout.astro';
         </div>
 	</main>
 
-    <!-- Timer Settings Modal -->
     <div id="timer-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-[70] flex items-center justify-center px-6">
         <div class="bg-gray-950 border border-gray-800 w-full max-w-xs rounded-[2.5rem] p-8">
-            <h3 class="text-xl font-black text-white italic tracking-tighter mb-6">Timer Settings</h3>
-            <div class="flex items-center justify-between mb-8">
-                <span class="text-sm font-bold text-gray-300 uppercase tracking-widest">Enable Rest Timer</span>
+            <h3 class="text-xl font-black text-white italic tracking-tighter mb-6">Settings</h3>
+            
+            <!-- Rest Timer Toggle -->
+            <div class="flex items-center justify-between mb-6">
+                <span class="text-sm font-bold text-gray-300 uppercase tracking-widest">Rest Timer</span>
                 <button id="rest-timer-toggle" class="w-12 h-6 rounded-full bg-indigo-600 relative transition-colors">
                     <div id="toggle-knob" class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full transition-all translate-x-0"></div>
                 </button>
             </div>
+
+            <!-- Units Toggle -->
+            <div class="flex items-center justify-between mb-8">
+                <span class="text-sm font-bold text-gray-300 uppercase tracking-widest">Weight Unit</span>
+                <div class="flex bg-gray-900 p-1 rounded-xl border border-gray-800">
+                    <button id="unit-lbs" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-colors bg-indigo-600 text-white">Lbs</button>
+                    <button id="unit-kg" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-colors text-gray-500">Kg</button>
+                </div>
+            </div>
+
             <button id="close-timer-modal" class="w-full bg-gray-900 text-white font-black py-4 rounded-xl uppercase text-xs tracking-widest">Done</button>
         </div>
     </div>
@@ -75,6 +86,7 @@ import Layout from '../layouts/Layout.astro';
 	let plan = null;
     let workoutStartTime = Date.now();
     let restEnabled = localStorage.getItem('restEnabled') !== 'false';
+    let weightUnit = localStorage.getItem('weightUnit') || 'lbs';
     let restInterval = null;
 
 	async function init() {
@@ -115,19 +127,41 @@ import Layout from '../layouts/Layout.astro';
 		if (nameEl) nameEl.innerText = plan.plan_name;
 
         // UI Setup
-        setupToggleUI();
+        setupSettingsUI();
 		renderExercises();
         startGlobalTimer();
 	}
 
-    function setupToggleUI() {
+    function setupSettingsUI() {
         const modal = document.getElementById('timer-modal');
         const knob = document.getElementById('toggle-knob');
         const bg = document.getElementById('rest-timer-toggle');
+        
+        const btnLbs = document.getElementById('unit-lbs');
+        const btnKg = document.getElementById('unit-kg');
 
         const updateUI = () => {
+            // Rest Timer Toggle
             knob.style.transform = restEnabled ? 'translateX(0)' : 'translateX(-24px)';
             bg.style.backgroundColor = restEnabled ? '#4f46e5' : '#1f2937';
+            
+            // Weight Units
+            if (weightUnit === 'lbs') {
+                btnLbs.classList.add('bg-indigo-600', 'text-white');
+                btnLbs.classList.remove('text-gray-500');
+                btnKg.classList.remove('bg-indigo-600', 'text-white');
+                btnKg.classList.add('text-gray-500');
+            } else {
+                btnKg.classList.add('bg-indigo-600', 'text-white');
+                btnKg.classList.remove('text-gray-500');
+                btnLbs.classList.remove('bg-indigo-600', 'text-white');
+                btnLbs.classList.add('text-gray-500');
+            }
+            
+            // Update placeholders in the list
+            document.querySelectorAll('.weight-input').forEach((input: HTMLInputElement) => {
+                input.placeholder = weightUnit;
+            });
         };
 
         document.getElementById('toggle-timer-settings').addEventListener('click', () => modal.classList.remove('hidden'));
@@ -136,6 +170,18 @@ import Layout from '../layouts/Layout.astro';
         bg.addEventListener('click', () => {
             restEnabled = !restEnabled;
             localStorage.setItem('restEnabled', restEnabled.toString());
+            updateUI();
+        });
+
+        btnLbs.addEventListener('click', () => {
+            weightUnit = 'lbs';
+            localStorage.setItem('weightUnit', 'lbs');
+            updateUI();
+        });
+
+        btnKg.addEventListener('click', () => {
+            weightUnit = 'kg';
+            localStorage.setItem('weightUnit', 'kg');
             updateUI();
         });
 
@@ -153,7 +199,7 @@ import Layout from '../layouts/Layout.astro';
 							<div class="flex items-center gap-4">
 								<span class="text-[10px] font-black text-gray-700 uppercase">${setIdx + 1}</span>
 								<div class="flex gap-2">
-									<input type="number" placeholder="kg" class="w-16 bg-transparent text-white font-black text-lg focus:outline-none placeholder:text-gray-800" />
+									<input type="number" placeholder="${weightUnit}" class="weight-input w-16 bg-transparent text-white font-black text-lg focus:outline-none placeholder:text-gray-800" />
 									<input type="number" placeholder="reps" value="${ex.reps}" class="w-16 bg-transparent text-gray-400 font-bold focus:outline-none placeholder:text-gray-800" />
 								</div>
 							</div>
