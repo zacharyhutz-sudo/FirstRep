@@ -60,7 +60,13 @@ import Layout from '../layouts/Layout.astro';
 
 		<!-- Advanced Chart Section -->
 		<section class="mb-8">
-			<h3 class="text-xs font-black text-gray-500 uppercase tracking-widest mb-6 px-1">Performance Chart</h3>
+            <div class="flex justify-between items-end mb-6 px-1">
+			    <h3 class="text-xs font-black text-gray-500 uppercase tracking-widest">Performance Chart</h3>
+                <div class="flex bg-gray-900 p-1 rounded-xl border border-gray-800">
+                    <button id="range-7" class="px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest transition-colors bg-indigo-600 text-white">7D</button>
+                    <button id="range-30" class="px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest transition-colors text-gray-500">30D</button>
+                </div>
+            </div>
             <div class="bg-gray-900/40 border border-gray-800/50 rounded-[2rem] p-6 relative overflow-visible">
                 <!-- Dual Axis Labels -->
                 <div class="flex justify-between mb-4 px-2">
@@ -83,8 +89,8 @@ import Layout from '../layouts/Layout.astro';
                         <line x1="0" y1="75" x2="100" y2="75" stroke="white" stroke-opacity="0.05" stroke-width="0.5" />
                         <line x1="0" y1="100" x2="100" y2="100" stroke="white" stroke-opacity="0.05" stroke-width="0.5" />
 
-                        <path id="weight-line" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                        <path id="burn-line" fill="none" stroke="#22c55e" stroke-width="2" stroke-dasharray="3 3" stroke-linecap="round" stroke-linejoin="round" />
+                        <path id="weight-line" fill="none" stroke="#6366f1" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+                        <path id="burn-line" fill="none" stroke="#22c55e" stroke-width="1" stroke-dasharray="2 2" stroke-linecap="round" stroke-linejoin="round" />
                         
                         <!-- Data Points -->
                         <g id="chart-points"></g>
@@ -172,6 +178,7 @@ import Layout from '../layouts/Layout.astro';
     const avgBurnEl = document.getElementById('avg-burn');
 
     let allLogs = [];
+    let chartRange = 7;
 
 	async function init() {
 		const { data: { session } } = await supabase.auth.getSession();
@@ -184,6 +191,28 @@ import Layout from '../layouts/Layout.astro';
 
         dateInput.value = new Date().toISOString().split('T')[0];
 		await loadHistory();
+
+        // Range Toggles
+        const btn7 = document.getElementById('range-7');
+        const btn30 = document.getElementById('range-30');
+
+        btn7.addEventListener('click', () => {
+            chartRange = 7;
+            btn7.classList.add('bg-indigo-600', 'text-white');
+            btn7.classList.remove('text-gray-500');
+            btn30.classList.remove('bg-indigo-600', 'text-white');
+            btn30.classList.add('text-gray-500');
+            renderDualLineChart(allLogs.slice(0, 7).reverse());
+        });
+
+        btn30.addEventListener('click', () => {
+            chartRange = 30;
+            btn30.classList.add('bg-indigo-600', 'text-white');
+            btn30.classList.remove('text-gray-500');
+            btn7.classList.remove('bg-indigo-600', 'text-white');
+            btn7.classList.add('text-gray-500');
+            renderDualLineChart(allLogs.slice(0, 30).reverse());
+        });
 
         dateInput.addEventListener('change', () => {
             const existing = allLogs.find(l => l.logged_at === dateInput.value);
@@ -242,7 +271,7 @@ import Layout from '../layouts/Layout.astro';
                     });
                 });
 
-                renderDualLineChart(logs.slice(0, 7).reverse());
+                renderDualLineChart(logs.slice(0, chartRange).reverse());
                 calculateAverages(logs);
 			} else {
 				historyList.innerHTML = `<p class="text-xs text-gray-600 font-bold text-center py-4 italic">No entries yet.</p>`;
@@ -327,11 +356,15 @@ import Layout from '../layouts/Layout.astro';
 
         // Labels
         if (chartLabels) {
-            chartLabels.innerHTML = data.map(l => `
-                <span class="text-[8px] font-black text-gray-600 uppercase">
-                    ${new Date(l.logged_at + 'T00:00:00').toLocaleDateString('en-US', { day: 'numeric' })}
-                </span>
-            `).join('');
+            // Only show labels for first, middle, and last to avoid crowding on 30D
+            chartLabels.innerHTML = data.map((l, i) => {
+                const isEdgeOrMid = i === 0 || i === data.length - 1 || (data.length > 10 && i === Math.floor(data.length / 2));
+                return `
+                    <span class="text-[8px] font-black text-gray-600 uppercase ${isEdgeOrMid ? '' : 'hidden sm:block'}">
+                        ${new Date(l.logged_at + 'T00:00:00').toLocaleDateString('en-US', { day: 'numeric', month: data.length > 10 ? 'short' : undefined })}
+                    </span>
+                `;
+            }).join('');
         }
     }
 
