@@ -80,6 +80,7 @@ import Layout from '../layouts/Layout.astro';
 	async function init() {
 		const urlParams = new URLSearchParams(window.location.search);
 		const planId = urlParams.get('id');
+		const dayIdx = parseInt(urlParams.get('day') || '0');
 
 		const { data: { session } } = await supabase.auth.getSession();
 		if (!session) return window.location.href = '/FirstRep/login/index.html';
@@ -94,6 +95,22 @@ import Layout from '../layouts/Layout.astro';
 		}
 
 		plan = workout;
+		
+		// Logic to handle multi-day plans
+		const planData = plan.plan_data || {};
+		const days = planData.days || planData.workouts || [];
+		
+		if (days.length > 0) {
+			const selectedDay = days[dayIdx] || days[0];
+			plan.plan_name = `${plan.plan_name} - ${selectedDay.day_label || selectedDay.label || `Day ${dayIdx + 1}`}`;
+			plan.exercises = (selectedDay.exercises || []).map((ex: any) => ({
+				exercise_name: ex.exercise || ex.name,
+				sets: parseInt(ex.sets) || 3,
+				reps: parseInt(ex.reps) || 12,
+				rest: ex.rest || '90s'
+			}));
+		}
+
 		const nameEl = document.getElementById('active-workout-name');
 		if (nameEl) nameEl.innerText = plan.plan_name;
 

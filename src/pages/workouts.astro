@@ -145,6 +145,15 @@ import Layout from '../layouts/Layout.astro';
 		if (!plans) return;
 		allPlans = plans;
 
+		// Fetch last completed workout to highlight current day
+		const { data: lastWorkout } = await supabase
+			.from('completed_workouts')
+			.select('workout_name, completed_at')
+			.eq('user_id', user.id)
+			.order('completed_at', { ascending: false })
+			.limit(1)
+			.maybeSingle();
+
 		plansGrid.innerHTML = '';
 		const activePlan = plans.find(p => p.is_active);
 		
@@ -173,7 +182,7 @@ import Layout from '../layouts/Layout.astro';
 				if (target.closest('.delete-btn')) return;
 				const planId = card.getAttribute('data-id');
 				const plan = allPlans.find(p => p.id === planId);
-				if (plan) openPreview(plan);
+				if (plan) openPreview(plan, lastWorkout);
 			});
 		});
 
@@ -218,24 +227,68 @@ import Layout from '../layouts/Layout.astro';
 		`;
 	}
 
-	function openPreview(plan) {
+	function openPreview(plan, lastWorkout = null) {
 		selectedPlan = plan;
 		previewName.innerText = plan.plan_name;
 		previewName.classList.remove('hidden');
 		editNameContainer.classList.add('hidden');
-		previewMeta.innerText = `${plan.exercises?.length || 0} Exercises • ~45 Min`;
 		
-		previewExercises.innerHTML = (plan.exercises || []).map(ex => `
-			<div class="bg-gray-900/50 border border-gray-800 p-4 rounded-2xl flex items-center gap-4">
-				<div class="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center text-gray-500 font-black italic">
-					${ex.sets}
-				</div>
-				<div>
-					<p class="font-bold text-gray-200">${ex.exercise_name}</p>
-					<p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">${ex.reps} Reps • ${ex.sets} Sets</p>
-				</div>
-			</div>
-		`).join('');
+		const planData = plan.plan_data || {};
+		const days = planData.days || planData.workouts || [];
+		
+		previewMeta.innerText = `${days.length} Day Program`;
+
+		// Determine which day to highlight
+		let currentDayIdx = 0;
+		if (lastWorkout && lastWorkout.workout_name.startsWith(plan.plan_name)) {
+			// Extract day number or label if possible, else just cycle
+			const lastDayLabel = lastWorkout.workout_name.split(' - ')[1];
+			const lastIdx = days.findIndex(d => (d.day_label || d.label) === lastDayLabel);
+			if (lastIdx !== -1) currentDayIdx = (lastIdx + 1) % days.length;
+		}
+		
+		if (days.length > 0) {
+			previewExercises.innerHTML = days.map((day, idx) => {
+				const isCurrent = idx === currentDayIdx;
+				return `
+					<div class="day-section space-y-3 mb-6 p-4 rounded-2xl transition-colors ${isCurrent ? 'bg-indigo-500/10 border border-indigo-500/20' : ''}" data-day-idx="${idx}">
+						<div class="flex justify-between items-center px-2">
+							<div class="flex items-center gap-2">
+								<span class="text-[10px] font-black ${isCurrent ? 'text-indigo-400' : 'text-gray-500'} uppercase tracking-widest">${day.day_label || day.label || `Day ${idx + 1}`}</span>
+								${isCurrent ? '<span class="bg-indigo-600 text-[7px] font-black uppercase px-1.5 py-0.5 rounded text-white tracking-widest">Recommended Next</span>' : ''}
+							</div>
+							<button class="start-day-btn bg-gray-800 hover:bg-indigo-600 text-white text-[9px] font-black uppercase px-3 py-1 rounded-full transition" data-id="${plan.id}" data-day="${idx}">
+								Start This Day
+							</button>
+						</div>
+						<div class="space-y-2">
+							${(day.exercises || []).map(ex => `
+								<div class="flex items-center gap-3 py-1 border-b border-gray-800/30 last:border-0">
+									<div class="text-[10px] font-black text-gray-700 w-4">${ex.sets}x</div>
+									<div class="text-sm font-medium text-gray-300">${ex.exercise || ex.exercise_name || ex.name}</div>
+								</div>
+							`).join('')}
+						</div>
+					</div>
+				`;
+			}).join('');
+
+			// Attach mini-start buttons
+			document.querySelectorAll('.start-day-btn').forEach(btn => {
+				btn.addEventListener('click', async (e) => {
+					e.stopPropagation();
+					const id = btn.getAttribute('data-id');
+					const day = btn.getAttribute('data-day');
+					
+					// Set active
+					const { data: { user } } = await supabase.auth.getUser();
+					await supabase.from('workout_plans').update({ is_active: false }).eq('user_id', user.id);
+					await supabase.from('workout_plans').update({ is_active: true }).eq('id', id);
+					
+					window.location.href = `/FirstRep/session?id=${id}&day=${day}`;
+				});
+			});
+		}
 
 		setActiveBtn.innerText = plan.is_active ? 'Currently Active' : 'Set as Active Plan';
 		setActiveBtn.disabled = plan.is_active;
