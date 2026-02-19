@@ -449,6 +449,276 @@
       "protein": 9,
       "carbs": 20,
       "fat": 0.4
+    },
+    {
+      "id": "51",
+      "name": "Bison (Ground, Raw)",
+      "unit": "100g",
+      "calories": 146,
+      "protein": 20.2,
+      "carbs": 0,
+      "fat": 7.2
+    },
+    {
+      "id": "52",
+      "name": "Venison (Raw)",
+      "unit": "100g",
+      "calories": 120,
+      "protein": 23,
+      "carbs": 0,
+      "fat": 2.4
+    },
+    {
+      "id": "53",
+      "name": "Tilapia (Raw)",
+      "unit": "100g",
+      "calories": 96,
+      "protein": 20,
+      "carbs": 0,
+      "fat": 1.7
+    },
+    {
+      "id": "54",
+      "name": "Haddock (Raw)",
+      "unit": "100g",
+      "calories": 87,
+      "protein": 19,
+      "carbs": 0,
+      "fat": 0.7
+    },
+    {
+      "id": "55",
+      "name": "Turkey Breast (Raw)",
+      "unit": "100g",
+      "calories": 114,
+      "protein": 24,
+      "carbs": 0,
+      "fat": 1.5
+    },
+    {
+      "id": "56",
+      "name": "Beef Liver (Raw)",
+      "unit": "100g",
+      "calories": 135,
+      "protein": 20.4,
+      "carbs": 3.9,
+      "fat": 3.6
+    },
+    {
+      "id": "57",
+      "name": "Kale (Raw)",
+      "unit": "100g",
+      "calories": 49,
+      "protein": 4.3,
+      "carbs": 8.8,
+      "fat": 0.9
+    },
+    {
+      "id": "58",
+      "name": "Mushrooms (White Button, Raw)",
+      "unit": "100g",
+      "calories": 22,
+      "protein": 3.1,
+      "carbs": 3.3,
+      "fat": 0.3
+    },
+    {
+      "id": "59",
+      "name": "Eggplant (Raw)",
+      "unit": "100g",
+      "calories": 25,
+      "protein": 1,
+      "carbs": 6,
+      "fat": 0.2
+    },
+    {
+      "id": "60",
+      "name": "Green Beans (Raw)",
+      "unit": "100g",
+      "calories": 31,
+      "protein": 1.8,
+      "carbs": 7,
+      "fat": 0.2
+    },
+    {
+      "id": "61",
+      "name": "Carrots (Raw)",
+      "unit": "100g",
+      "calories": 41,
+      "protein": 0.9,
+      "carbs": 9.6,
+      "fat": 0.2
+    },
+    {
+      "id": "62",
+      "name": "Brussels Sprouts (Cooked)",
+      "unit": "100g",
+      "calories": 36,
+      "protein": 2.6,
+      "carbs": 7.1,
+      "fat": 0.5
+    },
+    {
+      "id": "63",
+      "name": "Cabbage (Raw)",
+      "unit": "100g",
+      "calories": 25,
+      "protein": 1.3,
+      "carbs": 5.8,
+      "fat": 0.1
+    },
+    {
+      "id": "64",
+      "name": "Raspberries (Raw)",
+      "unit": "100g",
+      "calories": 52,
+      "protein": 1.2,
+      "carbs": 11.9,
+      "fat": 0.7
+    },
+    {
+      "id": "65",
+      "name": "Blackberries (Raw)",
+      "unit": "100g",
+      "calories": 43,
+      "protein": 1.4,
+      "carbs": 9.6,
+      "fat": 0.5
+    },
+    {
+      "id": "66",
+      "name": "Grapefruit (Raw)",
+      "unit": "100g",
+      "calories": 42,
+      "protein": 0.8,
+      "carbs": 10.7,
+      "fat": 0.1
+    },
+    {
+      "id": "67",
+      "name": "Watermelon (Raw)",
+      "unit": "100g",
+      "calories": 30,
+      "protein": 0.6,
+      "carbs": 7.6,
+      "fat": 0.2
+    },
+    {
+      "id": "68",
+      "name": "Pineapple (Raw)",
+      "unit": "100g",
+      "calories": 50,
+      "protein": 0.5,
+      "carbs": 13.1,
+      "fat": 0.1
+    },
+    {
+      "id": "69",
+      "name": "Greek Yogurt (2% Fat)",
+      "unit": "170g",
+      "calories": 140,
+      "protein": 15,
+      "carbs": 6,
+      "fat": 4
+    },
+    {
+      "id": "70",
+      "name": "Feta Cheese",
+      "unit": "100g",
+      "calories": 264,
+      "protein": 14,
+      "carbs": 4,
+      "fat": 21
+    },
+    {
+      "id": "71",
+      "name": "Swiss Cheese",
+      "unit": "100g",
+      "calories": 393,
+      "protein": 27,
+      "carbs": 1.5,
+      "fat": 31
+    },
+    {
+      "id": "72",
+      "name": "Pecans",
+      "unit": "28g",
+      "calories": 196,
+      "protein": 2.6,
+      "carbs": 3.9,
+      "fat": 20.4
+    },
+    {
+      "id": "73",
+      "name": "Brazil Nuts",
+      "unit": "28g",
+      "calories": 186,
+      "protein": 4.1,
+      "carbs": 3.5,
+      "fat": 19
+    },
+    {
+      "id": "74",
+      "name": "Pumpkin Seeds (Pepitas)",
+      "unit": "28g",
+      "calories": 151,
+      "protein": 7,
+      "carbs": 5,
+      "fat": 13
+    },
+    {
+      "id": "75",
+      "name": "Sunflower Seeds",
+      "unit": "28g",
+      "calories": 164,
+      "protein": 5.8,
+      "carbs": 5.6,
+      "fat": 14.4
+    },
+    {
+      "id": "76",
+      "name": "Buckwheat (Dry)",
+      "unit": "100g",
+      "calories": 343,
+      "protein": 13.3,
+      "carbs": 71.5,
+      "fat": 3.4
+    },
+    {
+      "id": "77",
+      "name": "Couscous (Cooked)",
+      "unit": "100g",
+      "calories": 112,
+      "protein": 3.8,
+      "carbs": 23,
+      "fat": 0.2
+    },
+    {
+      "id": "78",
+      "name": "Red Potatoes (Raw)",
+      "unit": "100g",
+      "calories": 70,
+      "protein": 1.9,
+      "carbs": 15.9,
+      "fat": 0.1
+    },
+    {
+      "id": "79",
+      "name": "Barley (Cooked)",
+      "unit": "100g",
+      "calories": 123,
+      "protein": 2.3,
+      "carbs": 28,
+      "fat": 0.4
+    },
+    {
+      "id": "80",
+      "name": "Ezekiel Bread",
+      "unit": "1 slice (34g)",
+      "calories": 80,
+      "protein": 4,
+      "carbs": 15,
+      "fat": 0.5
     }
   ]
 }
