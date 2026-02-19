@@ -222,21 +222,25 @@ import Layout from '../layouts/Layout.astro';
 		const { data: { user } } = await supabase.auth.getUser();
 		if (!user) return;
 
-		const { error } = await supabase.from('weight_logs').insert([{
+        const dateKey = new Date().toISOString().split('T')[0];
+
+        // Try to update first, if it fails because it doesn't exist, we insert
+        // This handles the "one entry per day" constraint gracefully
+		const { error: upsertError } = await supabase.from('weight_logs').upsert({
 			user_id: user.id,
 			weight: weight,
 			calories_burned: burn,
 			unit: unit,
-			logged_at: new Date().toISOString().split('T')[0]
-		}]);
+			logged_at: dateKey
+		}, { onConflict: 'user_id,logged_at' });
 
-		if (!error) {
+		if (!upsertError) {
 			weightInput.value = '';
 			burnInput.value = '';
 			await loadHistory();
 		} else {
-            console.error("Save Error:", error);
-			alert('Error logging entry: ' + error.message);
+            console.error("Save Error:", upsertError);
+			alert('Error logging entry: ' + upsertError.message);
 		}
 	});
 
