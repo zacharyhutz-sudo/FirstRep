@@ -483,12 +483,18 @@ import Layout from '../layouts/Layout.astro';
 				foodResults.innerHTML = '<p class="p-8 text-center text-gray-500 animate-pulse text-sm">Searching global database...</p>';
 			}
 			
+			const controller = new AbortController();
+			const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second limit
+
 			try {
 				const response = await fetch(WORKER_URL, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ query })
+					body: JSON.stringify({ query }),
+					signal: controller.signal
 				});
+				clearTimeout(timeoutId);
+
 				const aiMatches = await response.json();
 				
 				saveToSearchCache(query, aiMatches);
@@ -502,8 +508,10 @@ import Layout from '../layouts/Layout.astro';
 
 				renderSearchResults(combined, false);
 			} catch (err) {
+				console.log("Global search timed out or failed, showing local only.");
+				renderSearchResults(localMatches, false);
 				if (!localMatches.length) {
-					foodResults.innerHTML = '<p class="p-4 text-center text-red-400">Search failed.</p>';
+					foodResults.innerHTML = '<p class="p-4 text-center text-gray-500">No results found. Try a broader search.</p>';
 				}
 			}
 		}, 300);
