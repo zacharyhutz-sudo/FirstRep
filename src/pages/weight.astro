@@ -11,20 +11,22 @@ import Layout from '../layouts/Layout.astro';
 			</div>
 		</header>
 
+        <!-- Calories Burned Stat (Wide) -->
+        <div class="bg-indigo-600 rounded-[2.5rem] p-8 mb-8 relative overflow-hidden shadow-xl shadow-indigo-500/20 active:scale-[0.98] transition group">
+            <div class="relative z-10">
+                <p class="text-[10px] font-black text-indigo-200 uppercase tracking-[0.2em] mb-2">Calories Burned (Est.)</p>
+                <h2 id="calories-burned" class="text-4xl font-black text-white italic tracking-tighter mb-1">0</h2>
+                <p class="text-xs font-bold text-indigo-100/60 uppercase tracking-widest">Across all logged sessions</p>
+            </div>
+            <div class="absolute right-[-5%] bottom-[-20%] text-white/10 rotate-12">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-32 w-32" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.334-.398-1.817a1 1 0 00-1.514-.857 6.628 6.628 0 00-3.388 5.71c0 3.716 3.017 6.733 6.733 6.733 3.716 0 6.733-3.017 6.733-6.733 0-1.547-.522-2.973-1.413-4.108.384.428.636.917.756 1.442a1 1 0 101.942-.466c-.183-.76-.475-1.472-.861-2.112-.4-.662-.9-1.257-1.487-1.758a1 1 0 00-1.474.322c-.104.2-.187.41-.252.628-.063.21-.11.425-.143.644a4.935 4.935 0 01-1.077-1.507c-.19-.383-.346-.782-.47-1.189a10.89 10.89 0 01-.284-1.21 11.084 11.084 0 01-.137-1.15z" clip-rule="evenodd" />
+                </svg>
+            </div>
+        </div>
+
 		<!-- Log Weight Card -->
 		<div class="bg-gray-900 border border-gray-800 rounded-[2.5rem] p-8 mb-8">
-			<div class="flex items-center gap-4 mb-8">
-				<div class="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
-					</svg>
-				</div>
-				<div>
-					<h2 class="text-lg font-bold text-white">Log Current Weight</h2>
-					<p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Tracking Progress</p>
-				</div>
-			</div>
-
 			<form id="weight-form" class="space-y-6">
 				<div class="relative">
 					<input 
@@ -43,9 +45,21 @@ import Layout from '../layouts/Layout.astro';
 			</form>
 		</div>
 
+		<!-- Graph Section -->
+		<section class="mb-8">
+			<h3 class="text-xs font-black text-gray-500 uppercase tracking-widest mb-6">Progress</h3>
+            <div class="bg-gray-900/40 border border-gray-800/50 rounded-[2rem] p-6 h-48 flex items-end justify-between gap-2 relative overflow-hidden">
+                <div id="graph-bars" class="flex items-end justify-between w-full h-full relative z-10">
+                    <!-- Bars injected by JS -->
+                </div>
+                <!-- Zero line background -->
+                <div class="absolute bottom-6 left-0 right-0 h-px bg-gray-800/50 z-0"></div>
+            </div>
+		</section>
+
 		<!-- History -->
 		<section>
-			<h3 class="text-xs font-black text-gray-500 uppercase tracking-widest mb-6">History</h3>
+			<h3 class="text-xs font-black text-gray-500 uppercase tracking-widest mb-6">Recent History</h3>
 			<div id="weight-history" class="space-y-3">
 				<!-- Injected by JS -->
 				<div class="animate-pulse bg-gray-900/40 h-16 rounded-2xl"></div>
@@ -69,8 +83,8 @@ import Layout from '../layouts/Layout.astro';
 			<span class="text-[9px] font-black uppercase tracking-tighter">Log</span>
 		</a>
 		<a href="/FirstRep/weight" class="flex flex-col items-center gap-1 text-indigo-400 transition">
-			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-				<path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.616a1 1 0 11.894-1.79l1.599.8L9 4.323V3a1 1 0 011-1z" clip-rule="evenodd" />
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2M8 21V5a2 2 0 012-2h4a2 2 0 012 2v16H8z" />
 			</svg>
 			<span class="text-[9px] font-black uppercase tracking-tighter">Weight</span>
 		</a>
@@ -90,6 +104,8 @@ import Layout from '../layouts/Layout.astro';
 	const input = document.getElementById('weight-input') as HTMLInputElement;
 	const historyList = document.getElementById('weight-history');
 	const unitLabel = document.getElementById('unit-label');
+    const caloriesBurnedEl = document.getElementById('calories-burned');
+    const graphBars = document.getElementById('graph-bars');
 
 	async function init() {
 		const { data: { session } } = await supabase.auth.getSession();
@@ -98,8 +114,23 @@ import Layout from '../layouts/Layout.astro';
 		const unit = localStorage.getItem('weightUnit') || 'lbs';
 		if (unitLabel) unitLabel.innerText = unit.toUpperCase();
 
+		await loadStats();
 		await loadHistory();
 	}
+
+    async function loadStats() {
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        // Estimate calories burned (300 per session avg)
+        const { count } = await supabase
+            .from('completed_workouts')
+            .select('*', { count: 'exact', head: true })
+            .eq('user_id', user.id);
+            
+        if (caloriesBurnedEl) {
+            caloriesBurnedEl.innerText = ((count || 0) * 300).toLocaleString();
+        }
+    }
 
 	async function loadHistory() {
 		const { data: { user } } = await supabase.auth.getUser();
@@ -123,8 +154,29 @@ import Layout from '../layouts/Layout.astro';
 						</div>
 					`;
 				}).join('');
+
+                // Render Graph
+                const reversed = [...logs].reverse();
+                const minWeight = Math.min(...reversed.map(l => l.weight)) - 5;
+                const maxWeight = Math.max(...reversed.map(l => l.weight)) + 5;
+                const range = maxWeight - minWeight;
+
+                if (graphBars) {
+                    graphBars.innerHTML = reversed.map(log => {
+                        const height = ((log.weight - minWeight) / range) * 100;
+                        return `
+                            <div class="flex flex-col items-center gap-2 group flex-1">
+                                <div class="w-full bg-indigo-500/20 rounded-t-lg relative overflow-hidden h-32 flex items-end">
+                                    <div class="w-full bg-indigo-500 transition-all duration-1000" style="height: ${height}%"></div>
+                                </div>
+                                <span class="text-[8px] font-black text-gray-600 uppercase">${new Date(log.logged_at).toLocaleDateString('en-US', { day: 'numeric' })}</span>
+                            </div>
+                        `;
+                    }).join('');
+                }
 			} else {
 				historyList.innerHTML = `<p class="text-xs text-gray-600 font-bold text-center py-4 italic">No entries yet.</p>`;
+                if (graphBars) graphBars.innerHTML = '';
 			}
 		}
 	}
@@ -149,6 +201,7 @@ import Layout from '../layouts/Layout.astro';
 		if (!error) {
 			input.value = '';
 			await loadHistory();
+			await loadStats();
 		} else {
 			alert('Error logging weight: ' + error.message);
 		}
