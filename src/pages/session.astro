@@ -81,14 +81,21 @@ import Layout from '../layouts/Layout.astro';
 		const urlParams = new URLSearchParams(window.location.search);
 		const planId = urlParams.get('id');
 
-		if (!planId) return window.location.href = '/FirstRep/workouts';
-
 		const { data: { session } } = await supabase.auth.getSession();
 		if (!session) return window.location.href = '/FirstRep/login/index.html';
 
-		const { data: workout } = await supabase.from('workout_plans').select('*').eq('id', planId).single();
+		if (!planId) return window.location.href = '/FirstRep/workouts';
+
+		const { data: workout, error } = await supabase.from('workout_plans').select('*').eq('id', planId).single();
+		
+		if (error || !workout) {
+			console.error("Plan not found:", error);
+			return window.location.href = '/FirstRep/workouts';
+		}
+
 		plan = workout;
-		document.getElementById('active-workout-name').innerText = plan.plan_name;
+		const nameEl = document.getElementById('active-workout-name');
+		if (nameEl) nameEl.innerText = plan.plan_name;
 
         // UI Setup
         setupToggleUI();
