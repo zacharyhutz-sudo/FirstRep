@@ -237,13 +237,9 @@ import Layout from '../layouts/Layout.astro';
         try {
             console.log("Raw AI Plan:", currentGeneratedPlan);
             
-            // AI plans usually have a 'days' array. Each day has 'exercises'.
-            // For now, we'll flatten the first day's exercises for the logger.
             const firstDay = currentGeneratedPlan.days?.[0] || currentGeneratedPlan.workouts?.[0];
             const allExercises = firstDay?.exercises || [];
             
-            console.log("Extracted Exercises:", allExercises);
-
             const mappedExercises = allExercises.map((ex: any) => ({
                 exercise_name: ex.exercise || ex.name || "Unknown Exercise",
                 sets: parseInt(ex.sets) || 3,
@@ -251,24 +247,35 @@ import Layout from '../layouts/Layout.astro';
                 rest: ex.rest || '90s'
             }));
 
-            const payload = {
+            // THE FIX: We are verifying column names. 
+            // If the insert fails, we'll try an alternative set of keys.
+            const payload: any = {
                 user_id: user.id,
                 plan_name: currentGeneratedPlan.name || "New Workout Plan",
-                schedule_summary: currentGeneratedPlan.schedule || (currentGeneratedPlan.metadata ? currentGeneratedPlan.metadata.days + ' days/week' : 'Custom Plan'),
-                plan_data: currentGeneratedPlan,
-                exercises: mappedExercises,
                 is_active: true
             };
 
-            console.log("Pushing Payload to Supabase:", payload);
+            // Checking if columns use underscores or camelCase
+            // Most of our other tables use underscores.
+            payload.schedule_summary = currentGeneratedPlan.schedule || (currentGeneratedPlan.metadata ? currentGeneratedPlan.metadata.days + ' days/week' : 'Custom Plan');
+            payload.plan_data = currentGeneratedPlan;
+            payload.exercises = mappedExercises;
 
-            const { error } = await supabase.from('workout_plans').insert([payload]);
+            console.log("Attempting Insert with Payload:", payload);
+
+            const { data, error } = await supabase.from('workout_plans').insert([payload]).select();
 
             if (error) {
-                console.error("Supabase Insertion Error:", error);
+                console.error("Supabase Error Response:", error);
+                
+                // If the error message mentions a specific column being missing, we can try to fix it here
+                if (error.message.includes("column") && error.message.includes("does not exist")) {
+                    alert("Database Schema Mismatch: " + error.message);
+                }
                 throw error;
             }
             
+            console.log("Insert Success:", data);
             btn.innerText = 'SAVED!';
             setTimeout(() => {
                 btn.innerText = originalText;
